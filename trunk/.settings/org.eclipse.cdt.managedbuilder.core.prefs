@@ -1,0 +1,6 @@
+#Wed Oct 04 00:56:51 GMT+02:00 2006
+eclipse.preferences.version=1
+environment/buildEnvironmentLibrary/cdt.managedbuild.config.gnu.exe.debug.513180323=<?xml version\='1.0'?>\n<environment>\n    <variable name\='LIBRARY_PATH' operation\='remove'/>\n</environment>
+environment/project/cdt.managedbuild.config.gnu.exe.debug.513180323=<?xml version\='1.0'?>\n<environment/>
+environment/buildEnvironmentInclude/cdt.managedbuild.config.gnu.exe.debug.513180323=<?xml version\='1.0'?>\n<environment>\n    <variable name\='CPLUS_INCLUDE_PATH' operation\='remove'/>\n    <variable name\='CPATH' operation\='remove'/>\n</environment>
+environment/project=<?xml version\='1.0'?>\n<environment/>

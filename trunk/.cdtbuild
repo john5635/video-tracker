@@ -1,0 +1,38 @@
+<?xml version='1.0'?>
+<?fileVersion 3.0.0?>
+<ManagedProjectBuildInfo>
+    <project id='prova.cdt.managedbuild.target.gnu.exe.1440125757' name='Executable (Gnu)' projectType='cdt.managedbuild.target.gnu.exe'>
+      <configuration id='cdt.managedbuild.config.gnu.exe.debug.513180323' name='Debug' description='' parent='cdt.managedbuild.config.gnu.exe.debug' artifactName='prova' errorParsers='org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser' cleanCommand='rm -rf'>
+        <toolChain superClass='cdt.managedbuild.toolchain.gnu.exe.debug' id='cdt.managedbuild.toolchain.gnu.exe.debug.719538' name='GCC Tool Chain'>
+          <tool superClass='cdt.managedbuild.tool.gnu.c.compiler.exe.debug' id='cdt.managedbuild.tool.gnu.c.compiler.exe.debug.2080206101' name='GCC C Compiler' command='gcc'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug' id='cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.486936299' name='GCC C++ Compiler' command='g++'>
+            <option superClass='gnu.cpp.compiler.option.include.paths' id='gnu.cpp.compiler.option.include.paths.1979916809' valueType='includePath'>
+              <listOptionValue value='/usr/include/opencv' builtIn='false'/>
+</option>
+</tool>
+          <tool superClass='cdt.managedbuild.tool.gnu.c.linker.exe.debug' id='cdt.managedbuild.tool.gnu.c.linker.exe.debug.168145069' name='GCC C Linker' command='gcc'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.cpp.linker.exe.debug' id='cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.548178711' name='GCC C++ Linker' command='g++'>
+            <option superClass='gnu.cpp.link.option.libs' id='gnu.cpp.link.option.libs.1995078817' valueType='libs'>
+              <listOptionValue value='cxcore' builtIn='false'/>
+              <listOptionValue value='cv' builtIn='false'/>
+              <listOptionValue value='highgui' builtIn='false'/>
+              <listOptionValue value='cvaux' builtIn='false'/>
+              <listOptionValue value='ml' builtIn='false'/>
+</option>
+</tool>
+          <tool superClass='cdt.managedbuild.tool.gnu.assembler.exe.debug' id='cdt.managedbuild.tool.gnu.assembler.exe.debug.49280753' name='GCC Assembler' command='as'/>
+          <macros/>
+</toolChain>
+</configuration>
+      <configuration id='cdt.managedbuild.config.gnu.exe.release.1209615535' name='Release' description='' parent='cdt.managedbuild.config.gnu.exe.release' artifactName='prova' errorParsers='org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser' cleanCommand='rm -rf'>
+        <toolChain superClass='cdt.managedbuild.toolchain.gnu.exe.release' id='cdt.managedbuild.toolchain.gnu.exe.release.522961759' name='GCC Tool Chain'>
+          <tool superClass='cdt.managedbuild.tool.gnu.c.compiler.exe.release' id='cdt.managedbuild.tool.gnu.c.compiler.exe.release.2134110641' name='GCC C Compiler'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.cpp.compiler.exe.release' id='cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1102674838' name='GCC C++ Compiler'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.c.linker.exe.release' id='cdt.managedbuild.tool.gnu.c.linker.exe.release.1762816420' name='GCC C Linker'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.cpp.linker.exe.release' id='cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1665201591' name='GCC C++ Linker'/>
+          <tool superClass='cdt.managedbuild.tool.gnu.assembler.exe.release' id='cdt.managedbuild.tool.gnu.assembler.exe.release.975704271' name='GCC Assembler'/>
+</toolChain>
+</configuration>
+      <macros/>
+</project>
+</ManagedProjectBuildInfo>
