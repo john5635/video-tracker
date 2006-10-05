@@ -14,9 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-//SUUUKA
-
-
 #include <cvaux.h>  // include core library interface
 #include <highgui.h> // include GUI library interface
 #include <stdio.h>
