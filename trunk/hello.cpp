@@ -1,7 +1,7 @@
 #include <stdio.h>
 int main()
 {
-    printf("Hello World\n");
+    printf("Hello Dirty World\n");
                     
     //block until user types something
     fgetc(stdin);
