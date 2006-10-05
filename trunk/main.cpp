@@ -24,6 +24,7 @@
 #define rowA 2
 #define colA 1
 
+//Ecco la mia modifica frocioni
 int main (int argc, char ** argv){
 
 	CvMat* indexMat[8];
