@@ -23,7 +23,7 @@
 
 #define rowA 2
 #define colA 1
-//siete tutti froci persi
+
 int main (int argc, char ** argv){
 
 	CvMat* indexMat[8];
