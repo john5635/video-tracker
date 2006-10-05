@@ -1,101 +1,26 @@
 GPP = g++ -g
 CC = gcc -g
 
-CFLAGS = -O2 -Wall $(NODEBUG)# to toggle the debug option at compile time
-NODEBUG = 
-CFLAGS_IPTABLES = -I$(KERNEL_DIR)/include -Iinclude/ -DIPTABLES_VERSION=\"$(IPTABLES_VERSION)\" -g -DDEBUG #-pg # -DIPTC_DEBUG
-CFLAGS_WE = -O2 -g -W -Wall -Wstrict-prototypes -I.
-MMD = -MMD
-SHAREFLAGS = -shared -o libiw.so.27 -Wl,-soname,libiw.so.27 -lm -lc
+#include manager.conf # file di configurazione da includere se si inserisce
 
-TARGET = agent
+CFLAGS= -I/usr/include/opencv #pkg-config --cflags opencv
+LIBS=-lcxcore -lcv -lhighgui -lcvaux -lml #pkg-config --libs opencv
+
+TARGET = main
 RM = rm *.o
 
-LIBXML =-I/usr/include/libxml++-2.6 -I/usr/lib/libxml++-2.6/include -I/usr/include/libxml2 -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 
-LIBXML_LINK = -lxml++-2.6 -lxml2 -lpthread -lz -lm -lglibmm-2.4 -lgobject-2.0 -lsigc-2.0 -lglib-2.0
+OBJ = extractBlog.o getBackground.o kalman.o main.o
 
-ifndef KERNEL_DIR
-KERNEL_DIR=/usr/src/linux
-endif
+#fase di linking
+main: $(OBJ) 
+	$(GPP) $(OBJ)  $(LIBS)
 
-
-IPTABLES_VERSION:=1.3.1
-OLD_IPTABLES_VERSION:=1.2.10
-
-ifndef IPT_LIBDIR
-IPT_LIBDIR:=$(LIBDIR)/iptables
-endif
-
-DEPFILES = $(SHARED_LIBS:%.so=%.d)
-SH_CFLAGS:=$(CFLAGS) -fPIC
-STATIC_LIBS  =/usr/lib/
-STATIC6_LIBS =
-LDFLAGS      = -rdynamic
-LDLIBS       = -ldl -lnsl
-
-
-include manager.conf
-
-
-OBJ = Manager.o UserInterface.o TextInterface.o ContextOperation.o StateOperation.o Parser.o PacketManager.o VectorFactory.o Cipher.o NullCipher.o XmlHandler.o 
-
-ifdef DEBUG
-OBJ += debug.o
-else
-NODEBUG += NDEBUG
-endif
-
-ifdef FIREWALLOPERATION
-CFLAGS += -DFIREWALLOPERATION
-OBJ += FirewallOperation.o fw-xmlparser.o iptables.o fw-xmlwriter.o $(STATIC_LIBS)libiptc.a iptables-restore.o
-endif
-
-ifdef WIRELESSEXTENSIONSOPERATION
-CFLAGS += -DWIRELESSEXTENSIONSOPERATION
-OBJ += WirelessExtensionsOperation.o we-xmlparser.o we-xmlwriter.o iwconfig.o libiw.so.27
-RM+= *.so *.so.27 *.d 
-endif
-
-ifdef IDSOPERATION
-CFLAGS += -DIDSOPERATION
-OBJ += IdsOperation.o ids-xmlparser.o ids-xmlwriter.o deauthfloodParser.o
-endif
-
-
-ifdef LISTENINGOPERATION
-CFLAGS += -DLISTENINGOPERATION
-OBJ += ListeningOperation.o
-endif
-
-ifdef ROUTINGOPERATION
-CFLAGS += -DROUTINGOPERATION
-OBJ += RoutingOperation.o routeList.o route-xmlwriter.o
-endif
-
-
-ifdef PARSERDAEMON
-CFLAGS += -DPARSERDAEMON
-OBJ += ParserDaemon.o
-endif
-
-ifdef ISALIVEOPERATION
-CFLAGS += -DISALIVEOPERATION
-OBJ += isAliveOperation.o
-endif
-
-ifdef TEXTINTERFACE
-CFLAGS += -DTEXTINTERFACE
-endif
-
-OBJ += agent.o
-agent: $(OBJ) 
-	$(GPP) $(LIBXML_LINK) $(CFLAGS) $(MMD) $(OBJ)  -DIPT_LIB_DIR=\"$(IPT_LIBDIR)\"  $(LDFLAGS) -o $@  $(LDLIBS) -lm
-
+#fase di compilamento
 agent.o: 
-	$(GPP) $(CFLAGS) -c agent.cpp
+	$(GPP) $(CFLAGS) -c main.cpp
 	
-Manager.o: debug.o Manager.cpp
+extractBlob.o: debug.o Manager.cpp
 	$(GPP) $(CFLAGS) 	-c Manager.cpp
 	
 ContextOperation.o: ContextOperation.cpp 
