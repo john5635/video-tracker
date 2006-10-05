@@ -24,6 +24,8 @@
 #define rowA 2
 #define colA 1
 
+#MEO BUHOOO
+
 int main (int argc, char ** argv){
 
 	CvMat* indexMat[8];
