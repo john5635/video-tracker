@@ -4,9 +4,10 @@
 #include <cv.h>
 #include <highgui.h>
 #include <wx/utils.h>
-
+#include <wx/wx.h>
+#include <wx/string.h>
 int main(int argc, char *argv[]) {
-	CvCapture* capture = cvCaptureFromAVI("spheres1.avi");
+	CvCapture* capture = cvCaptureFromAVI("3Dballbounce.avi");
 
 	if( !capture ) {
 		fprintf( stderr, "ERROR: capture is NULL \n" );
@@ -37,10 +38,10 @@ int main(int argc, char *argv[]) {
 
 
 //----------------------CODICE CHE USA LE WX---------------------------
-
-		if (! wxDirExists("./data")){
-			wxMkdir("./data");
-			}
+		const wxChar* dir=_("./data");
+		if (! wxDirExists(dir)){
+			if (! wxMkdir(dir)){
+			printf("\nCartella non creata\n\n");}}
 
 //---------------------------------------------------------------------------------
 
