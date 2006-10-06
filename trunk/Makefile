@@ -6,17 +6,17 @@ CC = gcc -g
 CFLAGS= -I/usr/include/opencv #pkg-config --cflags opencv
 LIBS=-lcxcore -lcv -lhighgui -lcvaux -lml #pkg-config --libs opencv
 
-TARGET = main
+TARGET = video-tracker
 RM = rm *.o
 
 
 OBJ = extractBlob.o getBackground.o kalman.o main.o
 
 #fase di linking
-main: $(OBJ) 
-	$(GPP) $(CFLAGS) $(OBJ) -o video-tracker  $(LIBS)
+video-tracker: $(OBJ) 
+	$(GPP) $(CFLAGS) $(OBJ) -o $@  $(LIBS)
 
-#fase di compilazione
+#fase di compiling
 main.o: 
 	$(GPP) $(CFLAGS) -c main.cpp
 	
