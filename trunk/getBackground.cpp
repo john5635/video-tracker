@@ -17,6 +17,30 @@
 #include "videotracker.h"
 
 IplImage* getBackground(char* aviName){
+	 
+	 IplImage* tmp_frame = NULL;
+	 CvCapture* cap = NULL;
+	 
+	 cap = cvCaptureFromAVI(aviName);
+     tmp_frame = cvQueryFrame(cap);
+ 
+     if(!tmp_frame) {
+         printf("bad video \n");
+         exit(0);
+     }
 
+	 CvBGStatModel* bg_model = cvCreateGaussianBGModel(tmp_frame);
+
+     for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(cap), fr++ ){
+        
+		cvUpdateBGStatModel(tmp_frame, bg_model);
+        
+		//cvShowImage("BG", bg_model->background);
+        //cvShowImage("FG", bg_model->foreground);
+     
+	 }
+
+	 cvReleaseBGStatModel( &bg_model );
+     cvReleaseCapture(&cap);
 	 return 0;
 }

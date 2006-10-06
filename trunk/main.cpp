@@ -23,24 +23,24 @@ int main (int argc, char ** argv){
 
 	CvMat* indexMat[8];
 	
-	indexMat[0] = cvCreateMat( rowA, colA, CV_32FC1 ); /* predicted state (x'(k)):x(k)=A*x(k-1)+B*u(k) */
-	indexMat[1] = cvCreateMat( rowA, colA, CV_32FC1 ); /* corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k)) */
-	indexMat[2] = cvCreateMat( rowA, colA, CV_32FC1 ); /* state transition matrix (A) */
-	indexMat[3] = cvCreateMat( rowA, colA, CV_32FC1 ); /* control matrix (B)(it is not used if there is no control)*/
-	indexMat[4] = cvCreateMat( rowA, colA, CV_32FC1 ); /* measurement matrix (H) */
-	indexMat[5] = cvCreateMat( rowA, colA, CV_32FC1 ); /* process noise covariance matrix (Q) */
-	indexMat[6] = cvCreateMat( rowA, colA, CV_32FC1 ); /* measurement noise covariance matrix (R) */
-	indexMat[7] = cvCreateMat(10, 2, CV_32FC1); 
+	indexMat[0] = cvCreateMat( rowA, colA, CV_32FC1 ); /* state transition matrix (A) */
+	indexMat[1] = cvCreateMat( rowA, colA, CV_32FC1 ); /* control matrix (Bu)(it is not used if there is no control)*/
+	indexMat[2] = cvCreateMat( rowA, colA, CV_32FC1 ); /* measurement matrix (H) */
+	indexMat[3] = cvCreateMat( rowA, colA, CV_32FC1 ); /* process noise covariance matrix (Q) */
+	indexMat[4] = cvCreateMat( rowA, colA, CV_32FC1 ); /* measurement noise covariance matrix (R) */
+	indexMat[5] = cvCreateMat( rowA, colA, CV_32FC1 ); /* posteriori error estimate covariance matrix P(0)*/
+	indexMat[6] = cvCreateMat( rowA, colA, CV_32FC1 ); /* corrected state (x(0)) */
+	indexMat[7] = cvCreateMat( rowA, colA, CV_32FC1 ); //???
 
-    int MP; /* number of measurement vector dimensions */
-    int DP; /* number of state vector dimensions */
-    int CP; /* number of control vector dimensions */
+    int MP = 0; /* number of measurement vector dimensions */
+    int DP = 0; /* number of state vector dimensions */
+    int CP = 0; /* number of control vector dimensions */
 	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
-	init_Kalman(kalman, indexMat);
+	init(kalman, indexMat);
+	
 	execute(kalman, argv[1]);
-
 
 	return 0;
 }
