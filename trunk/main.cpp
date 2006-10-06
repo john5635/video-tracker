@@ -14,7 +14,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <videotracker.h>
+#include "videotracker.h"
 
 #define rowA 2
 #define colA 1
@@ -36,7 +36,7 @@ int main (int argc, char ** argv){
 	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
-	init(kalman, indexMat);
+	init_Kalman(kalman, indexMat);
 	execute(kalman, argv[1]);
 
 

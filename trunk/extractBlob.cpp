@@ -14,9 +14,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <videotracker.h>
+#include "videotracker.h"
 
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 
-	return 0;
-};
+
+}
+
+IplImage*  getBackground(char * aviName){
+
+
+
+}

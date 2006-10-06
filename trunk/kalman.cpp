@@ -14,20 +14,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
- #include <videotracker.h>
-
-struct { // coordinate of the tracked object in this case a ball.
-
-	int* cc;
-	int* cr;
-	float radius;
-	bool flag;
+#include "videotracker.h"
 
 
-} coordinate;
-
-
-void init(CvKalman * kalman, CvMat** indexMat){
+void init_Kalman(CvKalman * kalman, CvMat** indexMat){
 	
 	}
 
