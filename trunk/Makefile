@@ -16,7 +16,7 @@ OBJ = extractBlob.o getBackground.o kalman.o main.o
 main: $(OBJ) 
 	$(GPP) $(CFLAGS) $(OBJ) -o video-tracker  $(LIBS)
 
-#fase di compilamento
+#fase di compilazione
 main.o: 
 	$(GPP) $(CFLAGS) -c main.cpp
 	
