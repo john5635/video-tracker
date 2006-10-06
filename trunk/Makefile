@@ -3,8 +3,8 @@ CC = gcc -g
 
 #include config.conf # file di configurazione da includere se si inserisce
 
-CFLAGS= -I/usr/include/opencv #pkg-config --cflags opencv
-LIBS=-lcxcore -lcv -lhighgui -lcvaux -lml #pkg-config --libs opencv
+CFLAGS=  `pkg-config --cflags opencv`       # `wx-config --cflags`  #-I/usr/include/opencv
+LIBS= `pkg-config --libs opencv`            # `wx-config --libs`    #-lcxcore -lcv -lhighgui -lcvaux -lml
 
 TARGET = video-tracker
 RM = rm *.o
