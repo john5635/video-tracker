@@ -14,13 +14,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <cvaux.h>  // include core library interface
-#include <highgui.h> // include GUI library interface
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <cv.h>
-#include <cxcore.h>
+#include <videotracker.h>
 
 #define rowA 2
 #define colA 1
@@ -41,14 +35,10 @@ int main (int argc, char ** argv){
 	int MP,DP,CP;
 	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
-	
 
 	init_Kalman(kalman, indexMat);
 	execute(kalman, argv[1]);
 
 
-
-
-
-return 0;
+	return 0;
 }

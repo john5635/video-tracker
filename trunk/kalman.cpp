@@ -25,7 +25,9 @@ typedef struct coordinate{ // coordinate of the tracked object in this case a ba
 };
 
 
-void init(CvKalman * kalman, CvMat* indexMat);
+void init(CvKalman * kalman, CvMat* indexMat){
+	
+	}
 
 
 void execute(CvKalman* kalman, char * aviName ){
