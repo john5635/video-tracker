@@ -17,7 +17,7 @@
 #include "videotracker.h"
 
 
-void init_Kalman(CvKalman * kalman, CvMat** indexMat){
+void init(CvKalman * kalman, CvMat** indexMat){
 	
 	}
 

@@ -18,11 +18,5 @@
 
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 
-
-}
-
-IplImage*  getBackground(char * aviName){
-
-
-
+	return 0;
 }
