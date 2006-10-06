@@ -22,4 +22,4 @@ IplImage* getBackground(char* aviName);
 
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background);
 
-IplImage*  getBackground(char * aviName);
+//IplImage*  getBackground(char * aviName);
