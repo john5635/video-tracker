@@ -36,7 +36,7 @@ int main (int argc, char ** argv){
 	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
-	init_Kalman(kalman, indexMat);
+	init(kalman, indexMat);
 	execute(kalman, argv[1]);
 
 

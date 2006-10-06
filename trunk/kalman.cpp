@@ -16,7 +16,7 @@
  
  #include <videotracker.h>
 
-typedef struct coordinate{ // coordinate of the tracked object in this case a ball.
+struct { // coordinate of the tracked object in this case a ball.
 
 	int* cc;
 	int* cr;
@@ -24,10 +24,10 @@ typedef struct coordinate{ // coordinate of the tracked object in this case a ba
 	bool flag;
 
 
-};
+} coordinate;
 
 
-void init(CvKalman * kalman, CvMat* indexMat){
+void init(CvKalman * kalman, CvMat** indexMat){
 	
 	}
 
@@ -37,11 +37,11 @@ void execute(CvKalman* kalman, char * aviName ){
 	IplImage* background = getBackground(aviName);
 	
 	int height = background->height;
-	int lenght = background->lenght;
-	int channel = background->nChannel;
+	int width = background->width;
+	int channels = background->nChannels;
 
 
-	CvCapture* capture = cvCaptureFromAVI(aviName]);
+	CvCapture* capture = cvCaptureFromAVI(aviName);
   
 	if( !capture ) {
    		fprintf( stderr, "ERROR: capture is NULL \n" );
@@ -56,11 +56,11 @@ void execute(CvKalman* kalman, char * aviName ){
          exit(0);
         }
 
-	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(cap), fr++ ){
+	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 
 
 		struct coordinate* coord = extractBlob(tmp_frame, background);
-		if (coord.flag == false ) break;
+		if (coord->flag == false ) break;
 
 	}
 
