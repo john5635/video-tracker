@@ -42,6 +42,9 @@ int main(int argc, char *argv[]) {
 		if (! wxDirExists(dir)){
 			if (! wxMkdir(dir)){
 			printf("\nCartella non creata\n\n");}}
+		/*wxString dir = wxString("./data"); 
+		if (!wxDirExists(dir.c_str() )){ 
+			wxMkdir(dir);}*/
 
 //---------------------------------------------------------------------------------
 
