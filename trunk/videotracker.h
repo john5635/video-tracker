@@ -1,10 +1,14 @@
+#include <wx/wx.h>
+#include <wx/string.h>
+
 #include <cvaux.h>  // include core library interface
 #include <highgui.h> // include GUI library interface
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
 #include <cv.h>
 #include <cxcore.h>
+#include <vector>
+#include <wx/ffile.h>
 #include <iostream>
 
 using namespace std;
@@ -14,15 +18,21 @@ struct coordinate { // coordinate of the tracked object in this case a ball.
 	int* cr;
 	float radius;
 	bool flag;
-} ;
+};
 
+struct matrixDesc{
+		int nCols;
+		int nRows;
+};
 
 void init(CvKalman * kalman, CvMat** indexMat);
 void execute(CvKalman* kalman, char * aviName );
 
-float* getValue();
+std::vector<float> getValue(wxString filename);
 
 
 IplImage* getBackground(char* aviName);
 
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background);
+
+void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC);

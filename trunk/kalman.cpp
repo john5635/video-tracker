@@ -16,35 +16,32 @@
  
 #include "videotracker.h"
 
-float* getValue(){
-	return 0;
-}
-
-
 void init(CvKalman * kalman, CvMat** indexMat){
-	int rowA = 4, colA = 4;
-	int rowB = 4, colB = 1;
-	int rowH = 2, colH = 4;
-	int rowQ = 4, colQ = 4;
-	int rowR = 2, colR = 2;
-	int rowP = 4, colP = 4;
-	int rowX = 4, colX = 1;
 	
-	indexMat[0] = cvCreateMat( 4, 4, CV_32FC1 ); /* state transition matrix (A) */
-	indexMat[1] = cvCreateMat( 4, 1, CV_32FC1 ); /* control matrix (Bu)(it is not used if there is no control)*/
-	indexMat[2] = cvCreateMat( 2, 4, CV_32FC1 ); /* measurement matrix (H) */
-	indexMat[3] = cvCreateMat( 4, 4, CV_32FC1 ); /* process noise covariance matrix (Q) */
-	indexMat[4] = cvCreateMat( 2, 2, CV_32FC1 ); /* measurement noise covariance matrix (R) */
-	indexMat[5] = cvCreateMat( 4, 4, CV_32FC1 ); /* posteriori error estimate covariance matrix P(0)*/
-	indexMat[6] = cvCreateMat( 4, 1, CV_32FC1 ); /* corrected state (x(0)) */
-	indexMat[7] = cvCreateMat( rowA, colA, CV_32FC1 ); //???
-	
+	struct matrixDesc MDSC[7];
+	std::vector<float> ValuesVect;
+	parse("./data.txt",&ValuesVect,MDSC);
 
 	
-	for (int i=0;i<7;i++){
+	for (int i=0;i<2;i++){
+		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
+		}
+
+	//indexMat[0] = cvCreateMat( 4, 4, CV_32FC1 ); /* state transition matrix (A) */
+	//indexMat[1] = cvCreateMat( 4, 1, CV_32FC1 ); /* control matrix (Bu)(it is not used if there is no control)*/
+	//indexMat[2] = cvCreateMat( 2, 4, CV_32FC1 ); /* measurement matrix (H) */
+	//indexMat[3] = cvCreateMat( 4, 4, CV_32FC1 ); /* process noise covariance matrix (Q) */
+	//indexMat[4] = cvCreateMat( 2, 2, CV_32FC1 ); /* measurement noise covariance matrix (R) */
+	//indexMat[5] = cvCreateMat( 4, 4, CV_32FC1 ); /* posteriori error estimate covariance matrix P(0)*/
+	//indexMat[6] = cvCreateMat( 4, 1, CV_32FC1 ); /* corrected state (x(0)) */
+	//indexMat[7] = cvCreateMat( rowA, colA, CV_32FC1 ); //???
+	
+	
+	
+	for (int i=0;i<2;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
-			for (int l=0;l<indexMat[j]->cols;l++){
-				indexMat[i][(j*indexMat[i]->cols)+l].data.fl = getValue();//getValue() legge il valore da file o dalla maschera 
+			for (int l=0;l<indexMat[i]->cols;l++){
+				indexMat[i][(j*indexMat[i]->cols)+l].data.fl = 0;//qui ci si skianta i val contenuti nel valVect 
 			}
 		}	
 
