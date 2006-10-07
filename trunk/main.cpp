@@ -21,7 +21,7 @@
 
 int main (int argc, char ** argv){
 
-	CvMat* indexMat[8];
+	CvMat* indexMat[7];
 
     int MP = 2; /* number of measurement vector dimensions */
     int DP = 1; /* number of state vector dimensions */
