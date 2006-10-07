@@ -6,8 +6,14 @@
 #include <wx/utils.h>
 #include <wx/wx.h>
 #include <wx/string.h>
+
 int main(int argc, char *argv[]) {
-	CvCapture* capture = cvCaptureFromAVI("3Dballbounce.avi");
+
+#ifdef WIN32
+	CvCapture* capture = cvCaptureFromAVI("sphere1.avi");
+#else
+	CvCapture* capture = cvCaptureFromAVI("ball.avi");
+#endif
 
 	if( !capture ) {
 		fprintf( stderr, "ERROR: capture is NULL \n" );
@@ -36,15 +42,21 @@ int main(int argc, char *argv[]) {
 		cvShowImage( "mywindow", frame );
 		img=cvRetrieveFrame(capture);
 
-
 //----------------------CODICE CHE USA LE WX---------------------------
+		
+
+
+#ifdef WIN32
+		wxString dir = wxString("./data"); 
+		if (!wxDirExists(dir.c_str() )){ 
+			wxMkdir(dir);}*/	
+#else
+
 		const wxChar* dir=_("./data");
 		if (! wxDirExists(dir)){
 			if (! wxMkdir(dir)){
 			printf("\nCartella non creata\n\n");}}
-		/*wxString dir = wxString("./data"); 
-		if (!wxDirExists(dir.c_str() )){ 
-			wxMkdir(dir);}*/
+#endif		
 
 //---------------------------------------------------------------------------------
 
