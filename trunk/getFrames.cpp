@@ -7,6 +7,8 @@
 #include <wx/wx.h>
 #include <wx/string.h>
 
+using namespace std;
+
 int main(int argc, char *argv[]) {
 
 #ifdef WIN32
@@ -16,7 +18,8 @@ int main(int argc, char *argv[]) {
 #endif
 
 	if( !capture ) {
-		fprintf( stderr, "ERROR: capture is NULL \n" );
+		//fprintf( stderr, "ERROR: capture is NULL \n" );
+		cerr<<"Error:Caputre is null"<<endl;
 		getchar();
 		return -1;
 	}
@@ -33,7 +36,8 @@ int main(int argc, char *argv[]) {
 		// Get one frame
 		IplImage* frame = cvQueryFrame( capture );
 		if( !frame ) {
-			fprintf( stderr, "There is no frame to get. Press Any Key\n" );
+			//fprintf( stderr, "There is no frame to get. Press Any Key\n" );
+			cerr<<"There is no frame to get. Press Any Key"<<endl;
 			getchar();
 			//flag=true;
 			break;
@@ -55,14 +59,14 @@ int main(int argc, char *argv[]) {
 		const wxChar* dir=_("./data");
 		if (! wxDirExists(dir)){
 			if (! wxMkdir(dir)){
-			printf("\nCartella non creata\n\n");}}
+			cout<<"Cartella non creata"<<endl;}}
 #endif		
 
 //---------------------------------------------------------------------------------
 
 		sprintf(filesave,"./data/immagine%d.jpg",k);
 				
-		if(!cvSaveImage(filesave,img)) printf("Could not save the image\n");
+		if(!cvSaveImage(filesave,img)) cout<<"Could not save the image"<<endl;
 				
 		// Do not release the frame!
 		//If ESC key pressed, Key=0x10001B under OpenCV 0.9.7(linux version),

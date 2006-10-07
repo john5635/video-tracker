@@ -5,7 +5,9 @@
 #include <string.h>
 #include <cv.h>
 #include <cxcore.h>
+#include <iostream>
 
+using namespace std;
 
 struct coordinate { // coordinate of the tracked object in this case a ball.
 	int* cc;
