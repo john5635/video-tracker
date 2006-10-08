@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 #ifdef WIN32
 		wxString dir = wxString("./data"); 
 		if (!wxDirExists(dir.c_str() )){ 
-			wxMkdir(dir);}*/	
+			wxMkdir(dir);}	
 #else
 
 		const wxChar* dir=_("./data");

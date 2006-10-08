@@ -1,3 +1,9 @@
+#############################################
+#
+#  Makefile for video-tracker project
+#  
+##############################################
+
 GPP = g++ -g
 CC = gcc -g
 
@@ -19,24 +25,27 @@ wxCFLAGS += -DWIN32
 endif
 
 
-OBJ = extractBlob.o getBackground.o kalman.o main.o
+OBJ = extractBlob.o parser.o getBackground.o kalman.o main.o
 
 #fase di linking
 video-tracker: $(OBJ) 
-	$(GPP) $(CFLAGS) $(OBJ) -o $@  $(LIBS)
+	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS)
 
 #fase di compiling
 main.o: 
-	$(GPP) $(CFLAGS) -c main.cpp
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c main.cpp
 	
 extractBlob.o: 
-	$(GPP) $(CFLAGS) -c extractBlob.cpp
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c extractBlob.cpp
 
 getBackground.o: 
-	$(GPP) $(CFLAGS) -c getBackground.cpp
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c getBackground.cpp
 
 kalman.o: 
-	$(GPP) $(CFLAGS) -c kalman.cpp
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c kalman.cpp
+
+parser.o: 
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c parser.cpp
 
 main:        	$(TARGET)
 
