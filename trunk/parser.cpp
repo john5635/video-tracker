@@ -1,14 +1,24 @@
 #include "videoTracker.h"
 
+/****************************************************************************
+This function permits to read the file that contains the data for the matrices
+of the Kalman Filter
+*****************************************************************************/
+
+//ValuesVect contiene tutti i dati contenuti nelle matrici
+//MDSC contiene i dati che descrivono le matrici - necessario per la ricostruzione
+
+
 void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC){
  	wxString Stringa;
 	wxFFile file(fileName,"r");
-	file.ReadAll(&Stringa);
+	file.ReadAll(&Stringa);//put the content of the file in a string
 
-	int nMatrix = Stringa.Freq(']');
+	int nMatrix = Stringa.Freq(']');//# matrices in data file
 
 	//MDSC = new struct matrixDesc[nMatrix];
 	//std::vector<float> ValuesVect;
+	
 	
 	for (int i=0;i<nMatrix;i++){
 		wxString Matrix = Stringa.AfterFirst('[');
@@ -17,7 +27,7 @@ void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDS
 		Stringa.Remove(0,s+2);
 		
 		Matrix += ';';
-		int nRows = Matrix.Freq(';');
+		int nRows = Matrix.Freq(';');//# rows of the matrix
 		MDSC[i].nRows=nRows;
 		for (int j=0;j<nRows;j++){
 			wxString Row = Matrix.BeforeFirst(';');
@@ -27,11 +37,12 @@ void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDS
 			
 			Row +=(',');
 			int nCols = Row.Freq(',');
-			MDSC[i].nCols=nCols;
+			MDSC[i].nCols=nCols;//# cols of the matrix
+			//get data
 			for (int h=0;h<nCols;h++){
 				wxString Col = Row.BeforeFirst(',');
 				float val = strtod(Col,NULL);
-				ValuesVect->push_back(val);
+				ValuesVect->push_back(val);//put the data in the vector
 
 				int p;
 				p = Col.size();
