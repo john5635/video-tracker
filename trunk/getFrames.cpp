@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 #ifdef WIN32
 	CvCapture* capture = cvCaptureFromAVI("sphere1.avi");
 #else
-	CvCapture* capture = cvCaptureFromAVI("ball.avi");
+	CvCapture* capture = cvCaptureFromAVI(argv[1]);
 #endif
 
 	if( !capture ) {
