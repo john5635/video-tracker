@@ -11,9 +11,7 @@ of the Kalman Filter
 
 void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC){
  	wxString Stringa;
-	const wxChar* perm = _("r");
-	const wxChar* newFileName=_("./data.txt"); //it mus be not written,but a filename passed in the char* fileName variable
-	wxFFile file(newFileName, perm);
+	wxFFile file(fileName,"r");
 	file.ReadAll(&Stringa);//put the content of the file in a string
 
 	int nMatrix = Stringa.Freq(']');//# matrices in data file
@@ -43,8 +41,7 @@ void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDS
 			//get data
 			for (int h=0;h<nCols;h++){
 				wxString Col = Row.BeforeFirst(',');
-				const char* col = (const char *) Col.c_str(); // modified to be compiled under linux
-				float val = strtod(col,NULL);
+				float val = strtod(Col,NULL);
 				ValuesVect->push_back(val);//put the data in the vector
 
 				int p;
