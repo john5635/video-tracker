@@ -19,8 +19,8 @@
 void init(CvKalman * kalman, CvMat** indexMat){
 	
 	struct matrixDesc MDSC[7];
-	std::vector<float> ValuesVect;
-	parse("./data.txt",&ValuesVect,MDSC);
+	std::vector<float> ValuesVect(100);
+	parse(_("./data.txt"),&ValuesVect,MDSC);
 
 	
 	for (int i=0;i<2;i++){
