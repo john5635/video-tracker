@@ -9,11 +9,10 @@ of the Kalman Filter
 //MDSC contiene i dati che descrivono le matrici - necessario per la ricostruzione
 
 
-void parse(char * fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC){
+void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC){
  	wxString Stringa;
-	const wxChar* perm = _("r");
-	const wxChar* newFileName=_("./data.txt"); //it mus be not written,but a filename passed in the char* fileName variable
-	wxFFile file(newFileName, perm);
+	//it mus be not written,but a filename passed in the char* fileName variable
+	wxFFile file(fileName.GetData());
 	file.ReadAll(&Stringa);//put the content of the file in a string
 
 	int nMatrix = Stringa.Freq(']');//# matrices in data file
