@@ -78,7 +78,7 @@ void execute(CvKalman* kalman, char * aviName ){
 
 
 		coord = extractBlob(tmp_frame, background);
-		if (coord->flag == false ) break;
+		//if (coord->flag == false ) break;
 
 	}
 

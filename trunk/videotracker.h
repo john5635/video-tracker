@@ -14,9 +14,9 @@
 using namespace std;
 
 struct coordinate { // coordinate of the tracked object in this case a ball.
-	int* cc;
-	int* cr;
-	float radius;
+	//Coordinates of the rectangle around the blob
+	int Minx,Maxx,Maxy,Miny;
+	//float radius;
 	bool flag;
 };
 
