@@ -91,20 +91,36 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
 	
+	int height,width,step,channels;
+    uchar * dataCurrentImage;
+	uchar* dataBackgroundImage;
+	uchar* dataBinImage;
+    int i,j,k;
 	
-	if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
 	IplImage* img = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
 	IplImage* binImg = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
 	cvCvtColor(currentImage, img, CV_RGB2GRAY);
-	if(!cvSaveImage("img.jpg",img)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("img.jpg",img)) printf("Could not save the backgroundimage\n");
 	cvAdaptiveThreshold(img,binImg,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
 	
-	if(!cvSaveImage("binaria.jpg",binImg)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("binaria.jpg",binImg)) printf("Could not save the backgroundimage\n");
 	
-	cvNamedWindow("image",1);
-	cvShowImage("image", binImg);
-	cvWaitKey(0);
+	cvReleaseImage(&img);
+	
+	height    = currentImage->height;
+	width     = currentImage->width;
+	step      = currentImage->widthStep;
+	channels  = currentImage->nChannels;
+	dataCurrentImage      = (uchar *) currentImage->imageData;
+	dataBackgroundImage   = (uchar *) backgroundImage->imageData;
+	dataBinImage   = (uchar *) binImg->imageData;
 
+	for(i=0;i<height;i++) for(j=0;j<width;j++) for(k=0;k<channels;k++)
+    if ( dataCurrentImage[i*step+j*channels+k] - dataBackgroundImage[i*step+j*channels+k] >= value )
+		dataBinImage[i*step+j*channels+k] = 1;
+	
+	else  dataBinImage[i*step+j*channels+k] = 0;
 	
 	}
 
