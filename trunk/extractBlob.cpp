@@ -20,6 +20,7 @@
 
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
     IplImage* subbedImg = cvCloneImage(tmp_frame);
+	getFiltredBinaryImage(tmp_frame,background,2);
 	cvSub( tmp_frame, background, subbedImg, NULL );
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
 	
@@ -83,3 +84,41 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 	cvReleaseImage(&img);
 	return 0;
 }
+
+
+
+
+IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
+	
+	
+	IplImage * returnImage = cvCloneImage(currentImage);
+	cvCvtColor(returnImage, currentImage, CV_RGB2GRAY);
+	cvAdaptiveThreshold( returnImage, currentImage ,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
+	cvNamedWindow("image",1);
+	cvShowImage("image", currentImage);
+	
+	
+	
+	
+	
+
+	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

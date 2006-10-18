@@ -36,3 +36,5 @@ IplImage* getBackground(char* aviName);
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background);
 
 void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC);
+
+IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value );
