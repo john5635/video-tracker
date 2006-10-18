@@ -14,14 +14,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 // Blobs
-#include <Blob.h>
-#include <BlobResult.h>
+#include "Blob.h"
+#include "BlobResult.h"
 #include "videotracker.h"
 
-struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
+struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
     IplImage* subbedImg = cvCloneImage(tmp_frame);
-	getFiltredBinaryImage(tmp_frame,background,2);
-	 //cvSub( tmp_frame, background, subbedImg, NULL );
+	//getFiltredBinaryImage(tmp_frame,background,2);
+	cvSub( tmp_frame, background, subbedImg, NULL );
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
 	
 	IplImage* img = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
@@ -55,8 +55,8 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 	// some vars
 	int iMaxx, iMinx, iMaxy, iMiny, iMeanx, iMeany;
 	// for each blob
-	for  (i=0; i<blobs.GetNumBlobs(); ++i)
-	{
+	i=id;//for  (i=0; i<blobs.GetNumBlobs(); ++i)
+	//{
 		// get the blob info
 		Blob = blobs.GetBlob(i);
 		// get max, and min co-ordinates
@@ -72,18 +72,28 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 		// mark box around blob
 		cvRectangle( img, cvPoint(iMinx , iMiny ), cvPoint ( iMaxx, iMaxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
 		// print the blob centres
-		printf("\n%d, X: %d, Y: %d\n", i, iMeanx, iMeany);
-	}// each blob
+		printf("\nBlob id: %d, X: %d, Y: %d\n", i, iMeanx, iMeany);
+	//}// each blob
 
 	// display the image
-	//cvNamedWindow("image",1);
-	//cvShowImage("image", img);
+	cvNamedWindow("image",1);
+	cvShowImage("image", img);
 	// keep image 'til keypress
-	//cvWaitKey(0);
+	cvWaitKey(0);
 	// release the image
 	cvReleaseImage(&img);
 	
-	return 0;
+	//create the coordinate struct
+	coordinate coord;
+	coord.Maxx=iMaxx;
+	coord.Maxy=iMaxy;
+	coord.Minx=iMinx;
+	coord.Miny=iMiny;
+	//if (blobs.GetNumBlobs()==0) {coord->flag=false;} else coord->flag=true; 
+	coord.flag=true;
+	//Return blobs coordinate
+	return coord;
+	//return 0;
 }
 
 
@@ -91,39 +101,21 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
 	
-	int height,width,step,channels;
-    uchar * dataCurrentImage;
-	uchar* dataBackgroundImage;
-	uchar* dataBinImage;
-    int i,j,k;
 	
-	//if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
-	IplImage* img = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
-	IplImage* binImg = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
-	cvCvtColor(currentImage, img, CV_RGB2GRAY);
-	//if(!cvSaveImage("img.jpg",img)) printf("Could not save the backgroundimage\n");
-	cvAdaptiveThreshold(img,binImg,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
+	IplImage * returnImage = cvCloneImage(currentImage);
+	cvCvtColor(returnImage, currentImage, CV_RGB2GRAY);
+	cvAdaptiveThreshold( returnImage, currentImage ,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
+	cvNamedWindow("image",1);
+	cvShowImage("image", currentImage);
 	
-	//if(!cvSaveImage("binaria.jpg",binImg)) printf("Could not save the backgroundimage\n");
 	
-	cvReleaseImage(&img);
 	
-	height    = currentImage->height;
-	width     = currentImage->width;
-	step      = currentImage->widthStep;
-	channels  = currentImage->nChannels;
-	dataCurrentImage      = (uchar *) currentImage->imageData;
-	dataBackgroundImage   = (uchar *) backgroundImage->imageData;
-	dataBinImage   = (uchar *) binImg->imageData;
+	
+	
 
-	for(i=0;i<height;i++) for(j=0;j<width;j++) for(k=0;k<channels;k++)
-    if ( dataCurrentImage[i*step+j*channels+k] - dataBackgroundImage[i*step+j*channels+k] >= value )
-		dataBinImage[i*step+j*channels+k] = 1;
-	
-	else  dataBinImage[i*step+j*channels+k] = 0;
 	
 	}
-
+ 
 
 
 
