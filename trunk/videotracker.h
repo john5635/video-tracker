@@ -1,4 +1,4 @@
-#include <wx/wx.h>
+#include <wx/wx.h> 
 #include <wx/string.h>
 
 #include <cvaux.h>  // include core library interface
@@ -28,12 +28,14 @@ struct matrixDesc{
 void init(CvKalman * kalman, CvMat** indexMat);
 void execute(CvKalman* kalman, char * aviName );
 
+void findBlob(char * aviName,int id );
+
 std::vector<float> getValue(wxString filename);
 
 
 IplImage* getBackground(char* aviName);
 
-struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background);
+struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id);
 
 void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC);
 
