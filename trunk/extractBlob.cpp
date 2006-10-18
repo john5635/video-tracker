@@ -20,22 +20,24 @@
 
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
     IplImage* subbedImg = cvCloneImage(tmp_frame);
-	//getFiltredBinaryImage(tmp_frame,background,2);
+	//IplImage* binImg = getFiltredBinaryImage(tmp_frame,background,10);
 	cvSub( tmp_frame, background, subbedImg, NULL );
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
 	
 	IplImage* img = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
-	//IplImage* binImg = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
+	
+	IplImage* binImg = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
 	
 	cvCvtColor(subbedImg, img, CV_RGB2GRAY);
-
-	//cvAdaptiveThreshold( img, binImg,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
-	
+    cvThreshold(img,binImg,10,255,CV_THRESH_BINARY);
+	cvErode( binImg, binImg,NULL, 1 );
+//	cvAdaptiveThreshold( img, binImg,255,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,5, 5 );
+	if(!cvSaveImage("binary.jpg",binImg)) printf("Could not save the backgroundimage\n");
 	// FIND AND MARK THE BLOBS
 	// delcare a set of blob results
 	CBlobResult blobs;
 	// get the blobs from the image, with no mask, using a threshold of 100
-	blobs = CBlobResult( img, NULL, 10, true );
+	blobs = CBlobResult( binImg, NULL, 10, true );
 	
 	blobs.PrintBlobs( "blobs.txt" );
 
@@ -68,16 +70,17 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 		iMeanx=(iMinx+iMaxx)/2;
 		iMeany=(iMiny+iMaxy)/2;
 		// mark centre
-		cvLine( img, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
+		cvLine( binImg, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
 		// mark box around blob
-		cvRectangle( img, cvPoint(iMinx , iMiny ), cvPoint ( iMaxx, iMaxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
+		cvRectangle( binImg
+					, cvPoint(iMinx , iMiny ), cvPoint ( iMaxx, iMaxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
 		// print the blob centres
 		printf("\nBlob id: %d, X: %d, Y: %d\n", i, iMeanx, iMeany);
 	//}// each blob
 
 	// display the image
 	cvNamedWindow("image",1);
-	cvShowImage("image", img);
+	cvShowImage("image", binImg);
 	// keep image 'til keypress
 	cvWaitKey(0);
 	// release the image
@@ -98,26 +101,38 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 
 
 
-
+/*
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
 	
-	
-	IplImage * returnImage = cvCloneImage(currentImage);
-	cvCvtColor(returnImage, currentImage, CV_RGB2GRAY);
-	cvAdaptiveThreshold( returnImage, currentImage ,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
-	cvNamedWindow("image",1);
-	cvShowImage("image", currentImage);
-	
-	
-	
-	
-	
 
 	
-	}
- 
+	//if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
+	IplImage* cimg = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
+	IplImage* cbinImg = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
+	cvCvtColor(currentImage, cimg, CV_RGB2GRAY);
+	cvAdaptiveThreshold( cimg, cbinImg, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV, 9, 5 );
+	if(!cvSaveImage("current.jpg",cbinImg)) printf("Could not save the backgroundimage\n");
+	
+	//cvReleaseImage(&img);
+	//cvReleaseImage(&binImg);
+	
+	IplImage* bimg = cvCreateImage(cvGetSize(backgroundImage),IPL_DEPTH_8U,1);
+	IplImage* bbinImg = cvCreateImage(cvGetSize(backgroundImage),IPL_DEPTH_8U,1);
+	cvCvtColor(backgroundImage, bimg, CV_RGB2GRAY);
+	cvAdaptiveThreshold( bimg, bbinImg, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV, 9, 5 );
+	if(!cvSaveImage("back.jpg",bbinImg)) printf("Could not save the backgroundimage\n");
+	
+	IplImage* subbed = cvCloneImage(cbinImg);
+    cvSub(cbinImg,bbinImg,subbed,NULL);
+
+	cvErode( subbed, subbed,cvCreateStructuringElementEx(2,2,1,1,CV_SHAPE_RECT,NULL), 1 );
+		if(!cvSaveImage("backg.jpg",subbed)) printf("Could not save the backgroundimage\n");
+			
+			return subbed;
+}
 
 
+*/
 
 
 
