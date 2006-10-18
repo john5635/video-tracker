@@ -27,11 +27,15 @@ int main (int argc, char ** argv){
     int DP = 1; /* number of state vector dimensions */
     int CP = 0; /* number of control vector dimensions */
 	
+	int id=0;
+        
+	findBlob(argv[1],id);
+	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
 	init(kalman, indexMat);
 	
-	execute(kalman, argv[1]);
+	//execute(kalman, argv[1]);
 
 	return 0;
 }
