@@ -21,7 +21,7 @@
 struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
     IplImage* subbedImg = cvCloneImage(tmp_frame);
 	getFiltredBinaryImage(tmp_frame,background,2);
-	cvSub( tmp_frame, background, subbedImg, NULL );
+	 //cvSub( tmp_frame, background, subbedImg, NULL );
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
 	
 	IplImage* img = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
@@ -76,12 +76,13 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 	}// each blob
 
 	// display the image
-	cvNamedWindow("image",1);
-	cvShowImage("image", img);
+	//cvNamedWindow("image",1);
+	//cvShowImage("image", img);
 	// keep image 'til keypress
-	cvWaitKey(0);
+	//cvWaitKey(0);
 	// release the image
 	cvReleaseImage(&img);
+	
 	return 0;
 }
 
@@ -91,16 +92,18 @@ struct coordinate* extractBlob(IplImage* tmp_frame, IplImage* background){
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
 	
 	
-	IplImage * returnImage = cvCloneImage(currentImage);
-	cvCvtColor(returnImage, currentImage, CV_RGB2GRAY);
-	cvAdaptiveThreshold( returnImage, currentImage ,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
+	if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
+	IplImage* img = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
+	IplImage* binImg = cvCreateImage(cvGetSize(currentImage),IPL_DEPTH_8U,1);
+	cvCvtColor(currentImage, img, CV_RGB2GRAY);
+	if(!cvSaveImage("img.jpg",img)) printf("Could not save the backgroundimage\n");
+	cvAdaptiveThreshold(img,binImg,CV_THRESH_BINARY_INV,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,3, 5 );
+	
+	if(!cvSaveImage("binaria.jpg",binImg)) printf("Could not save the backgroundimage\n");
+	
 	cvNamedWindow("image",1);
-	cvShowImage("image", currentImage);
-	
-	
-	
-	
-	
+	cvShowImage("image", binImg);
+	cvWaitKey(0);
 
 	
 	}
