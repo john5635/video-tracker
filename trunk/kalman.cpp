@@ -51,7 +51,8 @@ void init(CvKalman * kalman, CvMat** indexMat){
 
 
 void execute(CvKalman* kalman, char * aviName ){
-	struct coordinate* coord;
+	//La parte ora commentata è in findBlob
+        /*struct coordinate coord;
 	IplImage* background = getBackground(aviName);
 	
 	int height = background->height;
@@ -78,9 +79,9 @@ void execute(CvKalman* kalman, char * aviName ){
 
 
 		coord = extractBlob(tmp_frame, background);
-		//if (coord->flag == false ) break;
-
-	}
+		if (coord.flag == false ) break; else printf("Flag true!");
+		printf("MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n", coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
+	}*/
 
 
 
