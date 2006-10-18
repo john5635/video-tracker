@@ -20,6 +20,7 @@
 
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
     IplImage* subbedImg = cvCloneImage(tmp_frame);
+
 	//IplImage* binImg = getFiltredBinaryImage(tmp_frame,background,10);
 	cvSub( tmp_frame, background, subbedImg, NULL );
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
@@ -30,11 +31,13 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 	
 	cvCvtColor(subbedImg, img, CV_RGB2GRAY);
     cvThreshold(img,binImg,10,255,CV_THRESH_BINARY);
-	cvErode( binImg, binImg,NULL, 1 );
-//	cvAdaptiveThreshold( img, binImg,255,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,5, 5 );
-	if(!cvSaveImage("binary.jpg",binImg)) printf("Could not save the backgroundimage\n");
+
+	//cvErode( binImg, binImg,NULL, 1 );
+	//cvAdaptiveThreshold( img, binImg,255,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,5, 5 );
+	//if(!cvSaveImage("binary.jpg",binImg)) printf("Could not save the backgroundimage\n");
 	// FIND AND MARK THE BLOBS
 	// delcare a set of blob results
+	
 	CBlobResult blobs;
 	// get the blobs from the image, with no mask, using a threshold of 100
 	blobs = CBlobResult( binImg, NULL, 10, true );
@@ -43,7 +46,7 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 
 	// discard the blobs with less area than 5000 pixels
 	// ( the criteria to filter can be any class derived from COperadorBlob )
-	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 100 );
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 100);
 	//queste due righe sono per filtrare i 2 blob del centro dell' immagine
 	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (img->height)*(img->width)*0.8);
 	blobs.Filter( blobs, B_INCLUDE, CBlobGetPerimeter(), B_LESS, (img->height)+(img->width)*2*0.8);
@@ -70,9 +73,9 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 		iMeanx=(iMinx+iMaxx)/2;
 		iMeany=(iMiny+iMaxy)/2;
 		// mark centre
-		cvLine( binImg, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
+		cvLine( tmp_frame, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
 		// mark box around blob
-		cvRectangle( binImg
+		cvRectangle( tmp_frame
 					, cvPoint(iMinx , iMiny ), cvPoint ( iMaxx, iMaxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
 		// print the blob centres
 		printf("\nBlob id: %d, X: %d, Y: %d\n", i, iMeanx, iMeany);
@@ -80,11 +83,11 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 
 	// display the image
 	cvNamedWindow("image",1);
-	cvShowImage("image", binImg);
+	cvShowImage("image", tmp_frame);
 	// keep image 'til keypress
 	cvWaitKey(0);
 	// release the image
-	cvReleaseImage(&img);
+	//cvReleaseImage(&tmp_frame);
 	
 	//create the coordinate struct
 	coordinate coord;
