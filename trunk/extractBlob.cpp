@@ -19,34 +19,47 @@
 #include "videotracker.h"
 
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
-    IplImage* subbedImg = cvCloneImage(tmp_frame);
-
+   
 	//IplImage* binImg = getFiltredBinaryImage(tmp_frame,background,10);
-	cvSub( tmp_frame, background, subbedImg, NULL );
-	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");	
 	
-	IplImage* img = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
+	//get the binary background
+	IplImage* tempBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
+	cvCvtColor(background, tempBack, CV_RGB2GRAY);
+	IplImage* binBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
+	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
+	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
 	
-	IplImage* binImg = cvCreateImage(cvGetSize(subbedImg),IPL_DEPTH_8U,1);
-	
-	cvCvtColor(subbedImg, img, CV_RGB2GRAY);
-    cvThreshold(img,binImg,10,255,CV_THRESH_BINARY);
+	//get the binary frame
+	IplImage* img = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvCvtColor(tmp_frame, img, CV_RGB2GRAY);
+	IplImage* binImg = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvThreshold(img,binImg,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
+
+	//get the binary foreground
+	cvSub( binImg, binBack, binFore, NULL );
+	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+
 
 	//cvErode( binImg, binImg,NULL, 1 );
 	//cvAdaptiveThreshold( img, binImg,255,CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV,5, 5 );
-	//if(!cvSaveImage("binary.jpg",binImg)) printf("Could not save the backgroundimage\n");
+	
+	
 	// FIND AND MARK THE BLOBS
 	// delcare a set of blob results
 	
 	CBlobResult blobs;
 	// get the blobs from the image, with no mask, using a threshold of 100
-	blobs = CBlobResult( binImg, NULL, 10, true );
+	blobs = CBlobResult( binFore, NULL, 10, true );
 	
 	blobs.PrintBlobs( "blobs.txt" );
 
 	// discard the blobs with less area than 5000 pixels
 	// ( the criteria to filter can be any class derived from COperadorBlob )
-	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 100);
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 60);
 	//queste due righe sono per filtrare i 2 blob del centro dell' immagine
 	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (img->height)*(img->width)*0.8);
 	blobs.Filter( blobs, B_INCLUDE, CBlobGetPerimeter(), B_LESS, (img->height)+(img->width)*2*0.8);
