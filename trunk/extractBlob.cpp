@@ -119,8 +119,13 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 
 
 /*
+
+
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value ){
 	
+
+
+
 
 	
 	//if(!cvSaveImage("current.jpg",currentImage)) printf("Could not save the backgroundimage\n");
