@@ -9,7 +9,7 @@ of the Kalman Filter
 //MDSC contiene i dati che descrivono le matrici - necessario per la ricostruzione
 
 
-void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC){
+void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
  	wxString Stringa;
 	//it mus be not written,but a filename passed in the char* fileName variable
 	wxFFile file(fileName.GetData());
@@ -20,6 +20,7 @@ void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* M
 	//MDSC = new struct matrixDesc[nMatrix];
 	//std::vector<float> ValuesVect;
 	
+	int zz=0;
 	
 	for (int i=0;i<nMatrix;i++){
 		wxString Matrix = Stringa.AfterFirst('[');
@@ -40,12 +41,13 @@ void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* M
 			int nCols = Row.Freq(',');
 			MDSC[i].nCols=nCols;//# cols of the matrix
 			//get data
+
 			for (int h=0;h<nCols;h++){
 				wxString Col = Row.BeforeFirst(',');
 				const char* col = (const char *) Col.c_str(); // modified to be compiled under linux
 				float val = strtod(col,NULL);
-				ValuesVect->push_back(val);//put the data in the vector
-
+				ValuesVect[zz]=val;//put the data in the vector
+				zz++;
 				int p;
 				p = Col.size();
 				Row.Remove(0,p+1);

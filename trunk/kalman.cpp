@@ -19,11 +19,12 @@
 void init(CvKalman * kalman, CvMat** indexMat){
 	
 	struct matrixDesc MDSC[7];
-	std::vector<float> ValuesVect(100);
-	parse(_("./data.txt"),&ValuesVect,MDSC);
+	float ValuesVect[100];
+
+	parse(_("./data.txt"),ValuesVect,MDSC);
 
 	
-	for (int i=0;i<2;i++){
+	for (int i=0;i<5;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
 
@@ -37,11 +38,13 @@ void init(CvKalman * kalman, CvMat** indexMat){
 	//indexMat[7] = cvCreateMat( rowA, colA, CV_32FC1 ); //???
 	
 	
-	
-	for (int i=0;i<2;i++){
+	int h = 0;
+
+	for (int i=0;i<5;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
 			for (int l=0;l<indexMat[i]->cols;l++){
-				indexMat[i][(j*indexMat[i]->cols)+l].data.fl = 0;//qui ci si skianta i val contenuti nel valVect 
+				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];//qui ci si skianta i val contenuti nel valVect 
+				h++;
 			}
 		}	
 

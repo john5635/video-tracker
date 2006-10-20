@@ -21,11 +21,7 @@
 
 int main (int argc, char ** argv){
 
-
-        
 	execute(argv[1],0);
-	
-	
 	
 	//execute(kalman, argv[1]);
 
