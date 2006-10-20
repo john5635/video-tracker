@@ -22,7 +22,8 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
    
 	//IplImage* binImg = getFiltredBinaryImage(tmp_frame,background,10);
 	//if(!cvSaveImage("subbed.jpg",subbedImg)) printf("Could not save the backgroundimage\n");	
-	
+	coordinate coord;
+
 	//get the binary background
 	IplImage* tempBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
 	cvCvtColor(background, tempBack, CV_RGB2GRAY);
@@ -73,7 +74,8 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 	// some vars
 	int iMaxx, iMinx, iMaxy, iMiny, iMeanx, iMeany;
 	// for each blob
-	i=id;//for  (i=0; i<blobs.GetNumBlobs(); ++i)
+	if (blobs.GetNumBlobs()==0){coord.flag=false; return coord;}
+	else{i=id;//for  (i=0; i<blobs.GetNumBlobs(); ++i)
 	//{
 		// get the blob info
 		Blob = blobs.GetBlob(i);
@@ -103,15 +105,14 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 	//cvReleaseImage(&tmp_frame);
 	
 	//create the coordinate struct
-	coordinate coord;
 	coord.Maxx=iMaxx;
 	coord.Maxy=iMaxy;
 	coord.Minx=iMinx;
 	coord.Miny=iMiny;
-	//if (blobs.GetNumBlobs()==0) {coord->flag=false;} else coord->flag=true; 
-	coord.flag=true;
+	if (blobs.GetNumBlobs()==0) {coord.flag=false;} else coord.flag=true; 
+	//coord.flag=true;
 	//Return blobs coordinate
-	return coord;
+	return coord;}
 	//return 0;
 }
 
@@ -149,18 +150,3 @@ IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImag
 
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

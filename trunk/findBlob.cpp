@@ -43,11 +43,11 @@ void findBlob(char * aviName,int id ){
 
                 
 		coord = extractBlob(tmp_frame, background,id);
-		if (coord.flag == false ) printf(""); else printf("Flag true!\n");
+		if (coord.flag == false ) {printf("No Blobs to extract");} else printf("Flag true!\n");
 	printf("MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
 	}
 
 
 
 
-}; 
+};
