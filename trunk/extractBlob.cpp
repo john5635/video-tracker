@@ -84,32 +84,25 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
 		iMinx=Blob.MinX();
 		iMaxy=Blob.MaxY();
 		iMiny=Blob.MinY();
+		
 		// find the average of the blob (i.e. estimate its centre)
-		iMeanx=(iMinx+iMaxx)/2;
-		iMeany=(iMiny+iMaxy)/2;
+		//iMeanx=(iMinx+iMaxx)/2;
+		//iMeany=(iMiny+iMaxy)/2;
+		
 		// mark centre
-		cvLine( tmp_frame, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
-		// mark box around blob
-		cvRectangle( tmp_frame
-					, cvPoint(iMinx , iMiny ), cvPoint ( iMaxx, iMaxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
+		
 		// print the blob centres
-		printf("\nBlob id: %d, X: %d, Y: %d\n", i, iMeanx, iMeany);
+		//printf("\nBlob id: %d, X: %d, Y: %d\n", i, iMeanx, iMeany);
 	//}// each blob
 
-	// display the image
-	cvNamedWindow("image",1);
-	cvShowImage("image", tmp_frame);
-	// keep image 'til keypress
-	cvWaitKey(0);
-	// release the image
-	//cvReleaseImage(&tmp_frame);
+	
 	
 	//create the coordinate struct
 	coord.Maxx=iMaxx;
 	coord.Maxy=iMaxy;
 	coord.Minx=iMinx;
 	coord.Miny=iMiny;
-	if (blobs.GetNumBlobs()==0) {coord.flag=false;} else coord.flag=true; 
+	coord.flag=true; 
 	//coord.flag=true;
 	//Return blobs coordinate
 	return coord;}

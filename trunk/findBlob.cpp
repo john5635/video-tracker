@@ -22,7 +22,7 @@ void findBlob(char * aviName,int id ){
 	int height = background->height;
 	int width = background->width;
 	int channels = background->nChannels;
-
+	int iMeanx, iMeany;
 
 	CvCapture* capture = cvCaptureFromAVI(aviName);
   
@@ -45,9 +45,27 @@ void findBlob(char * aviName,int id ){
 		coord = extractBlob(tmp_frame, background,id);
 		if (coord.flag == false ) {printf("No Blobs to extract");} else printf("Flag true!\n");
 	printf("MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
+	iMeanx=(coord.Maxx+coord.Minx)/2;
+	iMeany=(coord.Maxy+coord.Miny)/2;
+	cvLine( tmp_frame, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
+		// mark box around blob
+	cvRectangle( tmp_frame
+					, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
+		
+		
+		// display the image
+	cvNamedWindow("image",1);
+	cvShowImage("image", tmp_frame);
+	// keep image 'til keypress
+	cvWaitKey(0);
+	// release the image
+	
+	
 	}
 
-
+cvReleaseImage(&tmp_frame);
+cvDestroyWindow("image");
+cvReleaseCapture(&capture);
 
 
 };
