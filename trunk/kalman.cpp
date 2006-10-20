@@ -49,7 +49,13 @@ void init(CvKalman * kalman, CvMat** indexMat){
 		}	
 
 	}
-
+	
+	memcpy( kalman->transition_matrix->data.fl, indexMat[0], sizeof(indexMat[0])); //A
+	memcpy( kalman->control_matrix->data.fl, indexMat[1], sizeof(indexMat[1]));  //B
+	memcpy( kalman->measurement_matrix->data.fl, indexMat[2], sizeof(indexMat[2])); //H
+	memcpy( kalman->measurement_matrix->data.fl, indexMat[2], sizeof(indexMat[2])); //Q
+	memcpy( kalman->measurement_noise_cov->data.fl, indexMat[3], sizeof(indexMat[3])); //R
+	
 }
 
 

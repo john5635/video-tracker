@@ -23,8 +23,8 @@ void execute(char * aviName,int id ){
 	CvMat* indexMat[7];
 
     int MP = 2; /* number of measurement vector dimensions */
-    int DP = 1; /* number of state vector dimensions */
-    int CP = 0; /* number of control vector dimensions */
+    int DP = 4; /* number of state vector dimensions */
+    int CP = 1; /* number of control vector dimensions */
 	
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
