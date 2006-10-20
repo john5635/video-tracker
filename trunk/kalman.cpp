@@ -50,7 +50,7 @@ void init(CvKalman * kalman, CvMat** indexMat){
 }
 
 
-void execute(CvKalman* kalman, char * aviName ){
+//void execute(CvKalman* kalman, char * aviName ){
 	//La parte ora commentata è in findBlob
         /*struct coordinate coord;
 	IplImage* background = getBackground(aviName);
@@ -86,4 +86,4 @@ void execute(CvKalman* kalman, char * aviName ){
 
 
 
-}; // Predict and Correct
+//}; // Predict and Correct

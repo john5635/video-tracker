@@ -26,9 +26,9 @@ struct matrixDesc{
 };
 
 void init(CvKalman * kalman, CvMat** indexMat);
-void execute(CvKalman* kalman, char * aviName );
+//void execute(CvKalman* kalman, char * aviName );
 
-void findBlob(char * aviName,int id );
+void execute(char * aviName,int id );
 
 std::vector<float> getValue(wxString filename);
 
@@ -40,3 +40,5 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id);
 void parse(wxString fileName,std::vector<float>* ValuesVect,struct matrixDesc* MDSC);
 
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value );
+
+void drawBlob(IplImage * image, struct coordinate coord);
