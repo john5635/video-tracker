@@ -51,6 +51,7 @@ void execute(char * aviName,int id ){
 		else{ 
 			printf("Flag true!\n");
   			drawBlob(tmp_frame, coord);
+			//run(kalman,coord);
 			}	
 		
 		// display the image

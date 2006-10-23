@@ -16,6 +16,7 @@
  
 #include "videotracker.h"
 
+
 void init(CvKalman * kalman, CvMat** indexMat){
 	
 	struct matrixDesc MDSC[7];
@@ -24,7 +25,7 @@ void init(CvKalman * kalman, CvMat** indexMat){
 	parse(_("./data.txt"),ValuesVect,MDSC);
 
 	
-	for (int i=0;i<5;i++){
+	for (int i=0;i<7;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
 
@@ -40,7 +41,7 @@ void init(CvKalman * kalman, CvMat** indexMat){
 	
 	int h = 0;
 
-	for (int i=0;i<5;i++){
+	for (int i=0;i<7;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
 			for (int l=0;l<indexMat[i]->cols;l++){
 				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];//qui ci si skianta i val contenuti nel valVect 
@@ -50,14 +51,43 @@ void init(CvKalman * kalman, CvMat** indexMat){
 
 	}
 	
+/*	CvRandState rng;
+    cvRandInit( &rng, 0, 1, -1, CV_RAND_UNI );
+	cvRandSetRange( &rng, 0, 0.1, 0 );
+    rng.disttype = CV_RAND_NORMAL;
+
+
+	cvRand( &rng, kalman->state_post );
+	*/
+	
+		
+	//copying the data into Kalman Structure
 	memcpy( kalman->transition_matrix->data.fl, indexMat[0], sizeof(indexMat[0])); //A
 	memcpy( kalman->control_matrix->data.fl, indexMat[1], sizeof(indexMat[1]));  //B
 	memcpy( kalman->measurement_matrix->data.fl, indexMat[2], sizeof(indexMat[2])); //H
-	memcpy( kalman->measurement_matrix->data.fl, indexMat[2], sizeof(indexMat[2])); //Q
-	memcpy( kalman->measurement_noise_cov->data.fl, indexMat[3], sizeof(indexMat[3])); //R
+	memcpy( kalman->process_noise_cov->data.fl, indexMat[3], sizeof(indexMat[3])); //Q
+	memcpy( kalman->measurement_noise_cov->data.fl, indexMat[4], sizeof(indexMat[4])); //R
+	memcpy( kalman->temp1->data.fl, indexMat[5], sizeof(indexMat[5])); //u
+	memcpy( kalman->error_cov_pre->data.fl, indexMat[6], sizeof(indexMat[6])); //P
 	
 }
 
+
+
+void run(CvKalman * kalman, struct coordinate coord){
+	
+	CvMat* measurement = cvCreateMat( 4, 1, CV_32FC1 );
+	
+	for (int i = 0; i < 4 ; i++){
+	cvmSet(measurement,i,0,coord.Maxx);
+	}
+	
+	
+	cvKalmanPredict(kalman, kalman->temp1);
+	
+	//cvKalmanCorrect(kalman, )
+	
+	}
 
 //void execute(CvKalman* kalman, char * aviName ){
 	//La parte ora commentata è in findBlob

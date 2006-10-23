@@ -42,3 +42,5 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC);
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value );
 
 void drawBlob(IplImage * image, struct coordinate coord);
+	
+void run(CvKalman * kalman, struct coordinate coord);
