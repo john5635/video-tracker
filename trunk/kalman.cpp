@@ -19,13 +19,15 @@
 
 void init(CvKalman * kalman, CvMat** indexMat){
 	
-	struct matrixDesc MDSC[7];
+	struct matrixDesc *MDSC = new struct matrixDesc[5];
+	
+	//CvKalman * kalman=ptr;
 	float ValuesVect[100];
 
 	parse(_("./data.txt"),ValuesVect,MDSC);
 
 	
-	for (int i=0;i<7;i++){
+	for (int i=0;i<6;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
 
@@ -41,7 +43,7 @@ void init(CvKalman * kalman, CvMat** indexMat){
 	
 	int h = 0;
 
-	for (int i=0;i<7;i++){
+	for (int i=0;i<6;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
 			for (int l=0;l<indexMat[i]->cols;l++){
 				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];//qui ci si skianta i val contenuti nel valVect 
@@ -51,9 +53,9 @@ void init(CvKalman * kalman, CvMat** indexMat){
 
 	}
 	
-/*	CvRandState rng;
-    cvRandInit( &rng, 0, 1, -1, CV_RAND_UNI );
-	cvRandSetRange( &rng, 0, 0.1, 0 );
+	/*CvRandState rng;
+    //cvRandInit( &rng, 0, 1, -1, CV_RAND_UNI );
+	//cvRandSetRange( &rng, 0, 0.1, 0 );
     rng.disttype = CV_RAND_NORMAL;
 
 
@@ -62,31 +64,79 @@ void init(CvKalman * kalman, CvMat** indexMat){
 	
 		
 	//copying the data into Kalman Structure
-	memcpy( kalman->transition_matrix->data.fl, indexMat[0], sizeof(indexMat[0])); //A
-	memcpy( kalman->control_matrix->data.fl, indexMat[1], sizeof(indexMat[1]));  //B
-	memcpy( kalman->measurement_matrix->data.fl, indexMat[2], sizeof(indexMat[2])); //H
-	memcpy( kalman->process_noise_cov->data.fl, indexMat[3], sizeof(indexMat[3])); //Q
-	memcpy( kalman->measurement_noise_cov->data.fl, indexMat[4], sizeof(indexMat[4])); //R
-	memcpy( kalman->temp1->data.fl, indexMat[5], sizeof(indexMat[5])); //u
-	memcpy( kalman->error_cov_pre->data.fl, indexMat[6], sizeof(indexMat[6])); //P
-	
+
+	kalman->transition_matrix=indexMat[0];//A
+	copyMat(indexMat[1], kalman->control_matrix);//Bu
+	copyMat(indexMat[2], kalman->measurement_matrix);;//H
+	copyMat(indexMat[3], kalman->process_noise_cov);//Q
+	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
+	copyMat(indexMat[5], kalman->error_cov_pre);//P
+
+	//QUI BISOGNEREBBE FARE IL SET SULLA MATRICE DI STATO INIZIALE
+	double a[] = { 100,  100,  0,  0};
+
+	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
+	copyMat(&Ma, kalman->state_post);
+	//cvZero(kalman->state_post);
+
+
+	/*memcpy(kalman->transition_matrix->data.fl, indexMat[0], sizeof(indexMat[0]));//, sizeof(indexMat[0])); //A
+	kalman->control_matrix= cvCloneMat(indexMat[1]);//, sizeof(indexMat[1]));  //B
+	kalman->measurement_matrix= cvCloneMat(indexMat[2]);//, sizeof(indexMat[2])); //H
+	kalman->process_noise_cov=cvCloneMat(indexMat[3]);//, sizeof(indexMat[3])); //Q
+	kalman->measurement_noise_cov=cvCloneMat(indexMat[4]);//, sizeof(indexMat[4])); //R
+	kalman->temp1->data.fl[0]=indexMat[5]->data.fl[0]; //cvCloneMat(indexMat[5]);//, sizeof(indexMat[5])); //u
+	kalman->error_cov_pre=cvCloneMat(indexMat[6]);//, sizeof(indexMat[6])); //P
+	*/
+  //delete MDSC;
 }
 
+void copyMat (CvMat* source, CvMat* dest){
+	int i,j;
+	for (i=0; i<source->rows; i++)
+		for (j=0; j<source->cols;j++)
+			dest->data.fl[i*source->cols+j]=source->data.fl[i*source->cols+j];
 
+}
 
 void run(CvKalman * kalman, struct coordinate coord){
 	
-	CvMat* measurement = cvCreateMat( 4, 1, CV_32FC1 );
+	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
+	int Meanx, Meany;
+	Meanx=(coord.Minx+coord.Maxx)/2;
+	Meany=(coord.Miny+coord.Maxy)/2;
+	cvmSet(measurement,0,0,Meanx);
+	cvmSet(measurement,1,0,Meany);
 	
-	for (int i = 0; i < 4 ; i++){
-	cvmSet(measurement,i,0,coord.Maxx);
-	}
+	CvMat* state=cvCreateMat(4,1,CV_32FC1);
+	
+	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
+	u->data.fl[0]=1;
+    CvMat* process_noise = cvCreateMat(2, 1, CV_32FC1);
+
+	
+	//Kalman Predict
+	const CvMat* predict = cvKalmanPredict(kalman,u);
+	cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
+
+	
+	float prx = predict->data.fl[0];
+	float pry = predict->data.fl[1];
+	float vx = predict->data.fl[2];
+	float vy = predict->data.fl[3];
+	
+	printf("prx è %f, pry è %f\n\n", prx, pry);
 	
 	
-	cvKalmanPredict(kalman, kalman->temp1);
-	
-	//cvKalmanCorrect(kalman, )
-	
+	//Kalman Correct
+	const CvMat* correct= cvKalmanCorrect(kalman, measurement);
+	cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
+
+	float crx = correct->data.fl[0];
+	float cry = correct->data.fl[1];
+	float cvx = correct->data.fl[2];
+	float cvy = correct->data.fl[3];
+	printf("crx è %f, cry è %f\n\n", crx, cry);
 	}
 
 //void execute(CvKalman* kalman, char * aviName ){

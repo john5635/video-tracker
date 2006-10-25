@@ -44,16 +44,22 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
 
 			for (int h=0;h<nCols;h++){
 				wxString Col = Row.BeforeFirst(',');
-				const char* col = (const char *) Col.c_str(); // modified to be compiled under linux
-				float val = strtod(col,NULL);
+				
+				//const char* col = (const char *) Col.c_str(); // modified to be compiled under linux
+				
+				double val;
+				Col.ToDouble(&val);
+				
 				ValuesVect[zz]=val;//put the data in the vector
 				zz++;
 				int p;
 				p = Col.size();
 				Row.Remove(0,p+1);
 
-				}
+
 			}
-		}	
+			}
+		}
+	file.Close();
 
 }

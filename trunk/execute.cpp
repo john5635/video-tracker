@@ -29,7 +29,11 @@ void execute(char * aviName,int id ){
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 
 	init(kalman, indexMat);
-
+    
+	CvMat* state=cvCreateMat(4,1,CV_32FC1);
+	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
+    CvMat* process_noise = cvCreateMat(4, 1, CV_32FC1);
+	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
   
 	if( !capture ) {
@@ -51,6 +55,36 @@ void execute(char * aviName,int id ){
 		else{ 
 			printf("Flag true!\n");
   			drawBlob(tmp_frame, coord);
+			int Meanx, Meany;
+			Meanx=(coord.Minx+coord.Maxx)/2;
+			Meany=(coord.Miny+coord.Maxy)/2;
+			cvmSet(measurement,0,0,Meanx);
+			cvmSet(measurement,1,0,Meany);
+			CvMat* u = cvCreateMat(1,1, CV_32FC1 );
+			u->data.fl[0]=1;
+			
+			//Kalman Predict
+			const CvMat* predict = cvKalmanPredict(kalman,u);
+			cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
+
+			//Kalman Correct
+			const CvMat* correct= cvKalmanCorrect(kalman, measurement);
+			cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
+			
+			float prx = predict->data.fl[0];
+			float pry = predict->data.fl[1];
+			float vx = predict->data.fl[2];
+			float vy = predict->data.fl[3];
+			printf("prx e' %f, pry è %f\n\n", prx, pry);
+			float crx = correct->data.fl[0];
+			float cry = correct->data.fl[1];
+			float cvx = correct->data.fl[2];
+			float cvy = correct->data.fl[3];
+			printf("crx e' %f, cry è %f\n\n", crx, cry);
+
+
+			//BISOGNEREBBE FAR SCRIVERE LE COORDINATE CORRETTE PER CONFRONTARE
+			
 			//run(kalman,coord);
 			}	
 		

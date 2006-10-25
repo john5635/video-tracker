@@ -44,3 +44,4 @@ IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImag
 void drawBlob(IplImage * image, struct coordinate coord);
 	
 void run(CvKalman * kalman, struct coordinate coord);
+void copyMat (CvMat* source, CvMat* dest);
