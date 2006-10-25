@@ -105,9 +105,9 @@ void execute(char * aviName,int id ){
 void drawBlob(IplImage * image, struct coordinate coord){
 
 	int iMeanx, iMeany;
-	printf("MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
 	iMeanx=(coord.Maxx+coord.Minx)/2;
 	iMeany=(coord.Maxy+coord.Miny)/2;
+	printf("Centro: x:%d, y:%d - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", iMeanx, iMeany,coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
 	cvLine( image, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
 	// mark box around blob
 	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
