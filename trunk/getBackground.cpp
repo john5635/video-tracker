@@ -43,34 +43,37 @@
 
 IplImage* getBackground(char* aviName){
 	 
-	 IplImage* tmp_frame = NULL;
-	 IplImage* savedBackgroundImage;
-	 CvCapture* cap = NULL;
+	IplImage* tmp_frame = NULL;
+	IplImage* savedBackgroundImage;
+	CvCapture* cap = NULL;
 	// cvNamedWindow("BG", 1); da attivare se si passa un opzione al programma -v che sta per visualizza video
 	 
-	 cap = cvCaptureFromAVI(aviName);
-     	 tmp_frame = cvQueryFrame(cap);
+	cap = cvCaptureFromAVI(aviName);
+    tmp_frame = cvQueryFrame(cap);
  
-   	  if(!tmp_frame) {
-       		  printf("Bad video \n");
-       		  exit(0);
-    	 }
+   	if(!tmp_frame)
+		{
+       		printf("Bad video \n");
+       		exit(0);
+    	}
 
-	 CvBGStatModel* bg_model = cvCreateGaussianBGModel(tmp_frame);
+	CvBGStatModel* bg_model = cvCreateGaussianBGModel(tmp_frame);
 
-    	 for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(cap), fr++ ){
-        	printf("Reading avi %s\nframe# %d \t\n", aviName, fr);
+    for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(cap), fr++ ){
+       	printf("Reading avi %s\nframe# %d \t\n", aviName, fr);
 		double t = (double)cvGetTickCount();
 		cvUpdateBGStatModel(tmp_frame, bg_model);
-        	printf( "updating time : %.1f milli seconds \n", t/ (cvGetTickFrequency()*1000.) );
+       	printf( "updating time : %.1f milli seconds \n", t/ (cvGetTickFrequency()*1000.) );
+	
 		// cvShowImage("BG", bg_model->background);da attivare se si passa un opzione al programma -v che sta per visualizza video
-     		savedBackgroundImage = cvCloneImage(bg_model->background);
+     	savedBackgroundImage = cvCloneImage(bg_model->background);
 		int k = cvWaitKey(5);
-        	if( k == 27 ) break;
+        if( k == 27 ) break;
 	 }
+	 
 	 if(!cvSaveImage("background.jpg",savedBackgroundImage)) printf("Could not save the backgroundimage\n");
 	 cvReleaseBGStatModel( &bg_model );
-         cvReleaseCapture(&cap);
+     cvReleaseCapture(&cap);
    	 //cvDestroyWindow("BG");da attivare se si passa un opzione al programma -v che sta per visualizza video
 	 return savedBackgroundImage;
 }

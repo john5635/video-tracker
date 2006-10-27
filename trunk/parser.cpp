@@ -1,25 +1,59 @@
+/*! \file parser.cpp
+ *
+ *
+ * \brief <b>This function permits to read the file that contains the data for the matrices
+of the Kalman Filter </b>
+ *
+ *
+ *  \author Copyright (C) 2005-2006 by Iacopo Masi <iacopo.masi@gmail.com>
+ *   		 	and Nicola Martorana <martorana.nicola@gmail.com>
+ *			and Marco Meoni <meonimarco@gmail.com>
+ * 	
+ * This  code is distributed under the terms of <b>GNU GPL v2</b>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * \version $Revision: 0.1 $
+ * \date 2006/10/27 
+ * 
+ *
+ *
+ */
+ 
+
 #include "videotracker.h"
 
-/****************************************************************************
-This function permits to read the file that contains the data for the matrices
-of the Kalman Filter
-*****************************************************************************/
 
-//ValuesVect contiene tutti i dati contenuti nelle matrici
-//MDSC contiene i dati che descrivono le matrici - necessario per la ricostruzione
-
+///The function that parse the data.txt files where are store the Matrix
+/**
+ * \param filename The name of the file to parse
+ * \param ValuesVect The pointer to the vector that will contain the values
+ * \param MDSC The pointer to the structure that contains the info for each matrix: numbers of Rows and Cols 
+ */
 
 void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
- 	wxString Stringa;
-	//it mus be not written,but a filename passed in the char* fileName variable
-	wxFFile file(fileName.GetData());
-	file.ReadAll(&Stringa);//put the content of the file in a string
-
-	int nMatrix = Stringa.Freq(']');//# matrices in data file
-
-	//MDSC = new struct matrixDesc[nMatrix];
-	//std::vector<float> ValuesVect;
+ 	
+	wxString Stringa;
 	
+	//!It mus be not written,but a filename passed in the char* fileName variable
+	wxFFile file(fileName.GetData());
+	file.ReadAll(&Stringa);//!put the content of the file in a string
+
+	int nMatrix = Stringa.Freq(']');//!# matrices in data file
+
+		
 	int zz=0;
 	
 	for (int i=0;i<nMatrix;i++){
@@ -29,7 +63,7 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
 		Stringa.Remove(0,s+2);
 		
 		Matrix += ';';
-		int nRows = Matrix.Freq(';');//# rows of the matrix
+		int nRows = Matrix.Freq(';');//!# rows of the matrix
 		MDSC[i].nRows=nRows;
 		for (int j=0;j<nRows;j++){
 			wxString Row = Matrix.BeforeFirst(';');
@@ -39,8 +73,9 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
 			
 			Row +=(',');
 			int nCols = Row.Freq(',');
-			MDSC[i].nCols=nCols;//# cols of the matrix
-			//get data
+			MDSC[i].nCols=nCols;//!# cols of the matrix
+			
+			//!Getting the  data
 
 			for (int h=0;h<nCols;h++){
 				wxString Col = Row.BeforeFirst(',');
@@ -50,7 +85,7 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC){
 				double val;
 				Col.ToDouble(&val);
 				
-				ValuesVect[zz]=val;//put the data in the vector
+				ValuesVect[zz]=val;//!put the data in the vector
 				zz++;
 				int p;
 				p = Col.size();

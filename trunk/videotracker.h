@@ -1,22 +1,30 @@
+//! Including the wx library header
 #include <wx/wx.h> 
 #include <wx/string.h>
+#include <wx/ffile.h>
 
-#include <cvaux.h>  // include core library interface
-#include <highgui.h> // include GUI library interface
+//!Including the Opencv library header
+#include <cvaux.h>  
+#include <highgui.h>
 #include <stdio.h>
-#include <math.h>
 #include <cv.h>
 #include <cxcore.h>
+
+//! Including the standard C++ library header
 #include <vector>
-#include <wx/ffile.h>
+#include <math.h>
 #include <iostream>
 
 using namespace std;
 
-struct coordinate { // coordinate of the tracked object in this case a ball.
-	//Coordinates of the rectangle around the blob
+//! the numeber of matrix in the data.txt file to parse
+#define NUMBER_OF_MATRIX 7
+
+//! \struct Coordinate of the tracked object in this case a ball.
+struct coordinate { 
+	//!Coordinates of the rectangle around the blob
 	int Minx,Maxx,Maxy,Miny;
-	//float radius;
+	//!float radius;
 	bool flag;
 };
 
@@ -25,13 +33,13 @@ struct matrixDesc{
 		int nRows;
 };
 
+
+//! All the prototype functions of the video-tracker
 void init(CvKalman * kalman, CvMat** indexMat);
-//void execute(CvKalman* kalman, char * aviName );
 
 void execute(char * aviName,int id );
 
 std::vector<float> getValue(wxString filename);
-
 
 IplImage* getBackground(char* aviName);
 
@@ -44,4 +52,5 @@ IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImag
 void drawBlob(IplImage * image, struct coordinate coord);
 	
 void run(CvKalman * kalman, struct coordinate coord);
+	
 void copyMat (CvMat* source, CvMat* dest);

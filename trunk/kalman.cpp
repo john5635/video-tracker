@@ -1,4 +1,15 @@
-/*
+/*! \file kalman.cpp
+ *
+ *
+ * \brief <b>This file contains the two function that implement kalamn: the init where the kalman structure are fill up with the data taken by the parser </b>
+ *
+ *
+ *  \author Copyright (C) 2005-2006 by Iacopo Masi <iacopo.masi@gmail.com>
+ *   		 	and Nicola Martorana <martorana.nicola@gmail.com>
+ *			and Marco Meoni <meonimarco@gmail.com>
+ * 	
+ * This  code is distributed under the terms of <b>GNU GPL v2</b>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -12,84 +23,79 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * \version $Revision: 0.1 $
+ * \date 2006/10/27 
+ * 
+ *
+ *
  */
  
 #include "videotracker.h"
 
+///The function that fill up the kalman structure parsing a data file, where there is the matrices
+/**
+ * \brief  the map of the kalman matrix in the indexMat vector
+ *			0 -> A
+ *			1 -> Bu
+ *			2 -> H
+ *			3 -> Q
+ *			4 -> R
+ *			5 -> P
+ *			6 -> NULL			
+ * \param kalman the pointer to the kalman structure
+ * \param indexMat the pointer to the vector of matrix where will be the parsed value
+ */
 
 void init(CvKalman * kalman, CvMat** indexMat){
 	
 	struct matrixDesc *MDSC = new struct matrixDesc[5];
 	
-	//CvKalman * kalman=ptr;
 	float ValuesVect[100];
 
+	//!parsing the file
 	parse(_("./data.txt"),ValuesVect,MDSC);
 
 	
-	for (int i=0;i<6;i++){
+	for (int i=0;i< NUMBER_OF_MATRIX -1 ;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
 
-	//indexMat[0] = cvCreateMat( 4, 4, CV_32FC1 ); /* state transition matrix (A) */
-	//indexMat[1] = cvCreateMat( 4, 1, CV_32FC1 ); /* control matrix (Bu)(it is not used if there is no control)*/
-	//indexMat[2] = cvCreateMat( 2, 4, CV_32FC1 ); /* measurement matrix (H) */
-	//indexMat[3] = cvCreateMat( 4, 4, CV_32FC1 ); /* process noise covariance matrix (Q) */
-	//indexMat[4] = cvCreateMat( 2, 2, CV_32FC1 ); /* measurement noise covariance matrix (R) */
-	//indexMat[5] = cvCreateMat( 4, 4, CV_32FC1 ); /* posteriori error estimate covariance matrix P(0)*/
-	//indexMat[6] = cvCreateMat( 4, 1, CV_32FC1 ); /* corrected state (x(0)) */
-	//indexMat[7] = cvCreateMat( rowA, colA, CV_32FC1 ); //???
-	
-	
 	int h = 0;
-
-	for (int i=0;i<6;i++){
+	
+	//! gettin the value from the ValuesVect and store in indexMat
+	for (int i=0;i< NUMBER_OF_MATRIX -1;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
 			for (int l=0;l<indexMat[i]->cols;l++){
-				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];//qui ci si skianta i val contenuti nel valVect 
+				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];
 				h++;
 			}
 		}	
 
 	}
 	
-	/*CvRandState rng;
-    //cvRandInit( &rng, 0, 1, -1, CV_RAND_UNI );
-	//cvRandSetRange( &rng, 0, 0.1, 0 );
-    rng.disttype = CV_RAND_NORMAL;
-
-
-	cvRand( &rng, kalman->state_post );
-	*/
-	
-		
-	//copying the data into Kalman Structure
-
-	kalman->transition_matrix=indexMat[0];//A
+	//!filling up the kalamn structure. For now I have left the copyMat method. The other method is more efficent however.
+	copyMat(indexMat[0], kalman->transition_matrix);//A
 	copyMat(indexMat[1], kalman->control_matrix);//Bu
 	copyMat(indexMat[2], kalman->measurement_matrix);;//H
 	copyMat(indexMat[3], kalman->process_noise_cov);//Q
 	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
 	copyMat(indexMat[5], kalman->error_cov_pre);//P
 
-	//QUI BISOGNEREBBE FARE IL SET SULLA MATRICE DI STATO INIZIALE
+	//!Here we must set the initial state
 	double a[] = { 100,  100,  0,  0};
 
 	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
 	copyMat(&Ma, kalman->state_post);
-	//cvZero(kalman->state_post);
+	
 
-
-	/*memcpy(kalman->transition_matrix->data.fl, indexMat[0], sizeof(indexMat[0]));//, sizeof(indexMat[0])); //A
-	kalman->control_matrix= cvCloneMat(indexMat[1]);//, sizeof(indexMat[1]));  //B
-	kalman->measurement_matrix= cvCloneMat(indexMat[2]);//, sizeof(indexMat[2])); //H
-	kalman->process_noise_cov=cvCloneMat(indexMat[3]);//, sizeof(indexMat[3])); //Q
-	kalman->measurement_noise_cov=cvCloneMat(indexMat[4]);//, sizeof(indexMat[4])); //R
-	kalman->temp1->data.fl[0]=indexMat[5]->data.fl[0]; //cvCloneMat(indexMat[5]);//, sizeof(indexMat[5])); //u
-	kalman->error_cov_pre=cvCloneMat(indexMat[6]);//, sizeof(indexMat[6])); //P
-	*/
-  //delete MDSC;
 }
+
+///The function that make a copy from a matrix to another one
+/**
+ * \param source The source Matrix
+ * \param dest The Destination  Matrix, where the values are stored.
+ */
 
 void copyMat (CvMat* source, CvMat* dest){
 	int i,j;
@@ -99,6 +105,9 @@ void copyMat (CvMat* source, CvMat* dest){
 
 }
 
+
+/// \todo:THIS FUCTION MUST BECAME updateKalman not run:in that must be predict and correct
+/*
 void run(CvKalman * kalman, struct coordinate coord){
 	
 	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
@@ -137,42 +146,5 @@ void run(CvKalman * kalman, struct coordinate coord){
 	float cvx = correct->data.fl[2];
 	float cvy = correct->data.fl[3];
 	printf("crx è %f, cry è %f\n\n", crx, cry);
-	}
-
-//void execute(CvKalman* kalman, char * aviName ){
-	//La parte ora commentata è in findBlob
-        /*struct coordinate coord;
-	IplImage* background = getBackground(aviName);
-	
-	int height = background->height;
-	int width = background->width;
-	int channels = background->nChannels;
-
-
-	CvCapture* capture = cvCaptureFromAVI(aviName);
-  
-	if( !capture ) {
-   		fprintf( stderr, "ERROR: capture is NULL \n" );
-   		exit(0);
-  	}
-
-	IplImage* tmp_frame = cvQueryFrame(capture); //current image in the cycles
- 
- 
-	if(!tmp_frame) {
-         fprintf( stderr, "ERROR: Bad video\n" );
-         exit(0);
-        }
-
-	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
-
-
-		coord = extractBlob(tmp_frame, background);
-		if (coord.flag == false ) break; else printf("Flag true!");
-		printf("MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n", coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
-	}*/
-
-
-
-
-//}; // Predict and Correct
+}
+*/
