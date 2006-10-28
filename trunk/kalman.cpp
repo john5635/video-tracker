@@ -47,7 +47,7 @@
  * \param indexMat the pointer to the vector of matrix where will be the parsed value
  */
 
-void init(CvKalman * kalman, CvMat** indexMat){
+void initKalman(CvKalman * kalman, CvMat** indexMat){
 	
 	struct matrixDesc *MDSC = new struct matrixDesc[5];
 	
@@ -105,46 +105,44 @@ void copyMat (CvMat* source, CvMat* dest){
 
 }
 
+///The function that will update the kalman structure with the data collected in extractBlob. it will provide to do the predict and the correct kalamn's step.
+/**
+ * \param kalman the pointer to the kalman structure
+ * \param state the temp matrix of the state_post
+ * \param measurement the temp matrix of the measurement collected in extractBlob
+ * \param process_noise the temp matrix of the process_noise
+ * \param struct coordinate the struct in which are the measurement coordinate. (z_k)
+ */
 
-/// \todo:THIS FUCTION MUST BECAME updateKalman not run:in that must be predict and correct
-/*
-void run(CvKalman * kalman, struct coordinate coord){
-	
-	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
-	int Meanx, Meany;
-	Meanx=(coord.Minx+coord.Maxx)/2;
-	Meany=(coord.Miny+coord.Maxy)/2;
-	cvmSet(measurement,0,0,Meanx);
-	cvmSet(measurement,1,0,Meany);
-	
-	CvMat* state=cvCreateMat(4,1,CV_32FC1);
-	
-	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
-	u->data.fl[0]=1;
-    CvMat* process_noise = cvCreateMat(2, 1, CV_32FC1);
+void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord){
+
+			int Meanx, Meany;
+			Meanx=(coord.Minx+coord.Maxx)/2;
+			Meany=(coord.Miny+coord.Maxy)/2;
+			cvmSet(measurement,0,0,Meanx);
+			cvmSet(measurement,1,0,Meany);
+			CvMat* u = cvCreateMat(1,1, CV_32FC1 );
+			u->data.fl[0]=1;
+			
+			//Kalman Predict
+			const CvMat* predict = cvKalmanPredict(kalman,u);
+			cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
+
+			//Kalman Correct
+			const CvMat* correct= cvKalmanCorrect(kalman, measurement);
+			cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
+			
+			float prx = predict->data.fl[0];
+			float pry = predict->data.fl[1];
+			float vx = predict->data.fl[2];
+			float vy = predict->data.fl[3];
+			printf("prx e' %f, pry è %f\n\n", prx, pry);
+			float crx = correct->data.fl[0];
+			float cry = correct->data.fl[1];
+			float cvx = correct->data.fl[2];
+			float cvy = correct->data.fl[3];
+			printf("crx e' %f, cry è %f\n\n", crx, cry);
 
 	
-	//Kalman Predict
-	const CvMat* predict = cvKalmanPredict(kalman,u);
-	cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
-
 	
-	float prx = predict->data.fl[0];
-	float pry = predict->data.fl[1];
-	float vx = predict->data.fl[2];
-	float vy = predict->data.fl[3];
-	
-	printf("prx è %f, pry è %f\n\n", prx, pry);
-	
-	
-	//Kalman Correct
-	const CvMat* correct= cvKalmanCorrect(kalman, measurement);
-	cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
-
-	float crx = correct->data.fl[0];
-	float cry = correct->data.fl[1];
-	float cvx = correct->data.fl[2];
-	float cvy = correct->data.fl[3];
-	printf("crx è %f, cry è %f\n\n", crx, cry);
 }
-*/

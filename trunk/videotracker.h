@@ -35,7 +35,7 @@ struct matrixDesc{
 
 
 //! All the prototype functions of the video-tracker
-void init(CvKalman * kalman, CvMat** indexMat);
+void initKalman(CvKalman * kalman, CvMat** indexMat);
 
 void execute(char * aviName,int id );
 
@@ -51,6 +51,6 @@ IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImag
 
 void drawBlob(IplImage * image, struct coordinate coord);
 	
-void run(CvKalman * kalman, struct coordinate coord);
-	
 void copyMat (CvMat* source, CvMat* dest);
+
+void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord);
