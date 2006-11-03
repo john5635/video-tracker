@@ -42,9 +42,10 @@
  */
 
 void execute(char * aviName,int id ){
-	cvNamedWindow("image",1); 
+	 
 
-	struct coordinate coord;
+	struct coordinate coordReal;
+	struct coordinate coordPredict;
 	
 	IplImage* background = getBackground(aviName);
 	
@@ -84,20 +85,30 @@ void execute(char * aviName,int id ){
 
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
-		coord = extractBlob(tmp_frame, background,id);
+		coordReal = extractBlob(tmp_frame, background,id);
 		
-		if (coord.flag == false ) printf("No Blobs to extract"); 
+		if (coordReal.flag == false ) printf("No Blobs to extract"); 
 		else{ 
 			printf("Flag true!\n");
-  			drawBlob(tmp_frame, coord);
+  			drawBlob(tmp_frame, coordReal);
 			
 			//!updateKalman functions that provied to estimate with Kalman filter
-			updateKalman(kalman,state,measurement,process_noise,coord);
-
+			float * predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
+			
+			//!computing the coordinate predict from Kalman, the X one.
+			coordPredict.Maxx = predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
+			coordPredict.Minx = predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
+			
+			//!computing the coordinate predict from Kalman, the Y one.
+			coordPredict.Maxy = predict[0] + (coordReal.Maxy - coordReal.Miny)/2;
+			coordPredict.Miny = predict[0] - (coordReal.Maxy - coordReal.Miny)/2;
+			
+			drawBlob(tmp_frame, coordPredict);
+			
 			}	
 		
 		//! display the image
-		
+		cvNamedWindow("image",1);
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress

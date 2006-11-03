@@ -114,7 +114,7 @@ void copyMat (CvMat* source, CvMat* dest){
  * \param struct coordinate the struct in which are the measurement coordinate. (z_k)
  */
 
-void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord){
+float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord){
 
 			int Meanx, Meany;
 			Meanx=(coord.Minx+coord.Maxx)/2;
@@ -142,5 +142,7 @@ void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * pr
 			float cvx = correct->data.fl[2];
 			float cvy = correct->data.fl[3];
 			printf("crx e' %f, cry è %f\n\n", crx, cry);
+
+		return predict->data.fl;
 
 }

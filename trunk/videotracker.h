@@ -53,4 +53,4 @@ void drawBlob(IplImage * image, struct coordinate coord);
 	
 void copyMat (CvMat* source, CvMat* dest);
 
-void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord);
+float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord);
