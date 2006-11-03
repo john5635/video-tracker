@@ -60,10 +60,11 @@ CvKalman* initKalman(CvMat** indexMat){
 	for (int i=0;i< NUMBER_OF_MATRIX ;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
+
+	int DP = indexMat[0]->cols; //! number of state vector dimensions */
+	int MP = indexMat[2]->rows; //! number of measurement vector dimensions */
+	int CP = indexMat[1]->cols; //! number of control vector dimensions */
 	
-	int DP = indexMat[0]->cols;
-	int MP = indexMat[2]->rows;
-	int CP = indexMat[1]->cols;
 	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
 	
 	int h = 0;
@@ -122,33 +123,33 @@ void copyMat (CvMat* source, CvMat* dest){
 
 float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord){
 
-			int Meanx, Meany;
-			Meanx=(coord.Minx+coord.Maxx)/2;
-			Meany=(coord.Miny+coord.Maxy)/2;
-			cvmSet(measurement,0,0,Meanx);
-			cvmSet(measurement,1,0,Meany);
-			CvMat* u = cvCreateMat(1,1, CV_32FC1 );
-			u->data.fl[0]=1;
-			
-			//Kalman Predict
-			const CvMat* predict = cvKalmanPredict(kalman,u);
-			cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
+	int Meanx, Meany;
+	Meanx=(coord.Minx+coord.Maxx)/2;
+	Meany=(coord.Miny+coord.Maxy)/2;
+	cvmSet(measurement,0,0,Meanx);
+	cvmSet(measurement,1,0,Meany);
+	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
+	u->data.fl[0]=1;
+	
+	//Kalman Predict
+	const CvMat* predict = cvKalmanPredict(kalman,u);
+	cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
 
-			//Kalman Correct
-			const CvMat* correct= cvKalmanCorrect(kalman, measurement);
-			cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
-			
-			float prx = predict->data.fl[0];
-			float pry = predict->data.fl[1];
-			float vx = predict->data.fl[2];
-			float vy = predict->data.fl[3];
-			printf("prx e' %f, pry è %f\n\n", prx, pry);
-			float crx = correct->data.fl[0];
-			float cry = correct->data.fl[1];
-			float cvx = correct->data.fl[2];
-			float cvy = correct->data.fl[3];
-			printf("crx e' %f, cry è %f\n\n", crx, cry);
+	//Kalman Correct
+	const CvMat* correct= cvKalmanCorrect(kalman, measurement);
+	cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
+	
+	float prx = predict->data.fl[0];
+	float pry = predict->data.fl[1];
+	float vx = predict->data.fl[2];
+	float vy = predict->data.fl[3];
+	printf("prx e' %f, pry è %f\n\n", prx, pry);
+	float crx = correct->data.fl[0];
+	float cry = correct->data.fl[1];
+	float cvx = correct->data.fl[2];
+	float cvy = correct->data.fl[3];
+	printf("crx e' %f, cry è %f\n\n", crx, cry);
 
-		return correct->data.fl;
+	return correct->data.fl;
 
 }
