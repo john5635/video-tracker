@@ -42,7 +42,7 @@
  *			3 -> Q
  *			4 -> R
  *			5 -> P
- *			6 -> Video Dimension			
+ *			6 -> Initial state			
  * \param kalman the pointer to the kalman structure
  * \param indexMat the pointer to the vector of matrix where will be the parsed value
  */
