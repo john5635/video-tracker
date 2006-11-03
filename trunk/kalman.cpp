@@ -81,13 +81,14 @@ void initKalman(CvKalman * kalman, CvMat** indexMat){
 	copyMat(indexMat[3], kalman->process_noise_cov);//Q
 	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
 	copyMat(indexMat[5], kalman->error_cov_pre);//P
+	copyMat(indexMat[6], kalman->state_post);
 
 	//!Here we must set the initial state
-	float a[] = { 160, 120, 0, 0};
+//	float a[] = { 160, 120, 0, 0};
 
-	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
+	//CvMat Ma=cvMat(1, 4, CV_32FC1, a);
 	//copyMat(&Ma, kalman->state_pre);
-	copyMat(&Ma, kalman->state_post);
+	//copyMat(&Ma, kalman->state_post);
 
 }
 
