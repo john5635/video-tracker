@@ -49,7 +49,7 @@ void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC);
 
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value );
 
-void drawBlob(IplImage * image, struct coordinate coord);
+void drawBlob(IplImage * image, struct coordinate coord,int R, int G, int B );
 	
 void copyMat (CvMat* source, CvMat* dest);
 

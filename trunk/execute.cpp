@@ -42,7 +42,7 @@
  */
 
 void execute(char * aviName,int id ){
-	 
+	
 
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
@@ -90,7 +90,7 @@ void execute(char * aviName,int id ){
 		if (coordReal.flag == false ) printf("No Blobs to extract"); 
 		else{ 
 			printf("Flag true!\n");
-  			drawBlob(tmp_frame, coordReal);
+  			drawBlob(tmp_frame, coordReal, 255,255,255);
 			
 			//!updateKalman functions that provied to estimate with Kalman filter
 			float * predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
@@ -103,12 +103,12 @@ void execute(char * aviName,int id ){
 			coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
 			coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
 			
-			drawBlob(tmp_frame, coordPredict);
+			drawBlob(tmp_frame, coordPredict, 0, 255, 0);
 			
 			}	
 		
 		//! display the image
-		cvNamedWindow("image",1);
+		cvNamedWindow("image",1); 
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress
@@ -126,9 +126,12 @@ void execute(char * aviName,int id ){
 /**
  * \param image the image where the blob must be drawn
  * \param struct coordinate the coordinate of the blob to plot
- */
+ * \param R the RED components of RGB color. 
+ * \param G the GREEN components of RGB color.
+ * \param B the BLUE components of RGB color.
+*/
 
-void drawBlob(IplImage * image, struct coordinate coord){
+void drawBlob(IplImage * image, struct coordinate coord, int R, int G, int B){
 
 	int iMeanx, iMeany;
 	iMeanx=(coord.Maxx+coord.Minx)/2;
@@ -137,9 +140,9 @@ void drawBlob(IplImage * image, struct coordinate coord){
 	//!printing the center and other coordinate
 	printf("Centro: x:%d, y:%d - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", iMeanx, iMeany,coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
 	
-	cvLine( image, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(255, 255 , 255), 4, 8, 0 );
+	cvLine( image, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(R, G , B), 4, 8, 0 );
 	
 	// mark box around blob
-	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(255, 255 , 255), 1, 8, 0);
+	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(R, G , B), 1, 8, 0);
 
 }
