@@ -96,12 +96,12 @@ void execute(char * aviName,int id ){
 			float * predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
 			
 			//!computing the coordinate predict from Kalman, the X one.
-			coordPredict.Maxx = predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
-			coordPredict.Minx = predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
+			coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
+			coordPredict.Minx = (int) predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
 			
 			//!computing the coordinate predict from Kalman, the Y one.
-			coordPredict.Maxy = predict[0] + (coordReal.Maxy - coordReal.Miny)/2;
-			coordPredict.Miny = predict[0] - (coordReal.Maxy - coordReal.Miny)/2;
+			coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
+			coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
 			
 			drawBlob(tmp_frame, coordPredict);
 			
