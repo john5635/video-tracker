@@ -42,7 +42,8 @@
  */
 
 void execute(char * aviName,int id ){
-	
+	cvNamedWindow("image",1); 
+
 	struct coordinate coord;
 	
 	IplImage* background = getBackground(aviName);
@@ -89,7 +90,7 @@ void execute(char * aviName,int id ){
 		}	
 		
 		//! display the image
-		cvNamedWindow("image",1);
+		
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress
