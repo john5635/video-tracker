@@ -42,7 +42,7 @@
  */
 
 void execute(char * aviName,int id ){
-	
+	cvNamedWindow("image",1); 
 
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
@@ -50,7 +50,7 @@ void execute(char * aviName,int id ){
 	IplImage* background = getBackground(aviName);
 	
 	CvMat* indexMat[NUMBER_OF_MATRIX];
-
+	
     int MP = 2; //! number of measurement vector dimensions */
     int DP = 4; //! number of state vector dimensions */
     int CP = 1; //! number of control vector dimensions */
@@ -108,7 +108,7 @@ void execute(char * aviName,int id ){
 			}	
 		
 		//! display the image
-		cvNamedWindow("image",1); 
+
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress
