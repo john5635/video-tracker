@@ -83,11 +83,11 @@ void initKalman(CvKalman * kalman, CvMat** indexMat){
 	copyMat(indexMat[5], kalman->error_cov_pre);//P
 
 	//!Here we must set the initial state
-	double a[] = { 100,  100,  0,  0};
+	float a[] = { 100, 200, 0, 0};
 
 	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
+	//copyMat(&Ma, kalman->state_pre);
 	copyMat(&Ma, kalman->state_post);
-	
 
 }
 
@@ -143,6 +143,4 @@ void updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * pr
 			float cvy = correct->data.fl[3];
 			printf("crx e' %f, cry è %f\n\n", crx, cry);
 
-	
-	
 }

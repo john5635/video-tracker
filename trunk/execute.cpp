@@ -59,6 +59,12 @@ void execute(char * aviName,int id ){
 	initKalman(kalman, indexMat);
     
 	CvMat* state=cvCreateMat(4,1,CV_32FC1);
+
+	float a[] = { 100,  100,  0,  0};
+	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
+	//copyMat(&Ma, kalman->state_post);
+	//copyMat(&Ma, state);
+
 	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
     CvMat* process_noise = cvCreateMat(4, 1, CV_32FC1);
 	
@@ -67,7 +73,7 @@ void execute(char * aviName,int id ){
 	if( !capture ) {
    		fprintf( stderr, "ERROR: capture is NULL \n" );
    		exit(0);
-  	}
+  		}
 
 	IplImage* tmp_frame = cvQueryFrame(capture); //!current image in the cycles
  
@@ -77,6 +83,7 @@ void execute(char * aviName,int id ){
         }
 
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
+		
 		coord = extractBlob(tmp_frame, background,id);
 		
 		if (coord.flag == false ) printf("No Blobs to extract"); 
@@ -87,7 +94,7 @@ void execute(char * aviName,int id ){
 			//!updateKalman functions that provied to estimate with Kalman filter
 			updateKalman(kalman,state,measurement,process_noise,coord);
 
-		}	
+			}	
 		
 		//! display the image
 		
@@ -95,7 +102,7 @@ void execute(char * aviName,int id ){
 		
 		//! keep image 'til keypress
 		cvWaitKey(0);
-	}
+		}
 
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("image");
