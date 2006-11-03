@@ -80,18 +80,13 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id){
 	//! Create a file with filtered results
 	blobs.PrintBlobs( "filteredBlobs.txt" );
 
-	
-	
 	CBlob Blob;
 
-
-	if ( blobs.GetNumBlobs()==0 ) 
-		{
-			coord.flag=false; 
-			return coord;
-		}
-	else
-		{
+	if ( blobs.GetNumBlobs()==0 ) {
+		coord.flag=false; 
+		return coord;
+	}
+	else {
 		
 		//!Get the blob info
 		Blob = blobs.GetBlob(id);
@@ -104,6 +99,6 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id){
 		coord.flag=true; 
 		
 		return coord;
-		}
+	}
 
 }
