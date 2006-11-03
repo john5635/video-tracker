@@ -42,7 +42,7 @@
  */
 
 void execute(char * aviName,int id ){
-	cvNamedWindow("image",1); 
+	 
 
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
@@ -108,7 +108,7 @@ void execute(char * aviName,int id ){
 			}	
 		
 		//! display the image
-
+		cvNamedWindow("image",1);
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress

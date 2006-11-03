@@ -42,14 +42,14 @@
  *			3 -> Q
  *			4 -> R
  *			5 -> P
- *			6 -> NULL			
+ *			6 -> Video Dimension			
  * \param kalman the pointer to the kalman structure
  * \param indexMat the pointer to the vector of matrix where will be the parsed value
  */
 
 void initKalman(CvKalman * kalman, CvMat** indexMat){
 	
-	struct matrixDesc *MDSC = new struct matrixDesc[5];
+	struct matrixDesc *MDSC = new struct matrixDesc[NUMBER_OF_MATRIX];
 	
 	float ValuesVect[100];
 
@@ -57,14 +57,14 @@ void initKalman(CvKalman * kalman, CvMat** indexMat){
 	parse(_("./data.txt"),ValuesVect,MDSC);
 
 	
-	for (int i=0;i< NUMBER_OF_MATRIX -1 ;i++){
+	for (int i=0;i< NUMBER_OF_MATRIX ;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
 
 	int h = 0;
 	
 	//! gettin the value from the ValuesVect and store in indexMat
-	for (int i=0;i< NUMBER_OF_MATRIX -1;i++){
+	for (int i=0;i< NUMBER_OF_MATRIX;i++){
 		for (int j=0;j<indexMat[i]->rows;j++){
 			for (int l=0;l<indexMat[i]->cols;l++){
 				indexMat[i]->data.fl[j*indexMat[i]->cols+l] = ValuesVect[h];

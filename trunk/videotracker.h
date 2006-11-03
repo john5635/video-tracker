@@ -19,7 +19,7 @@
 using namespace std;
 
 //! the numeber of matrix in the data.txt file to parse
-#define NUMBER_OF_MATRIX 8
+#define NUMBER_OF_MATRIX 7
 
 //! \struct Coordinate of the tracked object in this case a ball.
 struct coordinate { 
