@@ -53,29 +53,23 @@ void execute(char * aviName,int id ){
 
 	//Creation and initializzation of Kalman	
 	CvKalman* kalman = initKalman(indexMat);
-    
-	CvMat* state=cvCreateMat(4,1,CV_32FC1);
 
-	float a[] = { 100,  100,  0,  0};
-	CvMat Ma=cvMat(1, 4, CV_32FC1, a);
-	//copyMat(&Ma, kalman->state_post);
-	//copyMat(&Ma, state);
-
-	CvMat* measurement = cvCreateMat( 2, 1, CV_32FC1 );
-    CvMat* process_noise = cvCreateMat(4, 1, CV_32FC1);
+	CvMat* state=cvCreateMat(kalman->DP,1,CV_32FC1);
+	CvMat* measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
+        CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
 	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
-  
+ 
 	if( !capture ) {
-   		fprintf( stderr, "ERROR: capture is NULL \n" );
+		fprintf( stderr, "ERROR: capture is NULL \n" );
    		exit(0);
-  		}
+  	}
 
 	IplImage* tmp_frame = cvQueryFrame(capture); //!current image in the cycles
  
 	if(!tmp_frame) {
-         fprintf( stderr, "ERROR: Bad video\n" );
-         exit(0);
+         	fprintf( stderr, "ERROR: Bad video\n" );
+         	exit(0);
         }
 
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
@@ -100,7 +94,7 @@ void execute(char * aviName,int id ){
 			
 			drawBlob(tmp_frame, coordPredict, 0, 255, 0);
 			
-			}	
+		}	
 		
 		//! display the image
 		cvNamedWindow("image",1);
@@ -108,7 +102,7 @@ void execute(char * aviName,int id ){
 		
 		//! keep image 'til keypress
 		cvWaitKey(0);
-		}
+	}
 
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("image");
