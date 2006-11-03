@@ -45,17 +45,9 @@
  * \return struct coordinate The coordinate of the extracted blob.
  */
  
-struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,int id){
+struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id){
    
 	struct coordinate coord;
-
-	//!getting the binary background
-	IplImage* tempBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
-	cvCvtColor(background, tempBack, CV_RGB2GRAY);
-	IplImage* binBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
-	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
-	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
-	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
 	
 	//!getting the binary current frame
 	IplImage* img = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);

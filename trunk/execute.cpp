@@ -48,6 +48,14 @@ void execute(char * aviName,int id ){
 	struct coordinate coordPredict;
 	
 	IplImage* background = getBackground(aviName);
+
+	//!getting the binary background
+	IplImage* tempBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
+	cvCvtColor(background, tempBack, CV_RGB2GRAY);
+	IplImage* binBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
+	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
+	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
 	
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 
@@ -56,7 +64,7 @@ void execute(char * aviName,int id ){
 
 	CvMat* state=cvCreateMat(kalman->DP,1,CV_32FC1);
 	CvMat* measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
-        CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
+    CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
 	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
  
@@ -74,7 +82,7 @@ void execute(char * aviName,int id ){
 
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
-		coordReal = extractBlob(tmp_frame, background,id);
+		coordReal = extractBlob(tmp_frame, binBack,id);
 		
 		if (coordReal.flag == false ) printf("No Blobs to extract"); 
 		else{ 
