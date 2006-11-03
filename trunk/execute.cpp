@@ -51,13 +51,11 @@ void execute(char * aviName,int id ){
 	
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	
-    int MP = 2; //! number of measurement vector dimensions */
-    int DP = 4; //! number of state vector dimensions */
-    int CP = 1; //! number of control vector dimensions */
+//    int MP = 2; //! number of measurement vector dimensions */
+//    int DP = 4; //! number of state vector dimensions */
+//    int CP = 1; //! number of control vector dimensions */
 	
-	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
-
-	initKalman(kalman, indexMat);
+	CvKalman* kalman = initKalman(indexMat);//cvCreateKalman(DP,MP,CP);
     
 	CvMat* state=cvCreateMat(4,1,CV_32FC1);
 

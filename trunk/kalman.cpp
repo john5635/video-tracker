@@ -47,7 +47,7 @@
  * \param indexMat the pointer to the vector of matrix where will be the parsed value
  */
 
-void initKalman(CvKalman * kalman, CvMat** indexMat){
+CvKalman* initKalman(CvMat** indexMat){
 	
 	struct matrixDesc *MDSC = new struct matrixDesc[NUMBER_OF_MATRIX];
 	
@@ -60,7 +60,12 @@ void initKalman(CvKalman * kalman, CvMat** indexMat){
 	for (int i=0;i< NUMBER_OF_MATRIX ;i++){
 		indexMat[i] = cvCreateMat( MDSC[i].nRows, MDSC[i].nCols, CV_32FC1 );
 		}
-
+	
+	int DP = indexMat[0]->cols;
+	int MP = indexMat[2]->rows;
+	int CP = indexMat[1]->cols;
+	CvKalman* kalman = cvCreateKalman(DP,MP,CP);
+	
 	int h = 0;
 	
 	//! gettin the value from the ValuesVect and store in indexMat
@@ -89,7 +94,7 @@ void initKalman(CvKalman * kalman, CvMat** indexMat){
 	//CvMat Ma=cvMat(1, 4, CV_32FC1, a);
 	//copyMat(&Ma, kalman->state_pre);
 	//copyMat(&Ma, kalman->state_post);
-
+	return kalman;
 }
 
 ///The function that make a copy from a matrix to another one

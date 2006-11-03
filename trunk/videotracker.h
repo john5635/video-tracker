@@ -36,7 +36,7 @@ struct matrixDesc{
 
 
 //! All the prototype functions of the video-tracker
-void initKalman(CvKalman * kalman, CvMat** indexMat);
+CvKalman* initKalman(CvMat** indexMat);
 
 void execute(char * aviName,int id );
 
