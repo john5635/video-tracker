@@ -47,9 +47,9 @@ void execute(char * aviName,int id ){
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
 	
-	//IplImage* background = getBackground(aviName);
+	IplImage* background = getBackground(aviName);
 	//da riscrivere la funzione getBackground(...);
-	//in prima istanza c'è da fargli fare la media sui primi n frames e avere un primo Background
+	//in prima istanza c'ï¿½ da fargli fare la media sui primi n frames e avere un primo Background
 
 
 	//!getting the binary background VA BENE
@@ -77,13 +77,13 @@ void execute(char * aviName,int id ){
          	exit(0);
         }
 
-	//qui c'è da far ritornare il vettore dei blob contenuti nel primo frame
+	//qui c'ï¿½ da far ritornare il vettore dei blob contenuti nel primo frame
 	
 	//poi si richiama la funzione drawBlob su tutti i Blobs di questo frame
 	//visualizzato il frame con i blobs, si blocca l'esecuzione in attesa del click
 	//cvSetMouseCallback(...) contenuta in HighGUI permette di settare l'azione da fare
 	//in relazione all'evento del mouse vedi nei samples "ffilldemo.c"
-	//all'interno della CallBack è possibile ottenere il valore del punto in cui si è clikkato
+	//all'interno della CallBack ï¿½ possibile ottenere il valore del punto in cui si ï¿½ clikkato
 	//NB relativo all'immagine e non alla finestra (-:
 
 	//Creation and initializzation of Kalman	
@@ -100,8 +100,8 @@ void execute(char * aviName,int id ){
 		
 	//ogni n frames facciamo l'aggiornamento del BackGround tipo backGroundUpdate(backgroundBINARIO!)
 
-		//invece dell'Id è necessario passare le coordinate del blob che ci interessa alla funzione extractBlob
-		//la funzione restituisce le coordinate del blob che si trova più vicino
+		//invece dell'Id ï¿½ necessario passare le coordinate del blob che ci interessa alla funzione extractBlob
+		//la funzione restituisce le coordinate del blob che si trova piï¿½ vicino
 		coordReal = extractBlob(tmp_frame, binBack,id);
 
 		if (coordReal.flag == false ) printf("No Blobs to extract"); 
