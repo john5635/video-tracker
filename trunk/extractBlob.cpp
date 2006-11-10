@@ -45,6 +45,135 @@
  * \return struct coordinate The coordinate of the extracted blob.
  */
  
+struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,struct coordinate selectedCoord){
+   
+	struct coordinate coord;
+	
+	//!getting the binary current frame
+	IplImage* img = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvCvtColor(tmp_frame, img, CV_RGB2GRAY);
+	IplImage* binImg = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvThreshold(img,binImg,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
+
+	//!get the binary foreground object
+	cvSub( binImg, binBack, binFore, NULL );
+	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+
+	//!Starting the extracting of Blob
+	CBlobResult blobs;
+	
+	//! get the blobs from the image, with no mask, using a threshold of 100
+	blobs = CBlobResult( binFore, NULL, 10, true );
+	
+	//! Create a file with all the found blob
+	blobs.PrintBlobs( "blobs.txt" );
+
+	//! discard the blobs with less area than 60 pixels
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 60);
+	
+	//!This two row of code are to filter the blob find from the library by a bug that match ablob like all the image and return the center of it
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (img->height)*(img->width)*0.8);
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetPerimeter(), B_LESS, (img->height)+(img->width)*2*0.8);
+	
+	//! Create a file with filtered results
+	blobs.PrintBlobs( "filteredBlobs.txt" );
+
+	CBlob Blob;
+
+	if ( blobs.GetNumBlobs()==0 ) {
+		coord.flag=false; 
+		return coord;
+	}
+	else {
+		
+		//!Get the blob info
+		Blob = getNearestBlob( blobs, selectedCoord);
+		
+		//!Creating the coordinate struct
+		coord.Maxx= (int ) Blob.MaxX();
+		coord.Maxy= (int ) Blob.MaxY();
+		coord.Minx= (int ) Blob.MinX();
+		coord.Miny= (int ) Blob.MinY();
+		coord.flag=true; 
+		
+		return coord;
+	}
+
+}
+
+CBlobResult extractBlob(IplImage* tmp_frame, IplImage* binBack){
+   	
+	struct coordinate coord;
+	
+	//!getting the binary current frame
+	IplImage* img = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvCvtColor(tmp_frame, img, CV_RGB2GRAY);
+	IplImage* binImg = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvThreshold(img,binImg,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
+
+	//!get the binary foreground object
+	cvSub( binImg, binBack, binFore, NULL );
+	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+
+	//!Starting the extracting of Blob
+	CBlobResult blobs;
+	
+	//! get the blobs from the image, with no mask, using a threshold of 100
+	blobs = CBlobResult( binFore, NULL, 10, true );
+	
+	//! Create a file with all the found blob
+	blobs.PrintBlobs( "blobs.txt" );
+
+	//! discard the blobs with less area than 60 pixels
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 60);
+	
+	//!This two row of code are to filter the blob find from the library by a bug that match ablob like all the image and return the center of it
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (img->height)*(img->width)*0.8);
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetPerimeter(), B_LESS, (img->height)+(img->width)*2*0.8);
+	
+	//! Create a file with filtered results
+	blobs.PrintBlobs( "filteredBlobs.txt" );
+	return blobs;
+}
+
+CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
+	int tot = blobs.GetNumBlobs();
+	int Meanx, Meany, tempMeanx, tempMeany;
+	CBlob Blob;
+	float* distance = NULL; 
+	float minimum;
+	distance = new float[tot];
+	Meanx=(coord.Minx+coord.Maxx)/2;
+	Meany=(coord.Miny+coord.Maxy)/2;
+	struct coordinate tempCoord;
+	//Questo ciclo for fa la distanza manhattan tra le coordinate passate e tutti i blob catturati e crea il vettore con tutte le distanze.
+	for (int i=0; i<tot; i++){
+		Blob = blobs.GetBlob(i);
+		tempCoord.Maxx= (int ) Blob.MaxX();
+		tempCoord.Maxy= (int ) Blob.MaxY();
+		tempCoord.Minx= (int ) Blob.MinX();
+		tempCoord.Miny= (int ) Blob.MinY();
+		tempMeanx=(tempCoord.Minx+tempCoord.Maxx)/2;
+		tempMeany=(tempCoord.Miny+tempCoord.Maxy)/2;
+		distance[i] = fabs(tempMeanx - Meanx) + fabs(tempMeany - Meany);
+	}
+	int minDistanceId=0;
+	
+	//Questo ciclo for becca la minima distanza fra tutte quelle calcolate
+	for (int j=0; j<tot; j++){
+		minimum = min( distance[j], distance[minDistanceId]);	
+		if ( distance[j] == minimum ) minDistanceId = j;
+	}
+	//Ottenuta la minima distanza si va a ritornare il Blob corrispondente
+	Blob = blobs.GetBlob( minDistanceId );
+	delete[] distance;
+	return Blob;
+
+}
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id){
    
 	struct coordinate coord;

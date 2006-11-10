@@ -47,7 +47,7 @@
  * \param indexMat the pointer to the vector of matrix where will be the parsed value
  */
 
-CvKalman* initKalman(CvMat** indexMat){
+CvKalman* initKalman(CvMat** indexMat, struct coordinate initCoord){
 	
 	struct matrixDesc *MDSC = new struct matrixDesc[NUMBER_OF_MATRIX];
 	
@@ -87,14 +87,17 @@ CvKalman* initKalman(CvMat** indexMat){
 	copyMat(indexMat[3], kalman->process_noise_cov);//Q
 	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
 	copyMat(indexMat[5], kalman->error_cov_pre);//P
-	copyMat(indexMat[6], kalman->state_post);
-
+	//copyMat(indexMat[6], kalman->state_post);
+	
 	//!Here we must set the initial state
-//	float a[] = { 160, 120, 0, 0};
+	int initMeanx, initMeany;
+	initMeanx=(initCoord.Minx+initCoord.Maxx)/2;
+	initMeany=(initCoord.Miny+initCoord.Maxy)/2;
+	float a[] = { initMeanx, initMeany, 0, 0};
 
-	//CvMat Ma=cvMat(1, 4, CV_32FC1, a);
+	CvMat Ma=cvMat(1, DP, CV_32FC1, a);
 	//copyMat(&Ma, kalman->state_pre);
-	//copyMat(&Ma, kalman->state_post);
+	copyMat(&Ma, kalman->state_post);
 	return kalman;
 }
 
