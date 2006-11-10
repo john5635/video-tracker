@@ -49,7 +49,7 @@ void execute(char * aviName,int id ){
 	
 	IplImage* background = getBackground(aviName);
 	//da riscrivere la funzione getBackground(...);
-	//in prima istanza c'� da fargli fare la media sui primi n frames e avere un primo Background
+	//in prima istanza c'è da fargli fare la media sui primi n frames e avere un primo Background
 
 
 	//!getting the binary background VA BENE
@@ -76,41 +76,79 @@ void execute(char * aviName,int id ){
          	fprintf( stderr, "ERROR: Bad video\n" );
          	exit(0);
         }
-
-	//qui c'� da far ritornare il vettore dei blob contenuti nel primo frame
 	
+	//qui c'è da far ritornare il vettore dei blob contenuti nel primo frame
 	//poi si richiama la funzione drawBlob su tutti i Blobs di questo frame
+	CBlobResult blobs=extractBlob(tmp_frame, binBack);
+	struct coordinate drawCoord;
+	if ( blobs.GetNumBlobs()==0 ) {
+		printf("No Blobs to extract");
+	}
+	else {
+		for (int i=0; i<blobs.GetNumBlobs();i++){
+		//!Get the blob info
+		CBlob Blob = blobs.GetBlob(i);
+		
+		//!Creating the coordinate struct
+		drawCoord.Maxx= (int ) Blob.MaxX();
+		drawCoord.Maxy= (int ) Blob.MaxY();
+		drawCoord.Minx= (int ) Blob.MinX();
+		drawCoord.Miny= (int ) Blob.MinY();
+		drawCoord.flag=true; 
+		//Qui ci sarà da disegnare i blobs e da fermare l'immagine per la selezione da mouse Marto.
+		//drawBlob(tmp_frame, drawCoord, 255, 255, 255);
+		}
+	}
+	
+	
 	//visualizzato il frame con i blobs, si blocca l'esecuzione in attesa del click
 	//cvSetMouseCallback(...) contenuta in HighGUI permette di settare l'azione da fare
 	//in relazione all'evento del mouse vedi nei samples "ffilldemo.c"
-	//all'interno della CallBack � possibile ottenere il valore del punto in cui si � clikkato
+	//all'interno della CallBack è possibile ottenere il valore del punto in cui si è clikkato
 	//NB relativo all'immagine e non alla finestra (-:
 
 	//Creation and initializzation of Kalman	
-	//il filtro di Kalman va inizializzato con le coordinate del blob selezionato
-	
-	CvKalman* kalman = initKalman(indexMat);
+	//il filtro di Kalman va inizializzato con le coordinate del blob selezionato --> selectedCoord che il marto ovviamente mi restituisce!!
+	struct coordinate selectedCoord;
+	selectedCoord.Maxx= 140;
+	selectedCoord.Maxy= 20;
+	selectedCoord.Minx= 120;
+	selectedCoord.Miny= 7;
+	selectedCoord.flag= true;
+	CBlob selectedBlob = getNearestBlob(blobs, selectedCoord);
+	//Per provare ho messo i valori del blob del primo frame di bouncingball.avi
+	selectedCoord.Maxx= (int ) selectedBlob.MaxX();
+	selectedCoord.Maxy= (int ) selectedBlob.MaxY();
+	selectedCoord.Minx= (int ) selectedBlob.MinX();
+	selectedCoord.Miny= (int ) selectedBlob.MinY();
+	selectedCoord.flag= true;
+	CvKalman* kalman = initKalman(indexMat, selectedCoord);
 
 	CvMat* state=cvCreateMat(kalman->DP,1,CV_32FC1);
 	CvMat* measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
-    CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
+        CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
 	
-
+	coordReal=selectedCoord;
+	float * predict = NULL;
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
 	//ogni n frames facciamo l'aggiornamento del BackGround tipo backGroundUpdate(backgroundBINARIO!)
+		
+		//invece dell'Id è necessario passare le coordinate del blob che ci interessa alla funzione extractBlob
+		//la funzione restituisce le coordinate del blob che si trova più vicino
 
-		//invece dell'Id � necessario passare le coordinate del blob che ci interessa alla funzione extractBlob
-		//la funzione restituisce le coordinate del blob che si trova pi� vicino
-		coordReal = extractBlob(tmp_frame, binBack,id);
+ 		coordReal = extractBlob(tmp_frame, binBack, coordReal); //coordReal = extractBlob(tmp_frame, binBack, 0);
 
-		if (coordReal.flag == false ) printf("No Blobs to extract"); 
+		if (coordReal.flag == false ) {
+			printf("No Blobs to extract");
+			if (coordPredict.flag == true) coordReal=coordPredict; //per seguire il blob se si "nasconde"
+		}
 		else{ 
 			printf("Flag true!\n");
   			drawBlob(tmp_frame, coordReal, 255,255,255);
 			
 			//!updateKalman functions that provied to estimate with Kalman filter
-			float * predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
+			predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
 			
 			//!computing the coordinate predict from Kalman, the X one.
 			coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
@@ -119,6 +157,8 @@ void execute(char * aviName,int id ){
 			//!computing the coordinate predict from Kalman, the Y one.
 			coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
 			coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
+			
+			coordPredict.flag = true;
 			
 			drawBlob(tmp_frame, coordPredict, 0, 255, 0);
 			
@@ -148,7 +188,7 @@ void execute(char * aviName,int id ){
  * \param B the BLUE components of RGB color.
 */
 
-void drawBlob(IplImage * image, struct coordinate coord, int R, int G, int B){
+void drawBlob (IplImage * image, struct coordinate coord, int R, int G, int B){
 
 	int iMeanx, iMeany;
 	iMeanx=(coord.Maxx+coord.Minx)/2;
