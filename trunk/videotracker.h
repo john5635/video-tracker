@@ -48,8 +48,9 @@ std::vector<float> getValue(wxString filename);
 IplImage* getBackground(char* aviName);
 
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,struct coordinate selectedCoord);
-CBlobResult extractBlob(IplImage* tmp_frame, IplImage* binBack);
+void extractBlob(IplImage* tmp_frame, IplImage* binBack);
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id);
+
 void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC);
 
 IplImage* getFiltredBinaryImage(IplImage* currentImage, IplImage* backgroundImage, int value );

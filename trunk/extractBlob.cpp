@@ -103,7 +103,7 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,struct coor
 
 }
 
-CBlobResult extractBlob(IplImage* tmp_frame, IplImage* binBack){
+void extractBlob(IplImage* tmp_frame, IplImage* binBack){
    	
 	struct coordinate coord;
 	
@@ -137,16 +137,30 @@ CBlobResult extractBlob(IplImage* tmp_frame, IplImage* binBack){
 	
 	//! Create a file with filtered results
 	blobs.PrintBlobs( "filteredBlobs.txt" );
-	return blobs;
+	//return blobs;
+	CBlob exBlob;
+	struct coordinate drawCoord;
+	for (int i=0; i<blobs.GetNumBlobs();i++){
+		//!Get the blob info
+		exBlob = blobs.GetBlob(i);
+		
+		//!Creating the coordinate struct
+		drawCoord.Maxx= (int ) exBlob.MaxX();
+		drawCoord.Maxy= (int ) exBlob.MaxY();
+		drawCoord.Minx= (int ) exBlob.MinX();
+		drawCoord.Miny= (int ) exBlob.MinY();
+		drawCoord.flag=true; 
+
+		drawBlob(tmp_frame, drawCoord, 255, 255, 0);}
 }
 
 CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 	int tot = blobs.GetNumBlobs();
 	int Meanx, Meany, tempMeanx, tempMeany;
 	CBlob Blob;
-	float* distance = NULL; 
+	float distance[tot];// = NULL; 
 	float minimum;
-	distance = new float[tot];
+// 	distance = new float[tot];
 	Meanx=(coord.Minx+coord.Maxx)/2;
 	Meany=(coord.Miny+coord.Maxy)/2;
 	struct coordinate tempCoord;
@@ -170,7 +184,7 @@ CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 	}
 	//Ottenuta la minima distanza si va a ritornare il Blob corrispondente
 	Blob = blobs.GetBlob( minDistanceId );
-	delete[] distance;
+	//delete[] distance;
 	return Blob;
 
 }

@@ -79,26 +79,13 @@ void execute(char * aviName,int id ){
 	
 	//qui c'è da far ritornare il vettore dei blob contenuti nel primo frame
 	//poi si richiama la funzione drawBlob su tutti i Blobs di questo frame
-	CBlobResult blobs=extractBlob(tmp_frame, binBack);
-	struct coordinate drawCoord;
-	if ( blobs.GetNumBlobs()==0 ) {
-		printf("No Blobs to extract");
-	}
-	else {
-		for (int i=0; i<blobs.GetNumBlobs();i++){
-		//!Get the blob info
-		CBlob Blob = blobs.GetBlob(i);
+	extractBlob(tmp_frame, binBack);
+	cvNamedWindow("image",1);
+	cvShowImage("image", tmp_frame);
 		
-		//!Creating the coordinate struct
-		drawCoord.Maxx= (int ) Blob.MaxX();
-		drawCoord.Maxy= (int ) Blob.MaxY();
-		drawCoord.Minx= (int ) Blob.MinX();
-		drawCoord.Miny= (int ) Blob.MinY();
-		drawCoord.flag=true; 
-		//Qui ci sarà da disegnare i blobs e da fermare l'immagine per la selezione da mouse Marto.
-		//drawBlob(tmp_frame, drawCoord, 255, 255, 255);
-		}
-	}
+	//! keep image 'til keypress
+	cvWaitKey(0);
+
 	
 	
 	//visualizzato il frame con i blobs, si blocca l'esecuzione in attesa del click
@@ -109,19 +96,15 @@ void execute(char * aviName,int id ){
 
 	//Creation and initializzation of Kalman	
 	//il filtro di Kalman va inizializzato con le coordinate del blob selezionato --> selectedCoord che il marto ovviamente mi restituisce!!
+	
 	struct coordinate selectedCoord;
-	selectedCoord.Maxx= 140;
+	selectedCoord.Maxx= 0;
 	selectedCoord.Maxy= 20;
 	selectedCoord.Minx= 120;
 	selectedCoord.Miny= 7;
 	selectedCoord.flag= true;
-	CBlob selectedBlob = getNearestBlob(blobs, selectedCoord);
-	//Per provare ho messo i valori del blob del primo frame di bouncingball.avi
-	selectedCoord.Maxx= (int ) selectedBlob.MaxX();
-	selectedCoord.Maxy= (int ) selectedBlob.MaxY();
-	selectedCoord.Minx= (int ) selectedBlob.MinX();
-	selectedCoord.Miny= (int ) selectedBlob.MinY();
-	selectedCoord.flag= true;
+	selectedCoord = extractBlob( tmp_frame, binBack, coordReal);
+
 	CvKalman* kalman = initKalman(indexMat, selectedCoord);
 
 	CvMat* state=cvCreateMat(kalman->DP,1,CV_32FC1);
