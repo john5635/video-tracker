@@ -80,11 +80,7 @@ void execute(char * aviName,int id ){
 	//qui c'è da far ritornare il vettore dei blob contenuti nel primo frame
 	//poi si richiama la funzione drawBlob su tutti i Blobs di questo frame
 	extractBlob(tmp_frame, binBack);
-	cvNamedWindow("image",1);
-	cvShowImage("image", tmp_frame);
-		
-	//! keep image 'til keypress
-	cvWaitKey(0);
+
 
 	
 	
