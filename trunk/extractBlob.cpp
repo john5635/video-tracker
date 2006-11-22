@@ -158,7 +158,8 @@ CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 	int tot = blobs.GetNumBlobs();
 	int Meanx, Meany, tempMeanx, tempMeany;
 	CBlob Blob;
-	float distance[tot];// = NULL; 
+	float distance[10]; 
+	for (int j=0; j<10; j++){distance[j]=NULL;}
 	float minimum;
 // 	distance = new float[tot];
 	Meanx=(coord.Minx+coord.Maxx)/2;
