@@ -51,8 +51,6 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,struct c
 
 void drawInitialBlobs(IplImage* tmp_frame, IplImage* binBack);
 
-struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id);
-
 int getNumBlob(IplImage* tmp_frame, IplImage* binBack);
 
 void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC);
