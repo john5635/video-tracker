@@ -103,7 +103,7 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,struct coor
 
 }
 
-void extractBlob(IplImage* tmp_frame, IplImage* binBack){
+void drawInitialBlobs(IplImage* tmp_frame, IplImage* binBack){
    	
 	struct coordinate coord;
 	
@@ -244,4 +244,42 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id){
 		return coord;
 	}
 
+}
+int getNumBlob(IplImage* tmp_frame, IplImage* binBack){
+   	
+	struct coordinate coord;
+	
+	//!getting the binary current frame
+	IplImage* img = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvCvtColor(tmp_frame, img, CV_RGB2GRAY);
+	IplImage* binImg = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	cvThreshold(img,binImg,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
+
+	//!get the binary foreground object
+	cvSub( binImg, binBack, binFore, NULL );
+	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+
+	//!Starting the extracting of Blob
+	CBlobResult blobs;
+	
+	//! get the blobs from the image, with no mask, using a threshold of 100
+	blobs = CBlobResult( binFore, NULL, 10, true );
+	
+	//! Create a file with all the found blob
+	blobs.PrintBlobs( "blobs.txt" );
+
+	//! discard the blobs with less area than 60 pixels
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 60);
+	
+	//!This two row of code are to filter the blob find from the library by a bug that match ablob like all the image and return the center of it
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (img->height)*(img->width)*0.8);
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetPerimeter(), B_LESS, (img->height)+(img->width)*2*0.8);
+	
+	//! Create a file with filtered results
+	blobs.PrintBlobs( "filteredBlobs.txt" );
+	//return blobs;
+
+	return blobs.GetNumBlobs();
 }

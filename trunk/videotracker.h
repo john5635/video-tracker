@@ -48,8 +48,12 @@ std::vector<float> getValue(wxString filename);
 IplImage* getBackground(char* aviName);
 
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* background,struct coordinate selectedCoord);
-void extractBlob(IplImage* tmp_frame, IplImage* binBack);
+
+void drawInitialBlobs(IplImage* tmp_frame, IplImage* binBack);
+
 struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack,int id);
+
+int getNumBlob(IplImage* tmp_frame, IplImage* binBack);
 
 void parse(wxString fileName,float* ValuesVect,struct matrixDesc* MDSC);
 
@@ -60,4 +64,9 @@ void drawBlob(IplImage * image, struct coordinate coord,int R, int G, int B );
 void copyMat (CvMat* source, CvMat* dest);
 
 float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord);
+
 CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord);
+
+void initBackgroundModel(CvBGStatModel ** bgmodel, IplImage* tmp_frame, CvGaussBGStatModelParams* paramMoG);
+
+IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame);

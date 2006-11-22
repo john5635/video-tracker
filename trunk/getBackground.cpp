@@ -34,46 +34,26 @@
 #include "videotracker.h"
 
 
-
 ///The function that make the Background subtraction with Gaussian model
 /**
  * \param aviName the name of the avi video to process
  * \return savedBackgroundImage the background of the video
  */
 
-IplImage* getBackground(char* aviName){
+IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame){
 	 
-	IplImage* tmp_frame = NULL;
-	IplImage* savedBackgroundImage;
-	CvCapture* cap = NULL;
-	// cvNamedWindow("BG", 1); da attivare se si passa un opzione al programma -v che sta per visualizza video
-	 
-	cap = cvCaptureFromAVI(aviName);
-    tmp_frame = cvQueryFrame(cap);
- 
-   	if(!tmp_frame)
-		{
-       		printf("Bad video \n");
-       		exit(0);
-    	}
-
-	CvBGStatModel* bg_model = cvCreateGaussianBGModel(tmp_frame);
-
-    for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(cap), fr++ ){
-       	printf("Reading avi %s\nframe# %d \t\n", aviName, fr);
-		double t = (double)cvGetTickCount();
-		cvUpdateBGStatModel(tmp_frame, bg_model);
-       	printf( "updating time : %.1f milli seconds \n", t/ (cvGetTickFrequency()*1000.) );
+	//Updating the Gaussian Model
+	cvUpdateBGStatModel(tmp_frame, bg_model);
+    if(!cvSaveImage("background.jpg",bg_model->background)) printf("Could not save the backgroundimage\n");
 	
-		// cvShowImage("BG", bg_model->background);da attivare se si passa un opzione al programma -v che sta per visualizza video
-     	savedBackgroundImage = cvCloneImage(bg_model->background);
-		int k = cvWaitKey(5);
-        if( k == 27 ) break;
-	 }
-	 
-	 if(!cvSaveImage("background.jpg",savedBackgroundImage)) printf("Could not save the backgroundimage\n");
-	 cvReleaseBGStatModel( &bg_model );
-     cvReleaseCapture(&cap);
-   	 //cvDestroyWindow("BG");da attivare se si passa un opzione al programma -v che sta per visualizza video
-	 return savedBackgroundImage;
+	//!getting the binary background
+	IplImage* tempBack = cvCreateImage(cvGetSize(bg_model->background),IPL_DEPTH_8U,1);
+	cvCvtColor(bg_model->background, tempBack, CV_RGB2GRAY);
+	IplImage* binBack = cvCreateImage(cvGetSize(bg_model->background),IPL_DEPTH_8U,1);
+	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
+	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
+	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
+	
+	//returing the binary background
+	return binBack; 
 }

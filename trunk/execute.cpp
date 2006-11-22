@@ -43,26 +43,26 @@
 
 void execute(char * aviName,int id ){
 	 
-
+	//Declare the variable of Kalman
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
-	
-	IplImage* background = getBackground(aviName);
-	//da riscrivere la funzione getBackground(...);
-	//in prima istanza c'è da fargli fare la media sui primi n frames e avere un primo Background
-
-
-	//!getting the binary background VA BENE
-	IplImage* tempBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
-	cvCvtColor(background, tempBack, CV_RGB2GRAY);
-	IplImage* binBack = cvCreateImage(cvGetSize(background),IPL_DEPTH_8U,1);
-	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
-	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
-	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
-	
 	CvMat* indexMat[NUMBER_OF_MATRIX];
-
+	float * predict = NULL;
 	
+	//Declare the structure for the background subtraction
+	CvGaussBGStatModelParams paramMoG;
+	CvBGStatModel *bkgdMdl = NULL;
+	IplImage * binaryBackground = NULL;
+
+	bool selected = false;
+	
+	CvKalman* kalman = NULL;
+
+	CvMat* state = NULL;
+	CvMat* measurement = NULL;
+	CvMat* process_noise = NULL;
+
+
 	CvCapture* capture = cvCaptureFromAVI(aviName);
  
 	if( !capture ) {
@@ -77,29 +77,16 @@ void execute(char * aviName,int id ){
          	exit(0);
         }
 	
-	//qui c'è da far ritornare il vettore dei blob contenuti nel primo frame
-	//poi si richiama la funzione drawBlob su tutti i Blobs di questo frame
-	extractBlob(tmp_frame, binBack);
-
-
 	
 	
-	//visualizzato il frame con i blobs, si blocca l'esecuzione in attesa del click
-	//cvSetMouseCallback(...) contenuta in HighGUI permette di settare l'azione da fare
-	//in relazione all'evento del mouse vedi nei samples "ffilldemo.c"
-	//all'interno della CallBack è possibile ottenere il valore del punto in cui si è clikkato
-	//NB relativo all'immagine e non alla finestra (-:
-
-	//Creation and initializzation of Kalman	
-	//il filtro di Kalman va inizializzato con le coordinate del blob selezionato --> selectedCoord che il marto ovviamente mi restituisce!!
 	
-	struct coordinate selectedCoord;
-	selectedCoord.Maxx= 0;
-	selectedCoord.Maxy= 20;
-	selectedCoord.Minx= 120;
-	selectedCoord.Miny= 7;
-	selectedCoord.flag= true;
-	selectedCoord = extractBlob( tmp_frame, binBack, coordReal);
+
+	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
+/*
+	
+	
+	
+	selectedCoord = extractBlob( tmp_frame, binBack, selectedCoord);
 
 	CvKalman* kalman = initKalman(indexMat, selectedCoord);
 
@@ -108,47 +95,75 @@ void execute(char * aviName,int id ){
         CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
 	
 	coordReal=selectedCoord;
-	float * predict = NULL;
+	*/
+		
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
-	//ogni n frames facciamo l'aggiornamento del BackGround tipo backGroundUpdate(backgroundBINARIO!)
+		binaryBackground = updateBackground(bkgdMdl,tmp_frame);
 		
-		//invece dell'Id è necessario passare le coordinate del blob che ci interessa alla funzione extractBlob
-		//la funzione restituisce le coordinate del blob che si trova più vicino
+		if (getNumBlob(tmp_frame,binaryBackground) >0){
+			
+			if (selected == false){
+				//!Extact and draw all blobs
+				drawInitialBlobs(tmp_frame, binaryBackground);
+				
+				//Questa è la simulazione del click del marto
+				struct coordinate selectedCoord;
+				selectedCoord.Maxx= 0;
+				selectedCoord.Maxy= 20;
+				selectedCoord.Minx= 120;
+				selectedCoord.Miny= 7;
+				selectedCoord.flag= true;
+				selectedCoord = extractBlob( tmp_frame, binaryBackground, selectedCoord);
+				
+				kalman = initKalman(indexMat, selectedCoord);
 
- 		coordReal = extractBlob(tmp_frame, binBack, coordReal); //coordReal = extractBlob(tmp_frame, binBack, 0);
+				state=cvCreateMat(kalman->DP,1,CV_32FC1);
+				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
+				process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
+	
+				coordReal=selectedCoord;
+				
+				selected=true;
 
-		if (coordReal.flag == false ) {
-			printf("No Blobs to extract");
-			if (coordPredict.flag == true) coordReal=coordPredict; //per seguire il blob se si "nasconde"
+			}
+			
+			else {
+				coordReal = extractBlob(tmp_frame, binaryBackground, coordReal);
+				
+				printf("Flag true!\n");
+				
+				drawBlob(tmp_frame, coordReal, 255,255,255);
+				
+				//!updateKalman functions that provied to estimate with Kalman filter
+				predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
+				
+				//!computing the coordinate predict from Kalman, the X one.
+				coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
+				coordPredict.Minx = (int) predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
+				
+				//!computing the coordinate predict from Kalman, the Y one.
+				coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
+				coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
+				
+				coordPredict.flag = true;
+				
+				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+			}
+
 		}
-		else{ 
-			printf("Flag true!\n");
-  			drawBlob(tmp_frame, coordReal, 255,255,255);
-			
-			//!updateKalman functions that provied to estimate with Kalman filter
-			predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
-			
-			//!computing the coordinate predict from Kalman, the X one.
-			coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
-			coordPredict.Minx = (int) predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
-			
-			//!computing the coordinate predict from Kalman, the Y one.
-			coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
-			coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
-			
-			coordPredict.flag = true;
-			
-			drawBlob(tmp_frame, coordPredict, 0, 255, 0);
-			
-		}	
 		
+		else {
+			if (coordPredict.flag == true) coordReal=coordPredict; 
+		}
+	
 		//! display the image
 		cvNamedWindow("image",1);
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress
 		cvWaitKey(0);
+
 	}
 
 	cvReleaseImage(&tmp_frame);
@@ -181,4 +196,16 @@ void drawBlob (IplImage * image, struct coordinate coord, int R, int G, int B){
 	// mark box around blob
 	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(R, G , B), 1, 8, 0);
 
+}
+void initBackgroundModel(CvBGStatModel ** bgmodel, IplImage* tmp_frame, CvGaussBGStatModelParams* paramMoG){
+	
+	paramMoG->win_size = 200; //200;
+	paramMoG->n_gauss = 3; //5;
+	paramMoG->bg_threshold = 0.1; //0.7;
+	paramMoG->std_threshold = 5; //2.5;
+	paramMoG->minArea = 200.f; //15.f;
+	paramMoG->weight_init = 0.01; //0.05;
+	paramMoG->variance_init = 30; //30*30;
+	*bgmodel = cvCreateGaussianBGModel(tmp_frame, paramMoG);
+	
 }
