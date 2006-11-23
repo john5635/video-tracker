@@ -46,6 +46,7 @@ void execute(char * aviName,int id ){
 	//Declare the variable of Kalman
 	struct coordinate coordReal;
 	struct coordinate coordPredict;
+	coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
 	
@@ -76,15 +77,9 @@ void execute(char * aviName,int id ){
          	fprintf( stderr, "ERROR: Bad video\n" );
          	exit(0);
         }
-	
-	
-	
-	
 
 	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
 /*
-	
-	
 	
 	selectedCoord = extractBlob( tmp_frame, binBack, selectedCoord);
 
@@ -101,7 +96,7 @@ void execute(char * aviName,int id ){
 		
 		binaryBackground = updateBackground(bkgdMdl,tmp_frame);
 		
-		if (getNumBlob(tmp_frame,binaryBackground) >0){
+		if (getNumBlob(tmp_frame,binaryBackground)>0){
 			
 			if (selected == false){
 				//!Extact and draw all blobs
@@ -154,7 +149,8 @@ void execute(char * aviName,int id ){
 		}
 		
 		else {
-			if (coordPredict.flag == true) coordReal=coordPredict; 
+			if (coordPredict.flag == true) {
+								coordReal=coordPredict;} 
 		}
 	
 		//! display the image
@@ -162,7 +158,7 @@ void execute(char * aviName,int id ){
 		cvShowImage("image", tmp_frame);
 		
 		//! keep image 'til keypress
-		cvWaitKey(0);
+		cvWaitKey(5);
 
 	}
 

@@ -174,7 +174,7 @@ CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 		tempCoord.Miny= (int ) Blob.MinY();
 		tempMeanx=(tempCoord.Minx+tempCoord.Maxx)/2;
 		tempMeany=(tempCoord.Miny+tempCoord.Maxy)/2;
-		distance[i] = sqrt((tempMeanx - Meanx)*(tempMeanx - Meanx) + (tempMeany - Meany)*(tempMeany - Meany));
+		distance[i] = sqrt((double)(tempMeanx - Meanx)*(tempMeanx - Meanx) + (tempMeany - Meany)*(tempMeany - Meany));
 	}
 	int minDistanceId=0;
 	
