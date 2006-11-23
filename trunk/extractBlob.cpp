@@ -55,11 +55,11 @@ struct coordinate extractBlob(IplImage* tmp_frame, IplImage* binBack, struct coo
 	IplImage* binImg = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
 	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
 	cvThreshold(img,binImg,100,255,CV_THRESH_BINARY);
-	if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("binImg.jpg",binImg)) printf("Could not save the backgroundimage\n");
 
 	//!get the binary foreground object
 	cvSub( binImg, binBack, binFore, NULL );
-	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+//	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
 
 	//!Starting the extracting of Blob
 	CBlobResult blobs;
@@ -159,7 +159,7 @@ CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 	int Meanx, Meany, tempMeanx, tempMeany;
 	CBlob Blob;
 	float distance[10]; 
-	for (int j=0; j<10; j++){distance[j]=NULL;}
+	for (int j=0; j<10; j++){distance[j]=0;}
 	float minimum;
 // 	distance = new float[tot];
 	Meanx=(coord.Minx+coord.Maxx)/2;

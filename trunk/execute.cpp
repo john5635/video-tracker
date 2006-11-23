@@ -50,6 +50,10 @@ void execute(char * aviName,int id ){
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
 	
+	//!vision of the avi file
+	cvNamedWindow( "image", 1 );
+	char code = -1;
+	
 	//Declare the structure for the background subtraction
 	CvGaussBGStatModelParams paramMoG;
 	CvBGStatModel *bkgdMdl = NULL;
@@ -154,11 +158,15 @@ void execute(char * aviName,int id ){
 		}
 	
 		//! display the image
-		cvNamedWindow("image",1);
 		cvShowImage("image", tmp_frame);
 		
+		//!showing in loop all frames
+		code = (char) cvWaitKey( 100 );
+		if( code > 0 )
+                break;
+		
 		//! keep image 'til keypress
-		cvWaitKey(5);
+		//cvWaitKey(5);
 
 	}
 

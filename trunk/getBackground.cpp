@@ -44,15 +44,15 @@ IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame){
 	 
 	//Updating the Gaussian Model
 	cvUpdateBGStatModel(tmp_frame, bg_model);
-    if(!cvSaveImage("background.jpg",bg_model->background)) printf("Could not save the backgroundimage\n");
+ //   if(!cvSaveImage("background.jpg",bg_model->background)) printf("Could not save the backgroundimage\n");
 	
 	//!getting the binary background
 	IplImage* tempBack = cvCreateImage(cvGetSize(bg_model->background),IPL_DEPTH_8U,1);
 	cvCvtColor(bg_model->background, tempBack, CV_RGB2GRAY);
 	IplImage* binBack = cvCreateImage(cvGetSize(bg_model->background),IPL_DEPTH_8U,1);
-	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
+//	if(!cvSaveImage("tempBack.jpg",tempBack)) printf("Could not save the backgroundimage\n");
 	cvThreshold(tempBack,binBack,100,255,CV_THRESH_BINARY);
-	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
+//	if(!cvSaveImage("binBack.jpg",binBack)) printf("Could not save the backgroundimage\n");
 	
 	//returing the binary background
 	return binBack; 
