@@ -31,6 +31,7 @@
  *
  */
 #include "videotracker.h"
+#include "execute.h"
 
 
 int main (int argc, char ** argv){

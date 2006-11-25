@@ -12,12 +12,13 @@ CC = gcc -g
 
 CFLAGS=  `pkg-config --cflags opencv`        #-I/usr/include/opencv
 LIBS= `pkg-config --libs opencv`             #-lcxcore -lcv -lhighgui -lcvaux -lml
+BLOBLIBS= -L. -lblob
 
 wxCFLAGS=`wx-config --cflags`
 wxLIBS=`wx-config --libs`
 
 TARGET = video-tracker
-RM = rm *.o video-tracker getFrames
+RM = rm *.o video-tracker 
 
 
 ifdef WIN32
@@ -25,15 +26,18 @@ wxCFLAGS += -DWIN32
 endif
 
 
-OBJ = extractBlob.o parser.o getBackground.o kalman.o main.o
+OBJ = extractBlob.o parser.o getBackground.o kalman.o  execute.o main.o
 
 #fase di linking
 video-tracker: $(OBJ) 
-	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS)
+	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS) $(BLOBLIBS)
 
 #fase di compiling
 main.o: 
 	$(GPP) $(CFLAGS) $(wxCFLAGS) -c main.cpp
+
+execute.o: 
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c execute.cpp
 	
 extractBlob.o: 
 	$(GPP) $(CFLAGS) $(wxCFLAGS) -c extractBlob.cpp

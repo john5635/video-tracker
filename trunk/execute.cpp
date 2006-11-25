@@ -1,38 +1,23 @@
 /*! \file execute.cpp
  *
  *
- * \brief <b>Main stream of the program: here are called creatKalman,initKalman,extractBlob and the updateKalman functions</b>
+ *  \brief <b>Main stream of the program: here are called creatKalman,initKalman,extractBlob and the updateKalman functions</b>
  *
  *
  *  \author Copyright (C) 2005-2006 by Iacopo Masi <iacopo.masi@gmail.com>
- *   		 	and Nicola Martorana <martorana.nicola@gmail.com>
- *			and Marco Meoni <meonimarco@gmail.com>
- * 	
- * This  code is distributed under the terms of <b>GNU GPL v2</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * \version $Revision: 0.1 $
- * \date 2006/10/27 
+ *   		 		and Nicola Martorana <martorana.nicola@gmail.com>
+ *				and Marco Meoni <meonimarco@gmail.com>
+ * 				This  code is distributed under the terms of <b>GNU GPL v2</b>
+ * 
+ *  \version $Revision: 0.1 $
+ *  \date 2006/10/27 
  * 
  *
  *
  */
  
  
-#include "videotracker.h" 
+#include "execute.h" 
 
 
 ///The function that execute the main stream of the program
@@ -49,6 +34,7 @@ void execute(char * aviName,int id ){
 	coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
+	CBlobResult blobsVector;
 	
 	//!vision of the avi file
 	cvNamedWindow( "image", 1 );
@@ -99,12 +85,13 @@ void execute(char * aviName,int id ){
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
 		binaryBackground = updateBackground(bkgdMdl,tmp_frame);
-		
-		if (getNumBlob(tmp_frame,binaryBackground)>0){
+		blobsVector = getBlobs(tmp_frame,binaryBackground);
+
+		if ( blobsVector.GetNumBlobs()>0 ){
 			
 			if (selected == false){
 				//!Extact and draw all blobs
-				drawInitialBlobs(tmp_frame, binaryBackground);
+				drawInitialBlobs(tmp_frame, blobsVector);
 				
 				//Questa è la simulazione del click del marto
 				struct coordinate selectedCoord;
@@ -113,13 +100,14 @@ void execute(char * aviName,int id ){
 				selectedCoord.Minx= 120;
 				selectedCoord.Miny= 7;
 				selectedCoord.flag= true;
-				selectedCoord = extractBlob( tmp_frame, binaryBackground, selectedCoord);
+				selectedCoord = extractBlob( blobsVector, selectedCoord);
 				
-				kalman = initKalman(indexMat, selectedCoord);
+				/*kalman = initKalman(indexMat, selectedCoord);
 
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
 				process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
+				*/
 	
 				coordReal=selectedCoord;
 				
@@ -128,12 +116,12 @@ void execute(char * aviName,int id ){
 			}
 			
 			else {
-				coordReal = extractBlob(tmp_frame, binaryBackground, coordReal);
+				coordReal = extractBlob( blobsVector, coordReal);
 				
 				printf("Flag true!\n");
 				
 				drawBlob(tmp_frame, coordReal, 255,255,255);
-				
+				/*
 				//!updateKalman functions that provied to estimate with Kalman filter
 				predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
 				
@@ -147,7 +135,7 @@ void execute(char * aviName,int id ){
 				
 				coordPredict.flag = true;
 				
-				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+				drawBlob(tmp_frame, coordPredict, 0, 255, 0);*/
 			}
 
 		}
@@ -200,16 +188,4 @@ void drawBlob (IplImage * image, struct coordinate coord, int R, int G, int B){
 	// mark box around blob
 	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(R, G , B), 1, 8, 0);
 
-}
-void initBackgroundModel(CvBGStatModel ** bgmodel, IplImage* tmp_frame, CvGaussBGStatModelParams* paramMoG){
-	
-	paramMoG->win_size = 200; //200;
-	paramMoG->n_gauss = 3; //5;
-	paramMoG->bg_threshold = 0.1; //0.7;
-	paramMoG->std_threshold = 5; //2.5;
-	paramMoG->minArea = 200.f; //15.f;
-	paramMoG->weight_init = 0.01; //0.05;
-	paramMoG->variance_init = 30; //30*30;
-	*bgmodel = cvCreateGaussianBGModel(tmp_frame, paramMoG);
-	
 }
