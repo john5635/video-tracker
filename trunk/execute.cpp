@@ -91,19 +91,18 @@ void execute(char * aviName,int id ){
 			
 			if (selected == false){
 				//!Extact and draw all blobs
-<<<<<<< .mine
 				drawInitialBlobs(tmp_frame, blobsVector);
 				cvNamedWindow("image",0);
 				int x,y;
 				cvSetMouseCallback( "image", on_mouse, 0 );
 				cvShowImage("image", tmp_frame);
-=======
 				drawInitialBlobs(tmp_frame, blobsVector);
 				
->>>>>>> .r120
+
 				//Questa è la simulazione del click del marto
-<<<<<<< .mine
+
 				coord selectedCoord;
+
 				try{
 					cvWaitKey();
 					}
@@ -112,15 +111,6 @@ void execute(char * aviName,int id ){
 					}
 
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
-=======
-				struct coordinate selectedCoord;
-				selectedCoord.Maxx= 0;
-				selectedCoord.Maxy= 20;
-				selectedCoord.Minx= 120;
-				selectedCoord.Miny= 7;
-				selectedCoord.flag= true;
-				selectedCoord = extractBlob( blobsVector, selectedCoord);
->>>>>>> .r120
 				
 				/*kalman = initKalman(indexMat, selectedCoord);
 
@@ -205,7 +195,6 @@ void drawBlob (IplImage * image, coord CcB, int R, int G, int B){
 	cvRectangle( image, cvPoint(CcB.MinX , CcB.MinY ), cvPoint ( CcB.MaxX, CcB.MaxY ), CV_RGB(R, G , B), 1, 8, 0);
 
 }
-<<<<<<< .mine
 
 void on_mouse( int event, int x, int y, int flags, void* param ){
  
@@ -219,5 +208,3 @@ void on_mouse( int event, int x, int y, int flags, void* param ){
 		}break;
 	}
 }
-=======
->>>>>>> .r120

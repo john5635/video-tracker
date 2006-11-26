@@ -23,13 +23,18 @@
 #include "extractBlob.h"
 #include "kalman.h"
 
-
+class coordExcept : public exception{
+public :
+	int x;
+	int y;
+};
 
 ///Functions Declaration
+void on_mouse( int event, int x, int y, int flags, void* param );
 
 void execute(char * ,int );
 
-void drawBlob (IplImage *, struct coordinate , int, int , int );
+void drawBlob (IplImage *, coord , int, int , int );
 
 #endif
 

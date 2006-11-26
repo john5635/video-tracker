@@ -28,14 +28,14 @@
  * \return struct coordinate The coordinate of the extracted blob.
  */
  
-struct coordinate extractBlob(CBlobResult blobs, struct coordinate selectedCoord){
+coord extractBlob(CBlobResult blobs, coord selectedCoord){
    
-	struct coordinate coord;
+	coord coordinate;
 	CBlob Blob;
 
 	if ( blobs.GetNumBlobs()==0 ) {
-		coord.flag=false; 
-		return coord;
+		coordinate.flag=false; 
+		return coordinate;
 	}
 	else {
 		
@@ -43,13 +43,9 @@ struct coordinate extractBlob(CBlobResult blobs, struct coordinate selectedCoord
 		Blob = getNearestBlob( blobs, selectedCoord);
 		
 		//!Creating the coordinate struct
-		coord.Maxx= (int ) Blob.MaxX();
-		coord.Maxy= (int ) Blob.MaxY();
-		coord.Minx= (int ) Blob.MinX();
-		coord.Miny= (int ) Blob.MinY();
-		coord.flag=true; 
+		coordinate.set(Blob.MaxX(),Blob.MinX(),Blob.MaxY(),Blob.MinY());
 		
-		return coord;
+		return coordinate;
 	}
 
 }
@@ -57,52 +53,41 @@ struct coordinate extractBlob(CBlobResult blobs, struct coordinate selectedCoord
 void drawInitialBlobs(IplImage * tmp_frame, CBlobResult blobs){
 
 	
-	struct coordinate drawCoord;
+	coord drawCoord;
 
 	for (int i=0; i<blobs.GetNumBlobs();i++){
 		
 		//!Creating the coordinate struct
-		drawCoord.Maxx= (int ) blobs.GetBlob(i).MaxX();
-		drawCoord.Maxy= (int ) blobs.GetBlob(i).MaxY();
-		drawCoord.Minx= (int ) blobs.GetBlob(i).MinX();
-		drawCoord.Miny= (int ) blobs.GetBlob(i).MinY();
-		drawCoord.flag=true; 
+		drawCoord.set(blobs.GetBlob(i).MaxX(),blobs.GetBlob(i).MinX(),blobs.GetBlob(i).MaxY(),blobs.GetBlob(i).MinY());
 
 		drawBlob(tmp_frame, drawCoord, 255, 255, 0);
 	}
 }
 
-CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
+CBlob getNearestBlob(CBlobResult blobs, coord coordinate){
 	
 	int tot = blobs.GetNumBlobs();
-	int Meanx, Meany, tempMeanx, tempMeany;
 	CBlob Blob;
 	float distance[10]; // 10 è il numero massimo di blob trovabile in un video
-	//for (int j=0; j<10; j++){distance[j]=0;}
 	float minimum;
-
-	Meanx=(coord.Minx+coord.Maxx)/2;
-	Meany=(coord.Miny+coord.Maxy)/2;
-	struct coordinate tempCoord;
 	
+	coord tempCoord;
+
 	//Questo ciclo for fa la distanza manhattan tra le coordinate passate e tutti i blob catturati e crea il vettore con tutte le distanze.
 	for (int i=0; i<tot; i++){
 		Blob = blobs.GetBlob(i);
-		tempCoord.Maxx= (int ) Blob.MaxX();
-		tempCoord.Maxy= (int ) Blob.MaxY();
-		tempCoord.Minx= (int ) Blob.MinX();
-		tempCoord.Miny= (int ) Blob.MinY();
-		tempMeanx=(tempCoord.Minx+tempCoord.Maxx)/2;
-		tempMeany=(tempCoord.Miny+tempCoord.Maxy)/2;
-		distance[i] = sqrt((double)(tempMeanx - Meanx)*(tempMeanx - Meanx) + (tempMeany - Meany)*(tempMeany - Meany));
+		tempCoord.set(Blob.MaxX(),Blob.MinX(),Blob.MaxY(),Blob.MinY());
+		distance[i] = sqrt((double)(tempCoord.cX - coordinate.cX)*(tempCoord.cX - coordinate.cX) + (tempCoord.cY - coordinate.cY)*(tempCoord.cY - coordinate.cY));
 	}
+
 	int minDistanceId=0;
 	
 	//Questo ciclo for becca la minima distanza fra tutte quelle calcolate
 	for (int j=0; j<tot; j++){
 		minimum = min( distance[j], distance[minDistanceId]);	
 		if ( distance[j] == minimum ) minDistanceId = j;
-	}
+		}
+
 	//Ottenuta la minima distanza si va a ritornare il Blob corrispondente
 	Blob = blobs.GetBlob( minDistanceId );
 	//delete[] distance;
@@ -111,8 +96,7 @@ CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord){
 }
 
 CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack){
-   	
-	struct coordinate coord;
+ 
 	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
 		
 	//!get the binary foreground object
@@ -129,7 +113,7 @@ CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack){
 	blobs.PrintBlobs( "blobs.txt" );
 
 	//! discard the blobs with less area than 60 pixels
-	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 60);
+	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_GREATER, 40);
 	
 	//!This two row of code are to filter the blob find from the library by a bug that match ablob like all the 	image and return the center of it
 	blobs.Filter( blobs, B_INCLUDE, CBlobGetArea(), B_LESS, (tmp_frame->height)*(tmp_frame->width)*0.8);

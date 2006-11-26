@@ -29,11 +29,11 @@
 
 ///Functions Declaration
 
-struct coordinate extractBlob(CBlobResult blobs, struct coordinate selectedCoord);
+coord extractBlob(CBlobResult blobs, coord selectedCoord);
 
 void drawInitialBlobs(IplImage * tmp_frame, CBlobResult blobs);
 
-CBlob getNearestBlob(CBlobResult blobs, struct coordinate coord);
+CBlob getNearestBlob(CBlobResult blobs, coord coordinate);
 
 CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack);
 
