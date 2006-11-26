@@ -29,8 +29,8 @@
 void execute(char * aviName,int id ){
 	 
 	//Declare the variable of Kalman
-	struct coordinate coordReal;
-	struct coordinate coordPredict;
+	coord coordReal;
+	coord coordPredict;
 	coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
@@ -91,9 +91,28 @@ void execute(char * aviName,int id ){
 			
 			if (selected == false){
 				//!Extact and draw all blobs
+<<<<<<< .mine
+				drawInitialBlobs(tmp_frame, blobsVector);
+				cvNamedWindow("image",0);
+				int x,y;
+				cvSetMouseCallback( "image", on_mouse, 0 );
+				cvShowImage("image", tmp_frame);
+=======
 				drawInitialBlobs(tmp_frame, blobsVector);
 				
+>>>>>>> .r120
 				//Questa è la simulazione del click del marto
+<<<<<<< .mine
+				coord selectedCoord;
+				try{
+					cvWaitKey();
+					}
+				catch(coordExcept e){
+					selectedCoord.set(e.x,e.y);
+					}
+
+				selectedCoord = extractBlob( blobsVector, selectedCoord);
+=======
 				struct coordinate selectedCoord;
 				selectedCoord.Maxx= 0;
 				selectedCoord.Maxy= 20;
@@ -101,6 +120,7 @@ void execute(char * aviName,int id ){
 				selectedCoord.Miny= 7;
 				selectedCoord.flag= true;
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
+>>>>>>> .r120
 				
 				/*kalman = initKalman(indexMat, selectedCoord);
 
@@ -161,7 +181,7 @@ void execute(char * aviName,int id ){
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("image");
 	cvReleaseCapture(&capture);
-};
+}
 
 
 
@@ -174,18 +194,30 @@ void execute(char * aviName,int id ){
  * \param B the BLUE components of RGB color.
 */
 
-void drawBlob (IplImage * image, struct coordinate coord, int R, int G, int B){
-
-	int iMeanx, iMeany;
-	iMeanx=(coord.Maxx+coord.Minx)/2;
-	iMeany=(coord.Maxy+coord.Miny)/2;
+void drawBlob (IplImage * image, coord CcB, int R, int G, int B){
 	
 	//!printing the center and other coordinate
-	printf("Centro: x:%d, y:%d - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", iMeanx, iMeany,coord.Maxx,coord.Maxy,coord.Minx,coord.Miny);
+	printf("Centro: x:%f, y:%f - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", CcB.cX, CcB.cY, CcB.MaxX, CcB.MaxY, CcB.MinX, CcB.MinY);
 	
-	cvLine( image, cvPoint(iMeanx, iMeany), cvPoint(iMeanx, iMeany), CV_RGB(R, G , B), 4, 8, 0 );
+	cvLine( image, cvPoint(CcB.cX, CcB.cY), cvPoint(CcB.cX, CcB.cY), CV_RGB(R, G , B), 4, 8, 0 );
 	
 	// mark box around blob
-	cvRectangle( image, cvPoint(coord.Minx , coord.Miny ), cvPoint ( coord.Maxx, coord.Maxy ), CV_RGB(R, G , B), 1, 8, 0);
+	cvRectangle( image, cvPoint(CcB.MinX , CcB.MinY ), cvPoint ( CcB.MaxX, CcB.MaxY ), CV_RGB(R, G , B), 1, 8, 0);
 
 }
+<<<<<<< .mine
+
+void on_mouse( int event, int x, int y, int flags, void* param ){
+ 
+	switch( event ){
+		case CV_EVENT_LBUTTONDOWN:{
+			//printf("(%d,%d)",x,y);
+			coordExcept e;
+			e.x=x;
+			e.y=y;
+			throw(e);
+		}break;
+	}
+}
+=======
+>>>>>>> .r120
