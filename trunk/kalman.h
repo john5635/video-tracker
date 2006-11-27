@@ -20,7 +20,7 @@
 
 #include "videotracker.h"
 #include "parser.h"
-
+#include "Coord.h"
 
 ///Other Define
 
@@ -29,11 +29,11 @@
 
 ///Functions Declaration
 
-CvKalman* initKalman(CvMat** , struct coordinate );
+CvKalman* initKalman(CvMat** , coord );
 
 void copyMat (CvMat* , CvMat* );
 
-float* updateKalman(CvKalman * ,CvMat *, CvMat* , CvMat * , struct coordinate );
+float* updateKalman(CvKalman * ,CvMat *, CvMat* , CvMat * , coord );
 
 
 #endif

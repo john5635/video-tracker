@@ -109,12 +109,12 @@ void execute(char * aviName,int id ){
 				selectedCoord.set(CLICK[0],CLICK[1]);
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
 				
-				/*kalman = initKalman(indexMat, selectedCoord);
+				kalman = initKalman(indexMat, selectedCoord);
 
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
 				process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
-				*/
+				
 	
 				coordReal=selectedCoord;
 				
