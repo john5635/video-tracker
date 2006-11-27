@@ -43,7 +43,7 @@ coord extractBlob(CBlobResult blobs, coord selectedCoord){
 		Blob = getNearestBlob( blobs, selectedCoord);
 		
 		//!Creating the coordinate struct
-		coordinate.set(Blob.MaxX(),Blob.MinX(),Blob.MaxY(),Blob.MinY());
+		coordinate.set( (int) Blob.MaxX(), (int) Blob.MinX(), (int) Blob.MaxY(), (int) Blob.MinY());
 		
 		return coordinate;
 	}
@@ -58,7 +58,7 @@ void drawInitialBlobs(IplImage * tmp_frame, CBlobResult blobs){
 	for (int i=0; i<blobs.GetNumBlobs();i++){
 		
 		//!Creating the coordinate struct
-		drawCoord.set(blobs.GetBlob(i).MaxX(),blobs.GetBlob(i).MinX(),blobs.GetBlob(i).MaxY(),blobs.GetBlob(i).MinY());
+		drawCoord.set( (int) blobs.GetBlob(i).MaxX(), (int) blobs.GetBlob(i).MinX(), (int) blobs.GetBlob(i).MaxY(), (int) blobs.GetBlob(i).MinY());
 
 		drawBlob(tmp_frame, drawCoord, 255, 255, 0);
 	}
@@ -76,7 +76,7 @@ CBlob getNearestBlob(CBlobResult blobs, coord coordinate){
 	//Questo ciclo for fa la distanza manhattan tra le coordinate passate e tutti i blob catturati e crea il vettore con tutte le distanze.
 	for (int i=0; i<tot; i++){
 		Blob = blobs.GetBlob(i);
-		tempCoord.set(Blob.MaxX(),Blob.MinX(),Blob.MaxY(),Blob.MinY());
+		tempCoord.set( (int) Blob.MaxX(), (int) Blob.MinX(), (int) Blob.MaxY(), (int) Blob.MinY());
 		distance[i] = sqrt((double)(tempCoord.cX - coordinate.cX)*(tempCoord.cX - coordinate.cX) + (tempCoord.cY - coordinate.cY)*(tempCoord.cY - coordinate.cY));
 	}
 
@@ -125,8 +125,3 @@ CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack){
 
 	return blobs;
 }
-
-
-
-
-

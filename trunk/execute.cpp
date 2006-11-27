@@ -92,7 +92,7 @@ void execute(char * aviName,int id ){
 			if (selected == false){
 				//!Extact and draw all blobs
 				drawInitialBlobs(tmp_frame, blobsVector);
-				cvNamedWindow("image",0);
+				//cvNamedWindow("image",0);
 				int x,y;
 				cvSetMouseCallback( "image", on_mouse, 0 );
 				cvShowImage("image", tmp_frame);
@@ -189,7 +189,7 @@ void drawBlob (IplImage * image, coord CcB, int R, int G, int B){
 	//!printing the center and other coordinate
 	printf("Centro: x:%f, y:%f - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", CcB.cX, CcB.cY, CcB.MaxX, CcB.MaxY, CcB.MinX, CcB.MinY);
 	
-	cvLine( image, cvPoint(CcB.cX, CcB.cY), cvPoint(CcB.cX, CcB.cY), CV_RGB(R, G , B), 4, 8, 0 );
+	cvLine( image,  cvPoint( (int)CcB.cX, (int) CcB.cY),  cvPoint( (int) CcB.cX,  (int)CcB.cY), CV_RGB(R, G , B), 4, 8, 0 );
 	
 	// mark box around blob
 	cvRectangle( image, cvPoint(CcB.MinX , CcB.MinY ), cvPoint ( CcB.MaxX, CcB.MaxY ), CV_RGB(R, G , B), 1, 8, 0);
