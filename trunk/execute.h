@@ -24,11 +24,6 @@
 #include "extractBlob.h"
 #include "kalman.h"
 
-class coordExcept : public exception{
-public :
-	int x;
-	int y;
-};
 
 ///Functions Declaration
 void on_mouse( int event, int x, int y, int flags, void* param );
