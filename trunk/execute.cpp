@@ -149,8 +149,8 @@ void execute(char * aviName,int id ){
 		}
 		
 		else {
-// 			if (coordPredict.flag == true) {
-// 								coordReal=coordPredict;} 
+			if (coordPredict.flag == true) {
+								coordReal=coordPredict;} 
 		}
 	
 		//! display the image
