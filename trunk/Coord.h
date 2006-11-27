@@ -69,8 +69,16 @@ public:
 	}
 
 	void set(int x,int y){
+		MinX = x - lX/2;
+		MaxX = x + lX/2;
+		MinY = y - lY/2;
+		MaxY = y + lY/2;
 		cX=x;
 		cY=y;
+// 		lX=MaxX-MinX;
+// 		lY=MaxY-MinY;
+		flag=true;
+		
 	}
 
 	void set(int maxx,int minx, int maxy, int miny){

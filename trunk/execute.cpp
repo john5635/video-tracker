@@ -127,11 +127,11 @@ void execute(char * aviName,int id ){
 				printf("Flag true!\n");
 				
 				drawBlob(tmp_frame, coordReal, 255,255,255);
-				/*
+				
 				//!updateKalman functions that provied to estimate with Kalman filter
 				predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
 				
-				//!computing the coordinate predict from Kalman, the X one.
+				/*//!computing the coordinate predict from Kalman, the X one.
 				coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
 				coordPredict.Minx = (int) predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
 				
@@ -139,16 +139,18 @@ void execute(char * aviName,int id ){
 				coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
 				coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
 				
-				coordPredict.flag = true;
+				coordPredict.flag = true;*/
+				coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
+				coordPredict.set ((int)predict[0], (int)predict[1]);
 				
-				drawBlob(tmp_frame, coordPredict, 0, 255, 0);*/
+				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
 			}
 
 		}
 		
 		else {
-			if (coordPredict.flag == true) {
-								coordReal=coordPredict;} 
+// 			if (coordPredict.flag == true) {
+// 								coordReal=coordPredict;} 
 		}
 	
 		//! display the image

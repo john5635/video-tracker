@@ -34,7 +34,7 @@
 
 CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	
-	struct matrixDesc *MDSC = new struct matrixDesc[NUMBER_OF_MATRIX];
+	struct matrixDesc MDSC [NUMBER_OF_MATRIX];
 	
 	float ValuesVect[100];
 
@@ -109,11 +109,11 @@ void copyMat (CvMat* source, CvMat* dest){
  * \param struct coordinate the struct in which are the measurement coordinate. (z_k)
  */
 
-float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, struct coordinate coord){
-
+float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, coord coord){
+	
 	int Meanx, Meany;
-	Meanx=(coord.Minx+coord.Maxx)/2;
-	Meany=(coord.Miny+coord.Maxy)/2;
+	Meanx = coord.cX;
+	Meany = coord.cY;
 	cvmSet(measurement,0,0,Meanx);
 	cvmSet(measurement,1,0,Meany);
 	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
