@@ -28,9 +28,6 @@ class coordExcept : public exception{
 public :
 	int x;
 	int y;
-    virtual const char* what() const{
-    return "Mouse Click";
-	}
 };
 
 ///Functions Declaration
