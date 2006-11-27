@@ -66,12 +66,22 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	}
 	
 	//!filling up the kalamn structure. For now I have left the copyMat method. The other method is more efficent however.
-	copyMat(indexMat[0], kalman->transition_matrix);//A
+	
+	
+	kalman->transition_matrix = indexMat[0];//A
+	//kalman->control_matrix = indexMat[1];//Bu
+	kalman->measurement_matrix = indexMat[2];//H
+ 	//kalman->process_noise_cov = indexMat[3];//Q
+	//kalman->measurement_noise_cov =  indexMat[4];//R
+	//kalman->error_cov_pre = indexMat[5];
+	
+	
+	/*copyMat(indexMat[0], kalman->transition_matrix);//A
 	copyMat(indexMat[1], kalman->control_matrix);//Bu
 	copyMat(indexMat[2], kalman->measurement_matrix);;//H
 	copyMat(indexMat[3], kalman->process_noise_cov);//Q
 	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
-	copyMat(indexMat[5], kalman->error_cov_pre);//P
+	copyMat(indexMat[5], kalman->error_cov_pre);//P */
 	//copyMat(indexMat[6], kalman->state_post);
 	
 	//!Here we must set the initial state
@@ -112,8 +122,8 @@ void copyMat (CvMat* source, CvMat* dest){
 float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, coord coord){
 	
 	int Meanx, Meany;
-	Meanx = coord.cX;
-	Meany = coord.cY;
+	Meanx = (int) coord.cX;
+	Meany =  (int) coord.cY;
 	cvmSet(measurement,0,0,Meanx);
 	cvmSet(measurement,1,0,Meany);
 	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
