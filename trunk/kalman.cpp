@@ -34,7 +34,7 @@
 
 CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	
-	struct matrixDesc MDSC [NUMBER_OF_MATRIX];
+	struct matrixDesc MDSC[NUMBER_OF_MATRIX];
 	
 	float ValuesVect[100];
 
