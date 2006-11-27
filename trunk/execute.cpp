@@ -104,7 +104,7 @@ void execute(char * aviName,int id ){
 				coord selectedCoord;
 
 				try{
-					cvWaitKey();
+					cvWaitKey(2000);
 					}
 				catch(coordExcept e){
 					selectedCoord.set(e.x,e.y);

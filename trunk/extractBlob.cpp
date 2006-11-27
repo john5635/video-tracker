@@ -101,7 +101,7 @@ CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack){
 		
 	//!get the binary foreground object
 	cvSub( getBinaryImage(tmp_frame) , binBack, binFore, NULL );
-	if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
+	//if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
 
 	//!Starting the extracting of Blob
 	CBlobResult blobs;

@@ -19,6 +19,7 @@
 
 ///Other Define
 #include "videotracker.h"
+#include "Coord.h"
 #include "getBackground.h"
 #include "extractBlob.h"
 #include "kalman.h"
@@ -40,4 +41,3 @@ void execute(char * ,int );
 void drawBlob (IplImage *, coord , int, int , int );
 
 #endif
-

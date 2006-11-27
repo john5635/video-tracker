@@ -38,72 +38,7 @@ struct coordinate {
 	bool flag;
 };
 
-class coord{
-public:
-	int MinX;
-	int MaxX;
-	int MinY;
-	int MaxY;
-	double cX;
-	double cY;
-	int lX;
-	int lY;
-	bool flag;
 
-	coord(){
-		MinX=0;
-		MaxX=0;
-		MinY=0;
-		MaxY=0;
-		cX=0;
-		cY=0;
-		lX=0;
-		lY=0;
-		flag=true;
-	}
-
-	coord(int x,int y){
-		MinX=0;
-		MaxX=0;
-		MinY=0;
-		MaxY=0;
-		cX=x;
-		cY=y;
-		lX=0;
-		lY=0;
-		flag=true;
-	}
-
-	coord(int maxx,int minx, int maxy, int miny){
-		MinX=minx;
-		MaxX=maxy;
-		MinY=miny;
-		MaxY=maxy;
-		cX=(MinX+MaxX)/2;
-		cY=(MinY+MaxY)/2;
-		lX=MaxX-MinX;
-		lY=MaxY-MinY;
-		flag=true;
-	}
-
-	void set(int x,int y){
-		cX=x;
-		cY=y;
-	}
-
-	void set(int maxx,int minx, int maxy, int miny){
-		MinX=minx;
-		MaxX=maxx;
-		MinY=miny;
-		MaxY=maxy;
-		cX=(MinX+MaxX)/2;
-		cY=(MinY+MaxY)/2;
-		lX=MaxX-MinX;
-		lY=MaxY-MinY;
-	}
-
-	//~coord();//distruttore
-};
 
 struct matrixDesc{
 		int nCols;
@@ -111,4 +46,3 @@ struct matrixDesc{
 };
 
 #endif
-
