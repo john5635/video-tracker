@@ -103,8 +103,7 @@ void execute(char * aviName,int id ){
 				drawInitialBlobs(tmp_frame, blobsVector);
 				
 				cvWaitKey(7000);
-				//Questa è la simulazione del click del marto
-
+				
 				coord selectedCoord;
 				selectedCoord.set(CLICK[0],CLICK[1]);
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
