@@ -25,6 +25,8 @@
  * \param aviName the name of the avi video to process
  * \param id the numbero of the blob to take in the extractBlob functions
  */
+int CLICK[2];
+
 
 void execute(char * aviName,int id ){
 	 
@@ -93,23 +95,18 @@ void execute(char * aviName,int id ){
 				//!Extact and draw all blobs
 				drawInitialBlobs(tmp_frame, blobsVector);
 				//cvNamedWindow("image",0);
-				int x,y;
-				cvSetMouseCallback( "image", on_mouse, 0 );
+				CLICK[0]=0;
+				CLICK[1]=0;
+				cvSetMouseCallback( "image", on_mouse, 0);
+				
 				cvShowImage("image", tmp_frame);
 				drawInitialBlobs(tmp_frame, blobsVector);
 				
-
+				cvWaitKey(7000);
 				//Questa è la simulazione del click del marto
 
 				coord selectedCoord;
-
-				try{
-					cvWaitKey();
-					}
-				catch(coordExcept &e){
-					selectedCoord.set(e.x,e.y);
-					}
-
+				selectedCoord.set(CLICK[0],CLICK[1]);
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
 				
 				/*kalman = initKalman(indexMat, selectedCoord);
@@ -200,11 +197,8 @@ void on_mouse( int event, int x, int y, int flags, void* param ){
  
 	switch( event ){
 		case CV_EVENT_LBUTTONDOWN:{
-			//printf("(%d,%d)",x,y);
-			coordExcept e;
-			e.x=x;
-			e.y=y;
-			throw(e);
+		CLICK[0]=x;
+		CLICK[1]=y;
 		}break;
 	}
 }
