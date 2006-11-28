@@ -41,7 +41,7 @@ public:
 		cY=0;
 		lX=0;
 		lY=0;
-		flag=true;
+		flag=false;
 	}
 
 	coord(int x,int y){
@@ -90,6 +90,7 @@ public:
 		cY=(MinY+MaxY)/2;
 		lX=MaxX-MinX;
 		lY=MaxY-MinY;
+		flag=true;
 	}
 
 	//~coord();//distruttore

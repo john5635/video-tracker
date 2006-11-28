@@ -33,7 +33,7 @@ void execute(char * aviName,int id ){
 	//Declare the variable of Kalman
 	coord coordReal;
 	coord coordPredict;
-	coordPredict.flag=true;
+	//coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
 	CBlobResult blobsVector;
@@ -131,15 +131,6 @@ void execute(char * aviName,int id ){
 				//!updateKalman functions that provied to estimate with Kalman filter
 				predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
 				
-				/*//!computing the coordinate predict from Kalman, the X one.
-				coordPredict.Maxx = (int) predict[0] + (coordReal.Maxx - coordReal.Minx)/2;
-				coordPredict.Minx = (int) predict[0] - (coordReal.Maxx - coordReal.Minx)/2;
-				
-				//!computing the coordinate predict from Kalman, the Y one.
-				coordPredict.Maxy = (int) predict[1] + (coordReal.Maxy - coordReal.Miny)/2;
-				coordPredict.Miny = (int) predict[1] - (coordReal.Maxy - coordReal.Miny)/2;
-				
-				coordPredict.flag = true;*/
 				coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 				coordPredict.set ((int)predict[0], (int)predict[1]);
 				
@@ -149,8 +140,13 @@ void execute(char * aviName,int id ){
 		}
 		
 		else {
-			if (coordPredict.flag == true) {
-								coordReal=coordPredict;} 
+			if ( (coordPredict.flag == true)) {
+				coordReal.set(coordPredict.MaxX, coordPredict.MinX, coordPredict.MaxY, coordPredict.MinY);
+				predict = updateKalman (kalman, state, measurement, process_noise, coordReal);
+				//coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
+				coordPredict.set ((int)predict[0], (int)predict[1]);
+				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+			} 
 		}
 	
 		//! display the image
