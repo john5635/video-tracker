@@ -32,16 +32,18 @@ void execute(char * aviName,int id ){
 	 
 	//Declare the variable of Kalman
 	coord coordReal;
+	coord candidateCoordReal;
 	coord coordPredict;
 	//coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
 	CBlobResult blobsVector;
-	
+	float distance; 
 	//!vision of the avi file
 	cvNamedWindow( "image", 1 );
 	char code = -1;
-	
+	int maxNumFrame = 0;
+
 	//Declare the structure for the background subtraction
 	CvGaussBGStatModelParams paramMoG;
 	CvBGStatModel *bkgdMdl = NULL;
@@ -122,19 +124,32 @@ void execute(char * aviName,int id ){
 			}
 			
 			else {
-				coordReal = extractBlob( blobsVector, coordReal);
+				candidateCoordReal = extractBlob( blobsVector, coordReal);
 				
-				printf("Flag true!\n");
+				distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
+
 				
-				drawBlob(tmp_frame, coordReal, 255,255,255);
-				
-				//!updateKalman functions that provied to estimate with Kalman filter
-				predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
-				
-				coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
-				coordPredict.set ((int)predict[0], (int)predict[1]);
-				
-				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+				if ((distance > 55.0) && (coordPredict.flag == true) && (maxNumFrame < 30)){
+					coordReal.set(coordPredict.MaxX, coordPredict.MinX, coordPredict.MaxY, coordPredict.MinY);
+					drawBlob(tmp_frame, coordReal, 255,255,255);
+					maxNumFrame++;
+				}
+				else {
+					maxNumFrame = 0;
+					coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
+				 
+					printf("Flag true!\n");
+					
+					drawBlob(tmp_frame, coordReal, 255,255,255);
+					
+					//!updateKalman functions that provied to estimate with Kalman filter
+					predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
+					
+					coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
+					coordPredict.set ((int)predict[0], (int)predict[1]);
+					
+					drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+				}
 			}
 
 		}

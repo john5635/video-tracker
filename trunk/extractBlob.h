@@ -37,5 +37,6 @@ CBlob getNearestBlob(CBlobResult blobs, coord coordinate);
 
 CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack);
 
+float getDistance (double X1, double X2, double Y1, double Y2);
 
 #endif
