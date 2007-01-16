@@ -25,11 +25,11 @@ wxCFLAGS += -DWIN32
 endif
 
 
-OBJ = extractBlob.o parser.o getBackground.o kalman.o main.o
+OBJ = extractBlob.o parser.o getBackground.o kalman.o execute.o main.o
 
 #fase di linking
 video-tracker: $(OBJ) 
-	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS)
+	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS) -lblob
 
 #fase di compiling
 main.o: 
@@ -46,6 +46,9 @@ kalman.o:
 
 parser.o: 
 	$(GPP) $(CFLAGS) $(wxCFLAGS) -c parser.cpp
+
+execute.o: 
+	$(GPP) $(CFLAGS) $(wxCFLAGS) -c execute.cpp
 
 main:        	$(TARGET)
 
