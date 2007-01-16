@@ -29,7 +29,7 @@ OBJ = extractBlob.o parser.o getBackground.o kalman.o execute.o main.o
 
 #fase di linking
 video-tracker: $(OBJ) 
-	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS) -lblob
+	$(GPP) $(CFLAGS) $(wxCFLAGS) $(OBJ) -o $@  $(LIBS) $(wxLIBS) -L. -lblob
 
 #fase di compiling
 main.o: 
