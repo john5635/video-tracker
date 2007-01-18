@@ -71,7 +71,7 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	kalman->transition_matrix = indexMat[0];//A
 	kalman->control_matrix = indexMat[1];//Bu
 	kalman->measurement_matrix = indexMat[2];//H
- 	kalman->process_noise_cov = indexMat[3];//Q
+ //	kalman->process_noise_cov = indexMat[3];//Q
 	kalman->measurement_noise_cov =  indexMat[4];//R
 	kalman->error_cov_pre = indexMat[5];//P
 	

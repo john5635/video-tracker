@@ -44,8 +44,8 @@ IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame){
 	 
 	//Updating the Gaussian Model
 	cvUpdateBGStatModel(tmp_frame, bg_model);
-        if(!cvSaveImage("./data/background.jpg",bg_model->background)) printf("Could not save the background image\n");
-	if(!cvSaveImage("./data/foreground.jpg",bg_model->foreground)) printf("Could not save the foreground image\n");
+  // if(!cvSaveImage("./data/background.jpg",bg_model->background)) printf("Could not save the background image\n");
+//if(!cvSaveImage("./data/foreground.jpg",bg_model->foreground)) printf("Could not save the foreground image\n");
 	
 	//returing the binary background
 	return bg_model->foreground;
