@@ -95,14 +95,14 @@ CBlob getNearestBlob(CBlobResult blobs, coord coordinate){
 
 }
 
-CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binBack){
+CBlobResult getBlobs(IplImage* tmp_frame, IplImage* binFore){
  
-	IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
+	//IplImage* binFore = cvCreateImage(cvGetSize(tmp_frame),IPL_DEPTH_8U,1);
 		
-	//!get the binary foreground object
-	cvSub( getBinaryImage(tmp_frame) , binBack, binFore, NULL );
+	//get the binary foreground object
+	//cvSub( getBinaryImage(tmp_frame) , binBack, binFore, NULL );
 	//if(!cvSaveImage("binFore.jpg",binFore)) printf("Could not save the backgroundimage\n");
-
+	
 	//!Starting the extracting of Blob
 	CBlobResult blobs;
 	

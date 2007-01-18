@@ -47,7 +47,7 @@ void execute(char * aviName,int id ){
 	//Declare the structure for the background subtraction
 	CvGaussBGStatModelParams paramMoG;
 	CvBGStatModel *bkgdMdl = NULL;
-	IplImage * binaryBackground = NULL;
+	IplImage * binaryForeground = NULL;
 
 	bool selected = false;
 	
@@ -88,8 +88,8 @@ void execute(char * aviName,int id ){
 		
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
-		binaryBackground = updateBackground(bkgdMdl,tmp_frame);
-		blobsVector = getBlobs(tmp_frame,binaryBackground);
+		binaryForeground = updateBackground(bkgdMdl,tmp_frame);
+		blobsVector = getBlobs(tmp_frame,binaryForeground);
 
 		if ( blobsVector.GetNumBlobs()>0 ){
 			
