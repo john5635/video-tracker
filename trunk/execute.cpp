@@ -40,7 +40,7 @@ void execute(char * aviName,int id ){
 	CBlobResult blobsVector;
 	float distance; 
 	//!vision of the avi file
-	cvNamedWindow( "image", 1 );
+	cvNamedWindow( "video-tracker", 1 );
 	char code = -1;
 	int maxNumFrame = 0;
 
@@ -96,12 +96,12 @@ void execute(char * aviName,int id ){
 			if (selected == false){
 				//!Extact and draw all blobs
 				drawInitialBlobs(tmp_frame, blobsVector);
-				//cvNamedWindow("image",0);
+				//cvNamedWindow("video-tracker",0);
 				CLICK[0]=0;
 				CLICK[1]=0;
-				cvSetMouseCallback( "image", on_mouse, 0);
+				cvSetMouseCallback( "video-tracker", on_mouse, 0);
 				
-				cvShowImage("image", tmp_frame);
+				cvShowImage("video-tracker", tmp_frame);
 				drawInitialBlobs(tmp_frame, blobsVector);
 				
 				cvWaitKey(7000);
@@ -165,7 +165,7 @@ void execute(char * aviName,int id ){
 		}
 	
 		//! display the image
-		cvShowImage("image", tmp_frame);
+		cvShowImage("video-tracker", tmp_frame);
 		
 		//!showing in loop all frames
 		code = (char) cvWaitKey( 100 );
@@ -178,7 +178,7 @@ void execute(char * aviName,int id ){
 	}
 
 	cvReleaseImage(&tmp_frame);
-	cvDestroyWindow("image");
+	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);
 }
 
