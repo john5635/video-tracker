@@ -149,6 +149,10 @@ void execute(char * aviName,int id ){
 					coordPredict.set ((int)predict[0], (int)predict[1]);
 					
 					drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+					
+					//!drawing the ellipse Initial State. Should be Fixed.
+					//cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), cvSize(kalman->error_cov_pre->data.fl[0],kalman->error_cov_pre->data.fl[5]), 45.0, 0, 360, CV_RGB(100,160,220),3);
+					//printf("\n***P=%d***\n", kalman->error_cov_pre->data.fl[0]);
 				}
 			}
 
