@@ -57,6 +57,15 @@ void execute(char * aviName,int id ){
 	CvMat* measurement = NULL;
 	CvMat* process_noise = NULL;
 
+	FILE * realCFile;
+	FILE * predCFile;
+	realCFile = fopen("coordinateReali.txt","w");
+	predCFile = fopen("coordinatePredette.txt","w");
+
+	//ellipse declarations
+	double theta;
+	CvSize axes;
+	int muX, muY;
 
 	CvCapture* capture = cvCaptureFromAVI(aviName);
  
@@ -148,11 +157,29 @@ void execute(char * aviName,int id ){
 					coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 					coordPredict.set ((int)predict[0], (int)predict[1]);
 					
-					drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+					//drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
-					//cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), cvSize(kalman->error_cov_pre->data.fl[0],kalman->error_cov_pre->data.fl[5]), 45.0, 0, 360, CV_RGB(100,160,220),3);
-					//printf("\n***P=%d***\n", kalman->error_cov_pre->data.fl[0]);
+					
+					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
+					
+					muX = sqrt(kalman->error_cov_pre->data.fl[0])*3*coordPredict.lX;
+					muY = sqrt(kalman->error_cov_pre->data.fl[5])*3*coordPredict.lY;
+					
+					axes = cvSize( muX , muY );
+					
+					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
+					/*
+					printf("\n***lX=%d, lY=%d***\n", coordPredict.lY,coordPredict.lX);
+					printf("\n***muX=%d, muY=%d***\n", muX, muY);
+					printf("\n*** theta=%f ***\n", theta);*/
+					
+					fprintf(realCFile,"%.0f,%.0f \n",coordReal.cX,coordReal.cY);
+					fprintf(predCFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
+					
+					
 				}
 			}
 
@@ -173,14 +200,15 @@ void execute(char * aviName,int id ){
 		
 		//!showing in loop all frames
 		code = (char) cvWaitKey( 100 );
-		if( code > 0 )
-                break;
+// 		if( code > 0 )
+//                 break;
 		
 		//! keep image 'til keypress
 		//cvWaitKey(5);
 
 	}
-
+	fclose(realCFile);
+	fclose(predCFile);
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);

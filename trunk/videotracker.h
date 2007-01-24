@@ -27,7 +27,7 @@ using namespace std;
 
 //! the numeber of matrix in the data.txt file to parse
 #define NUMBER_OF_MATRIX 6
-
+#define PI 3.14159265
 //! \struct Coordinate of the tracked object in this case a ball.
 struct coordinate { 
 	//!Coordinates of the rectangle around the blob
