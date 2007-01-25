@@ -171,6 +171,8 @@ void execute(char * aviName,int id ){
 					
 					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
+				
 					/*
 					printf("\n***lX=%d, lY=%d***\n", coordPredict.lY,coordPredict.lX);
 					printf("\n***muX=%d, muY=%d***\n", muX, muY);
