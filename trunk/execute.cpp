@@ -80,7 +80,9 @@ void execute(char * aviName,int id ){
          	fprintf( stderr, "ERROR: Bad video\n" );
          	exit(0);
         }
-
+	int frameH    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
+	int frameW    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
+// 	printf("H:%d, W:%d", frameH, frameW);
 	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
 /*
 	
