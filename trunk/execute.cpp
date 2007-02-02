@@ -34,6 +34,7 @@ void execute(char * aviName,int id ){
 	coord coordReal;
 	coord candidateCoordReal;
 	coord coordPredict;
+	coord predictConDens;
 	//coordPredict.flag=true;
 	CvMat* indexMat[NUMBER_OF_MATRIX];
 	float * predict = NULL;
@@ -52,7 +53,7 @@ void execute(char * aviName,int id ){
 	bool selected = false;
 	
 	CvKalman* kalman = NULL;
-
+	CvConDensation* ConDens = NULL;
 	CvMat* state = NULL;
 	CvMat* measurement = NULL;
 	CvMat* process_noise = NULL;
@@ -61,7 +62,8 @@ void execute(char * aviName,int id ){
 	FILE * predCFile;
 	realCFile = fopen("coordinateReali.txt","w");
 	predCFile = fopen("coordinatePredette.txt","w");
-
+	FILE * condFile;
+	condFile = fopen("coordinateCondensation.txt","w");
 	//ellipse declarations
 	double theta;
 	CvSize axes;
@@ -84,19 +86,7 @@ void execute(char * aviName,int id ){
 	int frameW    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
 // 	printf("H:%d, W:%d", frameH, frameW);
 	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
-/*
 	
-	selectedCoord = extractBlob( tmp_frame, binBack, selectedCoord);
-
-	CvKalman* kalman = initKalman(indexMat, selectedCoord);
-
-	CvMat* state=cvCreateMat(kalman->DP,1,CV_32FC1);
-	CvMat* measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
-        CvMat* process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
-	
-	coordReal=selectedCoord;
-	*/
-		
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
 		
 		binaryForeground = updateBackground(bkgdMdl,tmp_frame);
@@ -122,7 +112,8 @@ void execute(char * aviName,int id ){
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
 				
 				kalman = initKalman(indexMat, selectedCoord);
-
+				ConDens = initCondensation (indexMat, 100, frameW, frameH);
+				
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
 				process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
@@ -159,7 +150,11 @@ void execute(char * aviName,int id ){
 					coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 					coordPredict.set ((int)predict[0], (int)predict[1]);
 					
-					//drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+					
+					//!updateCondensation function.
+					predictConDens = updateCondensation(ConDens, coordReal);
+					//!draw condense prediction
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(255,255, 0), 1, 8, 0 );
 
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
@@ -182,7 +177,7 @@ void execute(char * aviName,int id ){
 					
 					fprintf(realCFile,"%.0f,%.0f \n",coordReal.cX,coordReal.cY);
 					fprintf(predCFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
-					
+					fprintf(condFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
 					
 				}
 			}
@@ -213,9 +208,11 @@ void execute(char * aviName,int id ){
 	}
 	fclose(realCFile);
 	fclose(predCFile);
+	fclose(condFile);
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);
+	
 }
 
 

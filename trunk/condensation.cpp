@@ -22,17 +22,19 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	CvConDensation* ConDens = cvCreateConDensation( DP, MP, nSample );
 	CvMat* lowerBound;
 	CvMat* upperBound;
-	lowerBound = cvCreateMat(2, 1, CV_32F);
-	upperBound = cvCreateMat(2, 1, CV_32F);
+	lowerBound = cvCreateMat(DP, 1, CV_32F);
+	upperBound = cvCreateMat(DP, 1, CV_32F);
 	
 	cvmSet( lowerBound, 0, 0, 0.0 ); cvmSet( upperBound, 0, 0, maxWidth );
 	cvmSet( lowerBound, 1, 0, 0.0 ); cvmSet( upperBound, 1, 0, maxHeight );
 	
 	cvConDensInitSampleSet(ConDens, lowerBound, upperBound);
 	
+	CvRNG rng_state = cvRNG(0xffffffff);
+	
 	for(int i=0; i < nSample; i++){
-		ConDens->flSamples[i][0]+=maxWidth/2;
-		ConDens->flSamples[i][1]+=maxHeight/2;
+		ConDens->flSamples[i][0] = cvRandInt( &rng_state ) % maxWidth; //0 represent the widht (x coord)
+		ConDens->flSamples[i][1] = cvRandInt( &rng_state ) % maxHeight; //1 represent the height (1 coord)
 	}
 	
 	ConDens->DynamMatr=(float*)indexMat[0];
@@ -40,22 +42,41 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	return ConDens;
 }
 
-coord updateCondensation ( CvConDensation* ConDens, coord Coord){
-	
-	
+coord updateCondensation ( CvConDensation* ConDens, coord Measurement){
+	coord prediction;
+	updateProcessProbDens(ConDens, Measurement);
+	cvConDensUpdateByTime(ConDens);
+	prediction.set(ConDens->State[0], ConDens->State[1]);
+	return prediction;	
 }
 
 void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){	
 	
-	float Prob, var;
+	float ProbX, ProbY, var, stdDevX, stdDevY;
 	
-	float stdev = sqrt(var/ConDens->SamplesNum);
+	ProbX=1; ProbY=1;
+	
+	sampleStat* statSampleX = new sampleStat (ConDens->SamplesNum);
+	sampleStat* statSampleY = new sampleStat (ConDens->SamplesNum);
+	
+	//float stdev = sqrt(var/ConDens->SamplesNum);
 	
 	for(int i = 0; i < ConDens->SamplesNum; i++){
-		Prob=1;
-		Prob*=(float)exp(-stdev * (Measurement.cX - ConDens->flSamples[i][0])*(Measurement.cX-ConDens->flSamples[i][0]));
-		Prob*=(float)exp(-stdev * (Measurement.cY - ConDens->flSamples[i][1])*(Measurement.cY-ConDens->flSamples[i][1]));
-		ConDens->flConfidence[i] = Prob;
+		statSampleX->setValue(ConDens->flSamples[i][0],i);
+		statSampleY->setValue(ConDens->flSamples[i][1],i);
+	}	
+	
+	stdDevX = statSampleX->getStdDeviation();
+	stdDevY = statSampleY->getStdDeviation();
+
+	for(int i = 0; i < ConDens->SamplesNum; i++){
+		
+		ProbX*= (float) exp(-stdDevX * (Measurement.cX - ConDens-> flSamples[i][0]) * (Measurement.cX-ConDens-> flSamples[i][0]));
+		
+		ProbY*= (float) exp(-stdDevY * (Measurement.cY - ConDens-> flSamples[i][1]) * (Measurement.cY-ConDens-> flSamples[i][1]));
+		
+		ConDens->flConfidence[i] = ProbX*ProbY;
 	}
+
 	
 }

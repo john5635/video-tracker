@@ -21,7 +21,7 @@
 #include "videotracker.h"
 #include "parser.h"
 #include "Coord.h"
-
+#include "SampleStat.h"
 ///Other Define
 
 
@@ -31,5 +31,5 @@
 
 CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, int maxHeight );
 coord updateCondensation ( CvConDensation*, coord );
-
+void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement);
 #endif

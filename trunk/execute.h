@@ -23,7 +23,8 @@
 #include "getBackground.h"
 #include "extractBlob.h"
 #include "kalman.h"
-
+#include "condensation.h"
+#include "SampleStat.h"
 
 ///Functions Declaration
 void on_mouse( int event, int x, int y, int flags, void* param );
