@@ -52,7 +52,7 @@ coord updateCondensation ( CvConDensation* ConDens, coord Measurement){
 
 void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){	
 	
-	float ProbX, ProbY, var, stdDevX, stdDevY;
+	float ProbX, ProbY, var, stdDevX, stdDevY , varianceX, varianceY;
 	
 	ProbX=1; ProbY=1;
 	
@@ -69,11 +69,14 @@ void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){
 	stdDevX = statSampleX->getStdDeviation();
 	stdDevY = statSampleY->getStdDeviation();
 
+	varianceX = statSampleX->getVariance();
+	varianceY = statSampleY->getVariance();
+
 	for(int i = 0; i < ConDens->SamplesNum; i++){
 		
-		ProbX*= (float) exp(-stdDevX * (Measurement.cX - ConDens-> flSamples[i][0]) * (Measurement.cX-ConDens-> flSamples[i][0]));
+		ProbX*= (float) exp( -1 * (Measurement.cX - ConDens-> flSamples[i][0]) * (Measurement.cX-ConDens-> flSamples[i][0]) / ( 2 * varianceX ) );
 		
-		ProbY*= (float) exp(-stdDevY * (Measurement.cY - ConDens-> flSamples[i][1]) * (Measurement.cY-ConDens-> flSamples[i][1]));
+		ProbY*= (float) exp( -1  * (Measurement.cY - ConDens-> flSamples[i][1]) * (Measurement.cY-ConDens-> flSamples[i][1]) / (2 * varianceY ) ) ;
 		
 		ConDens->flConfidence[i] = ProbX*ProbY;
 	}
