@@ -59,11 +59,11 @@ void execute(char * aviName,int id ){
 	CvMat* process_noise = NULL;
 
 	FILE * realCFile;
-	FILE * predCFile;
+	FILE * kalmanFile;
 	realCFile = fopen("coordinateReali.txt","w");
-	predCFile = fopen("coordinatePredette.txt","w");
-	FILE * condFile;
-	condFile = fopen("coordinateCondensation.txt","w");
+	kalmanFile = fopen("coordinateKalman.txt","w");
+	FILE * condenseFile;
+	condenseFile = fopen("coordinateCondensation.txt","w");
 	//ellipse declarations
 	double theta;
 	CvSize axes;
@@ -115,8 +115,10 @@ void execute(char * aviName,int id ){
 				selectedCoord.set(CLICK[0],CLICK[1]);
 				selectedCoord = extractBlob( blobsVector, selectedCoord);
 				
+				//Init Kalman
 				kalman = initKalman(indexMat, selectedCoord);
-				ConDens = initCondensation (indexMat, 100, frameW, frameH);
+				//Init Condensation
+				ConDens = initCondensation (indexMat, 1000, frameW, frameH);
 				
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
@@ -158,6 +160,7 @@ void execute(char * aviName,int id ){
 					//!updateCondensation function.
 					predictConDens = updateCondensation(ConDens, coordReal, &varXcondens, &varYcondens);
 
+
 					//!draw condense prediction
   				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(255,255, 0), 4, 8, 0 );
 					
@@ -170,15 +173,17 @@ void execute(char * aviName,int id ){
 					
 					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
 					
-					muX = sqrt(kalman->error_cov_pre->data.fl[0])*3*coordPredict.lX;
-					muY = sqrt(kalman->error_cov_pre->data.fl[5])*3*coordPredict.lY;
+					muX = sqrt(kalman->error_cov_pre->data.fl[0])*3;
+					muY = sqrt(kalman->error_cov_pre->data.fl[5])*3;
 					
 					axes = cvSize( muX , muY );
 					
 					
 					
 					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
+					
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
+					
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
 				
 					/*
@@ -187,8 +192,8 @@ void execute(char * aviName,int id ){
 					printf("\n*** theta=%f ***\n", theta);*/
 					
 					fprintf(realCFile,"%.0f,%.0f \n",coordReal.cX,coordReal.cY);
-					fprintf(predCFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
-					fprintf(condFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
+					fprintf(kalmanFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
+					fprintf(condenseFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
 					
 				}
 			}
@@ -218,8 +223,8 @@ void execute(char * aviName,int id ){
 
 	}
 	fclose(realCFile);
-	fclose(predCFile);
-	fclose(condFile);
+	fclose(kalmanFile);
+	fclose(condenseFile);
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);
