@@ -30,6 +30,6 @@
 ///Functions Declaration
 
 CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, int maxHeight );
-coord updateCondensation ( CvConDensation*, coord );
-void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement);
+coord updateCondensation ( CvConDensation* ConDens, coord Measurement, float * varX, float * varY);
+void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement, float * varX, float* varY);
 #endif

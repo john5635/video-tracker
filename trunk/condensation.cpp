@@ -53,15 +53,15 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	return ConDens;
 }
 
-coord updateCondensation ( CvConDensation* ConDens, coord Measurement){
+coord updateCondensation ( CvConDensation* ConDens, coord Measurement, float * varX, float * varY){
 	coord prediction;
-	updateProcessProbDens(ConDens, Measurement);
+	updateProcessProbDens(ConDens, Measurement, varX, varY);
 	cvConDensUpdateByTime(ConDens);
 	prediction.set(ConDens->State[0], ConDens->State[1]);
 	return prediction;	
 }
 
-void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){	
+void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement, float * varX, float * varY){	
 	
 	float ProbX, ProbY, var, stdDevX, stdDevY , varianceX, varianceY;
 	
@@ -95,5 +95,6 @@ void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){
 		ConDens->flConfidence[i] = ProbX*ProbY;
 	}
 
-	
+	*varX = varianceX;
+	*varY = varianceY;
 }
