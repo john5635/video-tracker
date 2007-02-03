@@ -69,6 +69,10 @@ void execute(char * aviName,int id ){
 	CvSize axes;
 	int muX, muY;
 
+	//Variance for drawing condensation ellipse
+	float varXcondens, varYcondens;
+	CvSize axesCondens;
+	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
  
 	if( !capture ) {
@@ -152,10 +156,15 @@ void execute(char * aviName,int id ){
 					
 					
 					//!updateCondensation function.
-					predictConDens = updateCondensation(ConDens, coordReal);
-					//!draw condense prediction
-					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(255,255, 0), 1, 8, 0 );
+					predictConDens = updateCondensation(ConDens, coordReal, &varXcondens, &varYcondens);
 
+					//!draw condense prediction
+  				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(255,255, 0), 4, 8, 0 );
+					
+					axesCondens = cvSize(varXcondens/300, varYcondens/300);
+
+					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(255,255,0),1);
+				
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
 					
@@ -165,6 +174,8 @@ void execute(char * aviName,int id ){
 					muY = sqrt(kalman->error_cov_pre->data.fl[5])*3*coordPredict.lY;
 					
 					axes = cvSize( muX , muY );
+					
+					
 					
 					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
