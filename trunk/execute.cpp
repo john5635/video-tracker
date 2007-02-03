@@ -162,19 +162,20 @@ void execute(char * aviName,int id ){
 
 
 					//!draw condense prediction
-  				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(255,255, 0), 4, 8, 0 );
+  				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
 					
 					axesCondens = cvSize(varXcondens/300, varYcondens/300);
 
-					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(255,255,0),1);
-				
+					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
+					
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
 					
 					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
 					
-					muX = sqrt(kalman->error_cov_pre->data.fl[0])*3;
-					muY = sqrt(kalman->error_cov_pre->data.fl[5])*3;
+					muX = sqrt(kalman->error_cov_pre->data.fl[0])*100;
+					muY = sqrt(kalman->error_cov_pre->data.fl[5])*100;
 					
 					axes = cvSize( muX , muY );
 					
