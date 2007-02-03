@@ -32,7 +32,7 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	cvmSet( lowerBound, 1, 0, 0.0 ); 
 	cvmSet( upperBound, 1, 0, maxHeight );
 
-	//ConDens->DynamMatr = &indexMat[0]; DXX MXXXXE è un FLOAT POINTER //fa il set della matrice del sistema
+	//ConDens->DynamMatr = &indexMat[0]; fa il set della matrice del sistema
 	
 
 	for (int i=0;i<DP*DP;i++){
