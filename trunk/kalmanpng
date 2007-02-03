@@ -8,5 +8,5 @@ set title "Kalman"
 set xlabel "Pixels"
 set ylabel "Pixels"
 #set samples 800, 800
-plot 'coordinatePredette.txt','coordinateReali.txt'
+plot 'coordinateKalman.txt' with point pt 1 , 'coordinateCondensation.txt' with point pt 1, 'coordinateReali.txt' with point pt 1
 #plot [-1:1] 'coordinatePredette.txt' with lines ,'coordinateReali.txt' with lines
