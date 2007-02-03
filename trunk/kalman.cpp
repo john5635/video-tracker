@@ -141,12 +141,12 @@ float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * 
 	float pry = predict->data.fl[1];
 	float vx = predict->data.fl[2];
 	float vy = predict->data.fl[3];
-	printf("prx e' %f, pry e' %f\n\n", prx, pry);
+	printf("prx e' %f, pry e' %f\n", prx, pry);
 	float crx = correct->data.fl[0];
 	float cry = correct->data.fl[1];
 	float cvx = correct->data.fl[2];
 	float cvy = correct->data.fl[3];
-	printf("crx e' %f, cry e' %f\n\n", crx, cry);
+	printf("crx e' %f, cry e' %f\n", crx, cry);
 
 	return correct->data.fl;
 
