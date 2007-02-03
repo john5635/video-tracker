@@ -34,10 +34,9 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 
 	//ConDens->DynamMatr = &indexMat[0]; DXX MXXXXE è un FLOAT POINTER //fa il set della matrice del sistema
 	
-	float M[] = {1,0,0,0,0,1,0,0,1,0,1,0,0,1,0,1};
 
-	for (int i=0;i<16;i++){
-		ConDens->DynamMatr[i]=M[i];
+	for (int i=0;i<DP*DP;i++){
+		ConDens->DynamMatr[i]= indexMat[0]->data.fl[i];
 	}
 
 	cvConDensInitSampleSet(ConDens, lowerBound, upperBound);
