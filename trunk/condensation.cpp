@@ -19,15 +19,27 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	
 	int DP = indexMat[0]->cols; //! number of state vector dimensions */
 	int MP = indexMat[2]->rows; //! number of measurement vector dimensions */
+
 	CvConDensation* ConDens = cvCreateConDensation( DP, MP, nSample );
 	CvMat* lowerBound;
 	CvMat* upperBound;
 	lowerBound = cvCreateMat(DP, 1, CV_32F);
 	upperBound = cvCreateMat(DP, 1, CV_32F);
 	
-	cvmSet( lowerBound, 0, 0, 0.0 ); cvmSet( upperBound, 0, 0, maxWidth );
-	cvmSet( lowerBound, 1, 0, 0.0 ); cvmSet( upperBound, 1, 0, maxHeight );
+	cvmSet( lowerBound, 0, 0, 0.0 ); 
+	cvmSet( upperBound, 0, 0, maxWidth );
 	
+	cvmSet( lowerBound, 1, 0, 0.0 ); 
+	cvmSet( upperBound, 1, 0, maxHeight );
+
+	//ConDens->DynamMatr = &indexMat[0]; DXX MXXXXE è un FLOAT POINTER //fa il set della matrice del sistema
+	
+	float M[] = {1,0,0,0,0,1,0,0,1,0,1,0,0,1,0,1};
+
+	for (int i=0;i<16;i++){
+		ConDens->DynamMatr[i]=M[i];
+	}
+
 	cvConDensInitSampleSet(ConDens, lowerBound, upperBound);
 	
 	CvRNG rng_state = cvRNG(0xffffffff);
@@ -37,7 +49,7 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 		ConDens->flSamples[i][1] = cvRandInt( &rng_state ) % maxHeight; //1 represent the height (1 coord)
 	}
 	
-	ConDens->DynamMatr=(float*)indexMat[0];
+	//ConDens->DynamMatr=(float*)indexMat[0];
 	
 	return ConDens;
 }
@@ -73,6 +85,9 @@ void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement){
 	varianceY = statSampleY->getVariance();
 
 	for(int i = 0; i < ConDens->SamplesNum; i++){
+
+		ProbX=1;
+		ProbY=1;
 		
 		ProbX*= (float) exp( -1 * (Measurement.cX - ConDens-> flSamples[i][0]) * (Measurement.cX-ConDens-> flSamples[i][0]) / ( 2 * varianceX ) );
 		
