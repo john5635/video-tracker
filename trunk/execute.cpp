@@ -64,13 +64,17 @@ void execute(char * aviName,int id ){
 	kalmanFile = fopen("coordinateKalman.txt","w");
 	FILE * condenseFile;
 	condenseFile = fopen("coordinateCondensation.txt","w");
+	FILE * meanStdFile;
+	meanStdFile = fopen("StdDev-Media.txt","w");
 	//ellipse declarations
 	double theta;
 	CvSize axes;
-	int muX, muY;
-
+	int muX, muY,condenseFrame;
+	condenseFrame=0;
 	//Variance for drawing condensation ellipse
-	float stdDXcondens, stdDYcondens;
+	float stdDXcondens, stdDYcondens, meanStdDXcondens, meanStdDYcondens ;
+	meanStdDXcondens=0;
+	meanStdDYcondens=0;
 	CvSize axesCondens;
 	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
@@ -92,7 +96,7 @@ void execute(char * aviName,int id ){
 	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
 	
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
-		
+		printf("\n-----------\nFrame #%d",fr);
 		binaryForeground = updateBackground(bkgdMdl,tmp_frame);
 		blobsVector = getBlobs(tmp_frame,binaryForeground);
 
@@ -137,16 +141,17 @@ void execute(char * aviName,int id ){
 				distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
 
 				
-				if ((distance > 55.0) && (coordPredict.flag == true) && (maxNumFrame < 30)){
+				if ((distance > 55.0) && (coordPredict.flag == true) && (maxNumFrame < 5)){
 					coordReal.set(coordPredict.MaxX, coordPredict.MinX, coordPredict.MaxY, coordPredict.MinY);
 					drawBlob(tmp_frame, coordReal, 255,255,255);
 					maxNumFrame++;
 				}
 				else {
 					maxNumFrame = 0;
+					
 					coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
 				 
-					printf("Flag true!\n");
+					//printf("Flag true!\n");
 					
 					drawBlob(tmp_frame, coordReal, 255,255,255);
 					
@@ -159,23 +164,25 @@ void execute(char * aviName,int id ){
 					
 					//!updateCondensation function.
 					predictConDens = updateCondensation(ConDens, coordReal, &stdDXcondens, &stdDYcondens);
-
+					
 
 					//!draw condense prediction
-  				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
+  					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
 					
-					axesCondens = cvSize(stdDXcondens/10, stdDYcondens/10);
-
+					
+					axesCondens = cvSize(stdDXcondens, stdDYcondens);
+					meanStdDXcondens+=stdDXcondens;
+					meanStdDYcondens+=stdDYcondens;
+					condenseFrame++;
 					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
 					
 					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
-					
 					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
 					
-					muX = sqrt(kalman->error_cov_pre->data.fl[0])*100;
-					muY = sqrt(kalman->error_cov_pre->data.fl[5])*100;
+					muX = sqrt(kalman->error_cov_pre->data.fl[0]);
+					muY = sqrt(kalman->error_cov_pre->data.fl[5]);
 					
 					axes = cvSize( muX , muY );
 					
@@ -187,14 +194,17 @@ void execute(char * aviName,int id ){
 					
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
 				
-					/*
-					printf("\n***lX=%d, lY=%d***\n", coordPredict.lY,coordPredict.lX);
-					printf("\n***muX=%d, muY=%d***\n", muX, muY);
-					printf("\n*** theta=%f ***\n", theta);*/
-					
+					//print coord
+					//real					
 					fprintf(realCFile,"%.0f,%.0f \n",coordReal.cX,coordReal.cY);
+					printf("\nBlob center:    (x:%d, y:%d)", (int)coordReal.cX, (int)coordReal.cY);
+					//kalman
 					fprintf(kalmanFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
+					printf("\nKalman center:  (x:%d, y:%d)", (int)predict[0],(int)predict[1]);
+					//condensation
 					fprintf(condenseFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
+					printf("\nConDens center: (x:%d, y:%d)\n", (int)predictConDens.cX,(int)predictConDens.cY);
+					
 					
 				}
 			}
@@ -207,7 +217,7 @@ void execute(char * aviName,int id ){
 				predict = updateKalman (kalman, state, measurement, process_noise, coordReal);
 				//coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 				coordPredict.set ((int)predict[0], (int)predict[1]);
-				drawBlob(tmp_frame, coordPredict, 0, 255, 0);
+				drawBlob(tmp_frame, coordPredict, 255, 0, 0);
 			} 
 		}
 	
@@ -223,9 +233,15 @@ void execute(char * aviName,int id ){
 		//cvWaitKey(5);
 
 	}
+	//print mean_Std-Dev
+	meanStdDXcondens=meanStdDXcondens/condenseFrame;
+	meanStdDYcondens=meanStdDYcondens/condenseFrame;
+	fprintf(meanStdFile,"Varianza Media per il condensation \nVarX: %.0f \nVarY: %.0f",meanStdDXcondens, meanStdDYcondens);
+	
 	fclose(realCFile);
 	fclose(kalmanFile);
 	fclose(condenseFile);
+	fclose(meanStdFile);
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);
@@ -246,12 +262,14 @@ void execute(char * aviName,int id ){
 void drawBlob (IplImage * image, coord CcB, int R, int G, int B){
 	
 	//!printing the center and other coordinate
-	printf("Centro: x:%f, y:%f - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", CcB.cX, CcB.cY, CcB.MaxX, CcB.MaxY, CcB.MinX, CcB.MinY);
+			       
+	
+	//printf("Centro: x:%f, y:%f - - MaxX: %d, MaxY: %d, MinX: %d, MinY: %d\n-----------\n", CcB.cX, CcB.cY, CcB.MaxX, CcB.MaxY, CcB.MinX, CcB.MinY);
 	
 	cvLine( image,  cvPoint( (int)CcB.cX, (int) CcB.cY),  cvPoint( (int) CcB.cX,  (int)CcB.cY), CV_RGB(R, G , B), 4, 8, 0 );
 	
 	// mark box around blob
-	cvRectangle( image, cvPoint(CcB.MinX , CcB.MinY ), cvPoint ( CcB.MaxX, CcB.MaxY ), CV_RGB(R, G , B), 1, 8, 0);
+	//cvRectangle( image, cvPoint(CcB.MinX , CcB.MinY ), cvPoint ( CcB.MaxX, CcB.MaxY ), CV_RGB(R, G , B), 1, 8, 0);
 
 }
 

@@ -32,6 +32,11 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	cvmSet( lowerBound, 1, 0, 0.0 ); 
 	cvmSet( upperBound, 1, 0, maxHeight );
 
+	cvmSet( lowerBound, 2, 0, 0.0 ); 
+	cvmSet( upperBound, 2, 0, 0.0 );
+	
+	cvmSet( lowerBound, 3, 0, 0.0 ); 
+	cvmSet( upperBound, 3, 0, 0.0 );
 	//ConDens->DynamMatr = &indexMat[0]; fa il set della matrice del sistema
 	
 
@@ -49,6 +54,7 @@ CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, 
 	}
 	
 	//ConDens->DynamMatr=(float*)indexMat[0];
+	//ConDens->State[0]=maxWidth/2;ConDens->State[1]=maxHeight/2;ConDens->State[2]=0;ConDens->State[3]=0;
 	
 	return ConDens;
 }
@@ -97,4 +103,5 @@ void updateProcessProbDens ( CvConDensation* ConDens, coord Measurement, float *
 
 	*stdDX_ptr = stdDevX;
 	*stdDY_ptr = stdDevY;
+	//printf("\nstdDXcondens:%f\nstdDYcondens:%f",stdDevX,stdDevY);
 }

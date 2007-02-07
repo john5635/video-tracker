@@ -69,17 +69,17 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	//Per riempire la struttura di kalman ci sono tre alternative:
 	//-------Alternativa 1-------//
 	
-	
+	/*
 	kalman->transition_matrix = indexMat[0];//A
 	kalman->control_matrix = indexMat[1];//Bu
 	kalman->measurement_matrix = indexMat[2];//H
  	kalman->process_noise_cov = indexMat[3];//Q
 	kalman->measurement_noise_cov =  indexMat[4];//R
 	kalman->error_cov_pre = indexMat[5];//P
-	
+	*/
 	
 	//-------Alternativa 2-------//
-	/*
+	
 	for( int i=0; i < DP*DP; i++ )
 		kalman->transition_matrix->data.fl[i] = indexMat[0]->data.fl[i];
  
@@ -97,7 +97,7 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
  
 	for( int i=0; i < DP*DP; i++)
 		kalman->error_cov_pre->data.fl[i] = indexMat[5]->data.fl[i];	
-	*/
+	
 	
 	//-------Alternativa 3-------//
 	/*
@@ -183,6 +183,7 @@ float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * 
 	const CvMat* correct= cvKalmanCorrect(kalman, measurement);
 	//cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
 	
+	/*
 	float prx = predict->data.fl[0];
 	float pry = predict->data.fl[1];
 	float vx = predict->data.fl[2];
@@ -193,7 +194,7 @@ float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * 
 	float cvx = correct->data.fl[2];
 	float cvy = correct->data.fl[3];
 	printf("crx e' %f, cry e' %f\n", crx, cry);
-
+	*/
 	return correct->data.fl;
 
 }
