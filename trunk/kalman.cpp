@@ -79,7 +79,7 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	*/
 	
 	//-------Alternativa 2-------//
-	
+#ifndef GNOME	
 	for( int i=0; i < DP*DP; i++ )
 		kalman->transition_matrix->data.fl[i] = indexMat[0]->data.fl[i];
  
@@ -97,10 +97,10 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
  
 	for( int i=0; i < DP*DP; i++)
 		kalman->error_cov_pre->data.fl[i] = indexMat[5]->data.fl[i];	
-	
+#endif	
 	
 	//-------Alternativa 3-------//
-	/*
+#ifdef GNOME
 	float A[] = {1,0,1,0, 0,1,0,1, 0,0,1,0, 0,0,0,1};
 	float Bu[] = { 0, 0, 0, 0};
 	float H[] = {1,0,0,0, 0,1,0,0 };
@@ -126,7 +126,7 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	
 	for( int i=0; i < DP*DP; i++)
 		kalman->error_cov_pre->data.fl[i] = P[i];	
-	*/
+ #endif
 	
 	
 	
