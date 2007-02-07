@@ -70,7 +70,7 @@ void execute(char * aviName,int id ){
 	int muX, muY;
 
 	//Variance for drawing condensation ellipse
-	float varXcondens, varYcondens;
+	float stdDXcondens, stdDYcondens;
 	CvSize axesCondens;
 	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
@@ -158,13 +158,13 @@ void execute(char * aviName,int id ){
 					
 					
 					//!updateCondensation function.
-					predictConDens = updateCondensation(ConDens, coordReal, &varXcondens, &varYcondens);
+					predictConDens = updateCondensation(ConDens, coordReal, &stdDXcondens, &stdDYcondens);
 
 
 					//!draw condense prediction
   				cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
 					
-					axesCondens = cvSize(varXcondens/300, varYcondens/300);
+					axesCondens = cvSize(stdDXcondens/10, stdDYcondens/10);
 
 					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
 					

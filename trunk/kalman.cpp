@@ -66,6 +66,8 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	}
 	
 	//!filling up the kalamn structure. For now I have left the copyMat method. The other method is more efficent however.
+	//Per riempire la struttura di kalman ci sono tre alternative:
+	//-------Alternativa 1-------//
 	
 	
 	kalman->transition_matrix = indexMat[0];//A
@@ -76,18 +78,62 @@ CvKalman* initKalman(CvMat** indexMat, coord initCoord){
 	kalman->error_cov_pre = indexMat[5];//P
 	
 	
-	/*copyMat(indexMat[0], kalman->transition_matrix);//A
-	copyMat(indexMat[1], kalman->control_matrix);//Bu
-	copyMat(indexMat[2], kalman->measurement_matrix);;//H
-	copyMat(indexMat[3], kalman->process_noise_cov);//Q
-	copyMat(indexMat[4], kalman->measurement_noise_cov);//R
-	copyMat(indexMat[5], kalman->error_cov_pre);//P */
-	//copyMat(indexMat[6], kalman->state_post);
+	//-------Alternativa 2-------//
+	/*
+	for( int i=0; i < DP*DP; i++ )
+		kalman->transition_matrix->data.fl[i] = indexMat[0]->data.fl[i];
+ 
+	for( int i=0; i < DP*1; i++ )
+		kalman->control_matrix->data.fl[i] = indexMat[1]->data.fl[i] ;
+
+	for( int i=0; i < DP*MP; i++)
+		kalman->measurement_matrix->data.fl[i] = indexMat[2]->data.fl[i];
+ 
+	for( int i=0; i < DP*DP; i++)
+		kalman->process_noise_cov->data.fl[i] = indexMat[3]->data.fl[i];
+ 
+	for( int i=0; i < MP*MP; i++)
+		kalman->measurement_noise_cov->data.fl[i] = indexMat[4]->data.fl[i];
+ 
+	for( int i=0; i < DP*DP; i++)
+		kalman->error_cov_pre->data.fl[i] = indexMat[5]->data.fl[i];	
+	*/
+	
+	//-------Alternativa 3-------//
+	/*
+	float A[] = {1,0,1,0, 0,1,0,1, 0,0,1,0, 0,0,0,1};
+	float Bu[] = { 0, 0, 0, 0};
+	float H[] = {1,0,0,0, 0,1,0,0 };
+	float Q[] = {0.0001,0,0,0, 0,0.0001,0,0, 0,0,0.0001,0, 0,0,0,0.0001}; 
+	float R[] = {0.2845,0.0045, 0.0045,0.0455 };
+	float P[] = { 100,0,0,0, 0,100,0,0, 0,0,100,0, 0,0,0,100};
+	
+	
+	for( int i=0; i < DP*DP; i++ )
+		kalman->transition_matrix->data.fl[i]= A[i];
+	
+	for( int i=0; i < DP*1; i++ )
+		kalman->control_matrix->data.fl[i] = Bu[i];
+	
+	for( int i=0; i < DP*MP; i++)
+		kalman->measurement_matrix->data.fl[i] = H[i];
+	
+	for( int i=0; i < DP*DP; i++)
+		kalman->process_noise_cov->data.fl[i] = Q[i];
+	
+	for( int i=0; i < MP*MP; i++)
+		kalman->measurement_noise_cov->data.fl[i] = R[i];
+	
+	for( int i=0; i < DP*DP; i++)
+		kalman->error_cov_pre->data.fl[i] = P[i];	
+	*/
+	
+	
 	
 	//!Here we must set the initial state
-// 	int initMeanx, initMeany;
-// 	initMeanx=(initCoord.Minx+initCoord.Maxx)/2;
-// 	initMeany=(initCoord.Miny+initCoord.Maxy)/2;
+	//int initMeanx, initMeany;
+	//initMeanx=(initCoord.Minx+initCoord.Maxx)/2;
+	//initMeany=(initCoord.Miny+initCoord.Maxy)/2;
 	float a[] = { initCoord.cX, initCoord.cY, 0, 0};
 
 	CvMat Ma=cvMat(1, DP, CV_32FC1, a);
