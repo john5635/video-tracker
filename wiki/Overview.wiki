@@ -15,4 +15,5 @@ This project aims to develop an implementation of Kalman filter and Condensation
 
 http://www.youtube.com/img/pic_youtubelogo_123x63.gif
 
-[http://www.youtube.com/watch?v=U1L0X4cts8o You Tube Example Result] 
+[http://www.youtube.com/watch?v=U1L0X4cts8o You Tube Kalman Example Result] 
+[http://www.youtube.com/watch?v=iAhwCFLnRWc You Tube Kalman & ConDensation Example]
