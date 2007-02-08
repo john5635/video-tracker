@@ -64,15 +64,21 @@ void execute(char * aviName,int id ){
 	kalmanFile = fopen("coordinateKalman.txt","w");
 	FILE * condenseFile;
 	condenseFile = fopen("coordinateCondensation.txt","w");
-	FILE * meanStdFile;
-	meanStdFile = fopen("StdDev-Media.txt","w");
+	FILE * distanceKalmanFILE;
+	distanceKalmanFILE = fopen ("distanzaKalman.txt","w");
+	FILE * distanceCondenseFILE;
+	distanceCondenseFILE = fopen ("distanzaCondensation.txt","w");
+	FILE * resultFile;
+	resultFile = fopen("Risultati.txt","w");
 	//ellipse declarations
 	double theta;
 	CvSize axes;
 	int muX, muY,condenseFrame;
 	condenseFrame=0;
 	//Variance for drawing condensation ellipse
-	float stdDXcondens, stdDYcondens, meanStdDXcondens, meanStdDYcondens ;
+	float stdDXcondens, stdDYcondens, meanStdDXcondens, meanStdDYcondens, resultDistance, meanKalmanDistance, meanCondenseDistance ;
+	meanKalmanDistance=0;
+	meanCondenseDistance=0;
 	meanStdDXcondens=0;
 	meanStdDYcondens=0;
 	CvSize axesCondens;
@@ -205,7 +211,15 @@ void execute(char * aviName,int id ){
 					fprintf(condenseFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
 					printf("\nConDens center: (x:%d, y:%d)\n", (int)predictConDens.cX,(int)predictConDens.cY);
 					
+					//distance from real
+					resultDistance = sqrt((double)(coordReal.cX - coordPredict.cX)*(coordReal.cX - coordPredict.cX) + (coordReal.cY - coordPredict.cY)*(coordReal.cY - coordPredict.cY));
+					meanKalmanDistance+=resultDistance;
+					fprintf(distanceKalmanFILE,"%.0f\n",resultDistance);
 					
+					resultDistance = sqrt((double)(coordReal.cX - predictConDens.cX)*(coordReal.cX - predictConDens.cX) + (coordReal.cY - predictConDens.cY)*(coordReal.cY - predictConDens.cY));
+					meanCondenseDistance+=resultDistance;
+					fprintf(distanceCondenseFILE,"%.0f\n",resultDistance);
+				
 				}
 			}
 
@@ -236,12 +250,17 @@ void execute(char * aviName,int id ){
 	//print mean_Std-Dev
 	meanStdDXcondens=meanStdDXcondens/condenseFrame;
 	meanStdDYcondens=meanStdDYcondens/condenseFrame;
-	fprintf(meanStdFile,"Varianza Media per il condensation \nVarX: %.0f \nVarY: %.0f",meanStdDXcondens, meanStdDYcondens);
-	
+	meanKalmanDistance=meanKalmanDistance/condenseFrame;
+	meanCondenseDistance=meanCondenseDistance/condenseFrame;
+	fprintf(resultFile,"Varianza Media per il condensation \nVarX: %.0f \nVarY: %.0f\n",meanStdDXcondens, meanStdDYcondens);
+	fprintf(resultFile,"\nDistanza Media tra la previsione di Kalman e il blob reale: %.0f\n",meanKalmanDistance);
+	fprintf(resultFile,"\nDistanza Media tra la previsione del Condensation e il blob reale: %.0f\n",meanCondenseDistance);
 	fclose(realCFile);
 	fclose(kalmanFile);
 	fclose(condenseFile);
-	fclose(meanStdFile);
+	fclose(distanceKalmanFILE);
+	fclose(distanceCondenseFILE);
+	fclose(resultFile);
 	cvReleaseImage(&tmp_frame);
 	cvDestroyWindow("video-tracker");
 	cvReleaseCapture(&capture);
