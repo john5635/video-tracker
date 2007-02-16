@@ -165,9 +165,10 @@ void copyMat (CvMat* source, CvMat* dest){
  * \param struct coordinate the struct in which are the measurement coordinate. (z_k)
  */
 
-float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * process_noise, coord coord){
+float* updateKalman(CvKalman * kalman, coord coord){
 	
 	int Meanx, Meany;
+	CvMat* measurement = cvCreateMat(2,1, CV_32FC1 );
 	Meanx = (int) coord.cX;
 	Meany =  (int) coord.cY;
 	cvmSet(measurement,0,0,Meanx);
@@ -177,24 +178,25 @@ float* updateKalman(CvKalman * kalman,CvMat *state, CvMat* measurement, CvMat * 
 	
 	//Kalman Predict
 	const CvMat* predict = cvKalmanPredict(kalman,u);
-	//cvMatMulAdd( kalman->measurement_matrix, state, measurement, measurement );
 
 	//Kalman Correct
 	const CvMat* correct= cvKalmanCorrect(kalman, measurement);
-	//cvMatMulAdd( kalman->transition_matrix, state, process_noise, state );
 	
-	/*
-	float prx = predict->data.fl[0];
-	float pry = predict->data.fl[1];
-	float vx = predict->data.fl[2];
-	float vy = predict->data.fl[3];
-	printf("prx e' %f, pry e' %f\n", prx, pry);
-	float crx = correct->data.fl[0];
-	float cry = correct->data.fl[1];
-	float cvx = correct->data.fl[2];
-	float cvy = correct->data.fl[3];
-	printf("crx e' %f, cry e' %f\n", crx, cry);
-	*/
 	return correct->data.fl;
+
+}
+
+float* updateKalman(CvKalman * kalman){
+	
+	CvMat* u = cvCreateMat(1,1, CV_32FC1 );
+	u->data.fl[0]=1;
+
+	//Kalman Predict
+	const CvMat* predict = cvKalmanPredict(kalman,u);
+
+	//Kalman Correct
+	//const CvMat* correct= cvKalmanCorrect(kalman, measurement);
+	
+	return predict->data.fl;
 
 }

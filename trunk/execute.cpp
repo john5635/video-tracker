@@ -73,7 +73,7 @@ void execute(char * aviName,int id ){
 	//ellipse declarations
 	double theta;
 	CvSize axes;
-	int muX, muY,condenseFrame;
+	int muX, muY, condenseFrame;
 	condenseFrame=0;
 	//Variance for drawing condensation ellipse
 	float stdDXcondens, stdDYcondens, meanStdDXcondens, meanStdDYcondens, resultDistance, meanKalmanDistance, meanCondenseDistance ;
@@ -102,12 +102,13 @@ void execute(char * aviName,int id ){
 	initBackgroundModel(&bkgdMdl,tmp_frame, &paramMoG);
 	
 	for( int fr = 1;tmp_frame; tmp_frame = cvQueryFrame(capture), fr++ ){
+		
 		printf("\n-----------\nFrame #%d",fr);
 		binaryForeground = updateBackground(bkgdMdl,tmp_frame);
 		blobsVector = getBlobs(tmp_frame,binaryForeground);
 
 		if ( blobsVector.GetNumBlobs()>0 ){
-			
+		
 			if (selected == false){
 				//!Extact and draw all blobs
 				drawInitialBlobs(tmp_frame, blobsVector);
@@ -133,36 +134,29 @@ void execute(char * aviName,int id ){
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );
 				process_noise = cvCreateMat(kalman->DP, 1, CV_32FC1);
-				
 	
 				coordReal=selectedCoord;
-				
+				coordPredict=coordReal;
+				muX=frameW/2;
+				muY=frameH/2;
 				selected=true;
-
 			}
 			
 			else {
-				candidateCoordReal = extractBlob( blobsVector, coordReal);
+				coordReal = extractBlob( blobsVector, coordReal);
 				
-				distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
+				//distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
+				
 
-				
-				if ((distance > 55.0) && (coordPredict.flag == true) && (maxNumFrame < 5)){
-					coordReal.set(coordPredict.MaxX, coordPredict.MinX, coordPredict.MaxY, coordPredict.MinY);
-					drawBlob(tmp_frame, coordReal, 255,255,255);
-					maxNumFrame++;
-				}
-				else {
-					maxNumFrame = 0;
-					
-					coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
+				if ( ! is_in_the_ellipse(coordReal,coordPredict,muX,muY)){
+					//coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
 				 
 					//printf("Flag true!\n");
 					
 					drawBlob(tmp_frame, coordReal, 255,255,255);
 					
 					//!updateKalman functions that provied to estimate with Kalman filter
-					predict = updateKalman(kalman,state,measurement,process_noise,coordReal);
+					predict = updateKalman(kalman);
 					
 					coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 					coordPredict.set ((int)predict[0], (int)predict[1]);
@@ -180,19 +174,19 @@ void execute(char * aviName,int id ){
 					meanStdDXcondens+=stdDXcondens;
 					meanStdDYcondens+=stdDYcondens;
 					condenseFrame++;
-					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
-					
-					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
 					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
+
+
+					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
+					
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
 					
 					muX = sqrt(kalman->error_cov_pre->data.fl[0]);
 					muY = sqrt(kalman->error_cov_pre->data.fl[5]);
 					
 					axes = cvSize( muX , muY );
-					
-					
 					
 					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
 					
@@ -219,7 +213,72 @@ void execute(char * aviName,int id ){
 					resultDistance = sqrt((double)(coordReal.cX - predictConDens.cX)*(coordReal.cX - predictConDens.cX) + (coordReal.cY - predictConDens.cY)*(coordReal.cY - predictConDens.cY));
 					meanCondenseDistance+=resultDistance;
 					fprintf(distanceCondenseFILE,"%.0f\n",resultDistance);
+				    }
+				else {
+					//coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
+				 
+					//printf("Flag true!\n");
+					
+					drawBlob(tmp_frame, coordReal, 255,255,255);
+					
+					//!updateKalman functions that provied to estimate with Kalman filter
+					predict = updateKalman(kalman,coordReal);
+					
+					coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
+					coordPredict.set ((int)predict[0], (int)predict[1]);
+					
+					
+					//!updateCondensation function.
+					predictConDens = updateCondensation(ConDens, coordReal, &stdDXcondens, &stdDYcondens);
+					
+
+					//!draw condense prediction
+  					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
+					
+					
+					axesCondens = cvSize(stdDXcondens, stdDYcondens);
+					meanStdDXcondens+=stdDXcondens;
+					meanStdDYcondens+=stdDYcondens;
+					condenseFrame++;
+					
+					//!drawing the ellipse Initial State. Should be Fixed.
+					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
+
+
+					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
+					
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
+					
+					muX = sqrt(kalman->error_cov_pre->data.fl[0]);
+					muY = sqrt(kalman->error_cov_pre->data.fl[5]);
+					
+					axes = cvSize( muX , muY );
+					
+					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
+					
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
+					
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
 				
+					//print coord
+					//real					
+					fprintf(realCFile,"%.0f,%.0f \n",coordReal.cX,coordReal.cY);
+					printf("\nBlob center:    (x:%d, y:%d)", (int)coordReal.cX, (int)coordReal.cY);
+					//kalman
+					fprintf(kalmanFile,"%.0f,%.0f \n",coordPredict.cX,coordPredict.cY);
+					printf("\nKalman center:  (x:%d, y:%d)", (int)predict[0],(int)predict[1]);
+					//condensation
+					fprintf(condenseFile,"%.0f,%.0f \n",predictConDens.cX,predictConDens.cY);
+					printf("\nConDens center: (x:%d, y:%d)\n", (int)predictConDens.cX,(int)predictConDens.cY);
+					
+					//distance from real
+					resultDistance = sqrt((double)(coordReal.cX - coordPredict.cX)*(coordReal.cX - coordPredict.cX) + (coordReal.cY - coordPredict.cY)*(coordReal.cY - coordPredict.cY));
+					meanKalmanDistance+=resultDistance;
+					fprintf(distanceKalmanFILE,"%.0f\n",resultDistance);
+					
+					resultDistance = sqrt((double)(coordReal.cX - predictConDens.cX)*(coordReal.cX - predictConDens.cX) + (coordReal.cY - predictConDens.cY)*(coordReal.cY - predictConDens.cY));
+					meanCondenseDistance+=resultDistance;
+					fprintf(distanceCondenseFILE,"%.0f\n",resultDistance);
 				}
 			}
 
@@ -228,7 +287,7 @@ void execute(char * aviName,int id ){
 		else {
 			if ( (coordPredict.flag == true)) {
 				coordReal.set(coordPredict.MaxX, coordPredict.MinX, coordPredict.MaxY, coordPredict.MinY);
-				predict = updateKalman (kalman, state, measurement, process_noise, coordReal);
+				predict = updateKalman (kalman,coordReal);
 				//coordPredict.set (coordReal.MaxX, coordReal.MinX, coordReal.MaxY, coordReal.MinY);
 				coordPredict.set ((int)predict[0], (int)predict[1]);
 				drawBlob(tmp_frame, coordPredict, 255, 0, 0);
@@ -300,4 +359,12 @@ void on_mouse( int event, int x, int y, int flags, void* param ){
 		CLICK[1]=y;
 		}break;
 	}
+}
+
+bool is_in_the_ellipse(coord P, coord O, int a, int b){
+	double c = sqrt(double(a*a)-(b*b));
+	double dist = sqrt((P.cX-O.cX+c)*(P.cX-O.cX+c)+(P.cY-O.cY)*(P.cY-O.cY))+sqrt((P.cX-O.cX-c)*(P.cX-O.cX-c)+(P.cY-O.cY)*(P.cY-O.cY));
+	if (dist<=(2*a)) return true;
+	else return false;
+
 }

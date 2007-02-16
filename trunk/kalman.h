@@ -33,7 +33,9 @@ CvKalman* initKalman(CvMat** , coord );
 
 void copyMat (CvMat* , CvMat* );
 
-float* updateKalman(CvKalman * ,CvMat *, CvMat* , CvMat * , coord );
+float* updateKalman(CvKalman *, coord );
+
+float* updateKalman(CvKalman *);
 
 
 #endif

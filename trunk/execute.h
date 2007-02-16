@@ -33,4 +33,6 @@ void execute(char * ,int );
 
 void drawBlob (IplImage *, coord , int, int , int );
 
+bool is_in_the_ellipse(coord P, coord O, int a, int b);
+
 #endif
