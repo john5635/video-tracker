@@ -73,7 +73,7 @@ pdfkeywords=tesi laurea LaTeX}
 \newcommand{\correlatore}[2][Prof.]{%
   \renewcommand{\@correlatore}{#1 \textsc{#2}}}
 \newcommand{\correlatoredue}[2][Prof.]{%
-  \renewcommand{\@correlatoredue}{#1 \uppercase{#2}}}
+  \renewcommand{\@correlatoredue}{#1 \textsc{#2}}}
 \newcommand{\laureando}[1]{%
   \renewcommand{\@laureando}{\textsc{#1}}%
   \renewcommand{\@autore}{\textsc{#1}}%
@@ -137,19 +137,18 @@ pdfkeywords=tesi laurea LaTeX}
 \begin{normalsize}
   \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}l@{}}
     Docente:&\@laureandoOlaureanda:\\
-     \vtop{\halign{\strut\hfil##\hfil\cr
+     \vtop{\halign{\strut##\hfil\cr
        \@relatore\cr}}&%
-     \vtop{\halign{\strut\hfil##\hfil\cr
-       \@autore\cr}}%
+     \vtop{\halign{\strut##\hfil\cr Nicola Martorana \cr Iacopo Masi \cr Marco Meoni
+       \cr}}%
   \end{tabular*}\end{normalsize}\end{center}
 \begin{normalsize}
   \ifthenelse{\equal{\@correlatore}{?}}{}%
-    {\noindent Assistente:\newline
+    {\noindent \ifthenelse{\equal{\@correlatoredue}{?}}{Assistente:}{Assistenti:}\newline
       \vtop{\halign{\strut\hfil##\hfil\cr
-       \@correlatore\cr}}} \newline \newline
+       \@correlatore\cr}}}\\
   \ifthenelse{\equal{\@correlatoredue}{?}}{}%
-    {\noindent Correlatore:\newline
-      \vtop{\halign{\strut\hfil##\hfil\cr
+    { \vtop{\halign{\strut\hfil##\hfil\cr
        \@correlatoredue\cr}}}
 \end{normalsize}
   \begin{center}

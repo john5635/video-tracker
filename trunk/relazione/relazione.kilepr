@@ -3,7 +3,7 @@ img_extIsRegExp=false
 img_extensions=.eps .pdf .dvi .ps .fig .gif .jpg .jpeg .png
 kileprversion=1
 kileversion=1.9.1
-lastDocument=
+lastDocument=relazione.tex
 masterDocument=
 name=relazione
 pkg_extIsRegExp=false
@@ -17,35 +17,27 @@ QuickBuild=
 
 [item:bibliografia.bib]
 archive=true
-column=0
+column=19
 encoding=UTF-8
 highlight=BibTeX
-line=410
-open=false
+line=122
+open=true
 
 [item:esperimenti.tex]
 archive=true
-column=7864421
+column=0
 encoding=
-highlight=
-line=0
-open=false
+highlight=LaTeX
+line=13
+open=true
 
 [item:introduzione.tex]
-archive=true
-column=34
-encoding=UTF-8
-highlight=LaTeX
-line=7
-open=false
-
-[item:licenza.tex]
 archive=true
 column=0
 encoding=UTF-8
 highlight=LaTeX
-line=28
-open=false
+line=0
+open=true
 
 [item:relazione.kilepr]
 archive=true
@@ -57,11 +49,11 @@ open=false
 
 [item:relazione.tex]
 archive=true
-column=0
+column=1
 encoding=UTF-8
 highlight=LaTeX
-line=344
-open=false
+line=287
+open=true
 
 [item:software.tex]
 archive=true
@@ -73,8 +65,8 @@ open=false
 
 [item:unifitesi.sty]
 archive=true
-column=0
+column=84
 encoding=ISO 8859-16
 highlight=LaTeX
-line=129
-open=false
+line=141
+open=true
