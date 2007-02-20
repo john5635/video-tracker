@@ -51,6 +51,7 @@ void execute(char * aviName,int id ){
 	IplImage * binaryForeground = NULL;
 
 	bool selected = false;
+	bool firstTime = true;
 	
 	CvKalman* kalman = NULL;
 	CvConDensation* ConDens = NULL;
@@ -75,13 +76,19 @@ void execute(char * aviName,int id ){
 	CvSize axes;
 	int muX, muY, condenseFrame;
 	condenseFrame=0;
+	muX=0;
+	muY=0;
 	//Variance for drawing condensation ellipse
 	float stdDXcondens, stdDYcondens, meanStdDXcondens, meanStdDYcondens, resultDistance, meanKalmanDistance, meanCondenseDistance ;
 	meanKalmanDistance=0;
 	meanCondenseDistance=0;
 	meanStdDXcondens=0;
 	meanStdDYcondens=0;
+	stdDXcondens=0;
+	stdDYcondens=0;
 	CvSize axesCondens;
+
+	theta=0;
 	
 	CvCapture* capture = cvCaptureFromAVI(aviName);
  
@@ -143,8 +150,8 @@ void execute(char * aviName,int id ){
 			}
 			
 			else {
-				coordReal = extractBlob( blobsVector, coordReal);
-				
+				if (fr%5==0){
+				firstTime=false;
 				//distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
 				
 
@@ -152,7 +159,6 @@ void execute(char * aviName,int id ){
 					//coordReal.set(candidateCoordReal.MaxX, candidateCoordReal.MinX, candidateCoordReal.MaxY, candidateCoordReal.MinY);
 				 
 					//printf("Flag true!\n");
-					
 					drawBlob(tmp_frame, coordReal, 255,255,255);
 					
 					//!updateKalman functions that provied to estimate with Kalman filter
@@ -176,11 +182,10 @@ void execute(char * aviName,int id ){
 					condenseFrame++;
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
-					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
+					//theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
 
-
+					axesCondens = cvSize(stdDXcondens, stdDYcondens);
 					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
-					
 					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
 					
 					muX = sqrt(kalman->error_cov_pre->data.fl[0]);
@@ -229,12 +234,7 @@ void execute(char * aviName,int id ){
 					
 					
 					//!updateCondensation function.
-					predictConDens = updateCondensation(ConDens, coordReal, &stdDXcondens, &stdDYcondens);
-					
-
-					//!draw condense prediction
-  					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
-					
+					predictConDens = updateCondensation(ConDens, coordReal, &stdDXcondens, &stdDYcondens);					
 					
 					axesCondens = cvSize(stdDXcondens, stdDYcondens);
 					meanStdDXcondens+=stdDXcondens;
@@ -242,22 +242,20 @@ void execute(char * aviName,int id ){
 					condenseFrame++;
 					
 					//!drawing the ellipse Initial State. Should be Fixed.
-					theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
+					//theta = 0;//(180/PI)*atan((float)coordPredict.lY/(float)coordPredict.lX);
 
 
 					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
-					
-					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
-					
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );										//!draw condense prediction
+  					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
+
 					muX = sqrt(kalman->error_cov_pre->data.fl[0]);
 					muY = sqrt(kalman->error_cov_pre->data.fl[5]);
 					
 					axes = cvSize( muX , muY );
 					
 					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
-					
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
-					
 					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
 				
 					//print coord
@@ -281,8 +279,25 @@ void execute(char * aviName,int id ){
 					fprintf(distanceCondenseFILE,"%.0f\n",resultDistance);
 				}
 			}
+				else{
+					//axesCondens = cvSize(stdDXcondens, stdDYcondens);
+					//axes = cvSize( muX , muY );
 
+					coordReal = extractBlob( blobsVector, coordReal);
+					drawBlob(tmp_frame, coordReal, 255,255,255);
+
+					if(!firstTime){
+					cvEllipse( tmp_frame, cvPoint(predictConDens.cX,predictConDens.cY), axesCondens, theta, 0, 360, CV_RGB(0,255,0),1);
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(0,255, 0), 1, 8, 0 );
+					cvLine( tmp_frame,  cvPoint(predictConDens.cX,predictConDens.cY), cvPoint(predictConDens.cX,predictConDens.cY), CV_RGB(0,255, 0), 4, 8, 0 );
+					cvEllipse( tmp_frame, cvPoint(coordPredict.cX,coordPredict.cY), axes, theta, 0, 360, CV_RGB(255,0,0),1);
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordPredict.cX,coordPredict.cY), CV_RGB(255,0, 0), 4, 8, 0 );
+					cvLine( tmp_frame,  cvPoint(coordPredict.cX,coordPredict.cY), cvPoint(coordReal.cX,coordReal.cY), CV_RGB(255,0, 0), 1, 8, 0 );
+					}	
+				}
 		}
+
+	}
 		
 		else {
 			if ( (coordPredict.flag == true)) {
