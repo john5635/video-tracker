@@ -7,10 +7,10 @@ DVIPS = dvips
 RERUN = "(There were undefined references|Rerun to get (cross-references|the bars) right)"
 RERUNBIB = "No file.*\.bbl|Citation.*undefined"
 
-SOURCES = tesi.tex
+SOURCES = relazione
 
-GOALS = tesi.ps tesi.pdf
-DVIFILES = tesi.dvi
+GOALS = relazione.ps relazione.pdf
+DVIFILES = relazione.dvi
 
 COPY = if test -r $*.toc; then cp $*.toc $*.toc.bak; fi 
 RM = /bin/rm -f
@@ -49,4 +49,4 @@ clean:
 				*.inx *.toc *.out *.bbl *.lof *.lot *.backup *.ps *.dvi *~ #*.pdf
 
 info:				
-				@echo "Tesi di laurea - Autore: Marco Meoni - Titolo: Progettazione e sviluppo di un Network Management System per reti wireless in configurazione MeshAP - A.A. 2004/2005"
+				@echo "relazione kalman condensation MMM team"
