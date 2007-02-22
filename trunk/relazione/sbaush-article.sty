@@ -1,0 +1,247 @@
+% sbaush-article.sty - file di stile LaTeX per articoli e relazioni
+
+% questo pacchetto ancora ha bisogno di subire forti modifiche
+
+
+\usepackage{amsmath,graphicx,times,latexsym,mathptmx,comment,epsf,fleqn,ifthen,hyperref}
+
+\graphicspath{{./figure/}}
+
+%% Il numero della lezione viene impostato usando, ad esempio, \lecture{6} nell'intestazione
+%% del file. \lecturenumber dovrebbe essere usato in tutte i paragrafi, teoremi, equazioni, etc.
+\newcount\lecturenumber
+\def\lecture#1{\global\lecturenumber=#1}
+
+\def\endproofmark{$\Box$}
+\newenvironment{proof}{\par{\bf Dimostrazione}:}{\endproofmark}
+
+\newcount\defnnumber
+\defnnumber=0
+\newenvironment{defn}[1]{\par\global\advance\defnnumber by 1
+{\bf Definizione \the\lecturenumber.\the\defnnumber\ (#1)}:
+\begingroup}%
+{\endgroup}
+
+\newcount\theoremnumber
+\theoremnumber=0
+\newenvironment{theorem}{\par\global\advance\theoremnumber by 1
+{\bf Teorema \the\lecturenumber.\the\theoremnumber}:
+\begingroup\em}%
+{\endgroup}
+
+\newcount\lemmanumber
+\lemmanumber=0
+\newenvironment{lemma}{\par\global\advance\lemmanumber by 1
+{\bf Lemma \the\lecturenumber.\the\lemmanumber}:
+\begingroup\em}%
+{\endgroup}
+
+\newskip\saveskip
+\newskip\saveindent
+\saveskip=\baselineskip
+
+\def\tab{\hbox{\kern10pt}}
+
+\textheight=9in
+\textwidth=6.5in
+\topmargin=-.75in
+\oddsidemargin=0.25in
+\evensidemargin=0.25in
+\parindent=0pt
+\parskip=5pt
+\itemsep=-1pt
+\floatsep 9pt plus 2pt minus 3pt
+\intextsep 9pt plus 2pt minus 3pt
+\textfloatsep=9pt plus 2pt minus 3pt
+\renewcommand{\baselinestretch}{1.0}
+%\font\dunhd=cmr10 scaled \magstep5
+%\font\dunhc=cmr10 scaled \magstep4
+\font\dunhb=cmr10 scaled \magstep3
+\font\dunha=cmr10 scaled \magstep2
+\date{}
+
+\def\maketitle{%
+ \begingroup
+ \newpage
+ \global\@topnum\z@ \@maketitle 
+ \thispagestyle{myheadings}
+ \endgroup
+ \setcounter{footnote}{0}
+ \let\maketitle\relax
+ \let\@maketitle\relax}
+\def\@maketitle
+%intestazione della relazione
+{\newpage
+\hrule height0.1pt %\vskip .7em
+% }
+\begin{center}
+\Large \class \\ \large\date
+\end{center}  
+
+
+{\begin{center}
+ \LARGE\title              
+\end{center}} 
+\vskip .7em
+
+\newlength{\gnat}
+\settowidth{\gnat}{\large \secondassistant}
+% \newlength{\tmp}
+% \settowidth{\tmp}{\large \secondassistant}
+% \ifthenelse{\lengthtest{\gnat<\tmp}}{\setlength{\gnay}{\tmp}}
+% \settowidth{\tmp}{\large \firstassistant}
+% \ifthenelse{\lengthtest{\gnat<\tmp}}{\setlength{\gnay}{\tmp}}
+
+\begin{minipage}[t]{\gnat}
+ \large\textbf{Docente:} \\ \large \professor \\
+\large\textbf{Assistenti:} \\ \large \firstassistant \\ \large \secondassistant
+\end{minipage} \hfill
+\begin{minipage}[t]{\gnat}
+ \large\textbf{Autori:} \\ \large\firstauthor \\ \large\secondauthor \\ \large\thirdauthor
+
+\end{minipage} 
+\vskip .7em
+\hrule height0.1pt 
+ \par
+ \vskip .7em} 
+
+%  \def\section{\@startsection {section}{1}{\z@}{-3.0ex plus -.6ex minus 
+%      -.2ex}{1.3ex plus .1ex}{\dunhb}}
+%  \def\subsection{\@startsection{subsection}{2}{\z@}{-1.6ex plus -.5ex minus 
+%     -.1ex}{0.9ex plus .1ex}{\dunha}}
+
+%%%%%% intestazioni delle pagine
+\def\foottext{\begin{footnotesize}\title \hfill\textbf\thepage\end{footnotesize}}
+
+\def\ps@myheadings{\let\@mkboth\@gobbletwo
+\def\@oddfoot{\foottext}%
+\def\@evenfoot{\foottext}%
+\def\@evenhead{}\def\@oddhead{}}
+
+\pagestyle{myheadings}
+
+%%%%%% figure
+\def\fig#1#2{\centerline{\includegraphics[scale=#1]{#2}}}
+
+%%%%%% riferimenti
+\newcommand{\secref}[1]{Paragrafo~\ref{#1}}
+\newcommand{\figref}[1]{Figura~\ref{#1}}
+\newcommand{\tabref}[1]{Tabella~\ref{#1}}
+\newcommand{\exref}[1]{Esercizio~\ref{#1}}
+\newcommand{\partref}[1]{Parte~\ref{#1}} 
+\newcommand{\appref}[1]{Appendice~\ref{#1}} 
+\newcommand{\sideref}[1]{commento a margine intitolato #1}
+\newcommand{\pgref}[1]{pagina~\pageref{#1}}
+
+%%%%%% simboli aggiuntivi
+\newcommand{\impliessymbol}{\Rightarrow}
+\newcommand{\entails}{\models}
+\newcommand{\lequiv}{\;\;{\Leftrightarrow}\;\;}
+\newcommand{\lequivsymbol}{\Leftrightarrow}
+\newcommand{\xor}{\not\!\!\!\!\!\!\!\lequiv}
+\newcommand{\All}[1]{\forall\,#1\;\;}
+\newcommand{\Exi}[1]{\exists\,#1\;\;}
+\newcommand{\Exii}[1]{\exists!\,#1\;\;}
+\newcommand{\Iot}[2]{\iota\,#1\,#2}
+\newcommand{\Lam}[2]{\lambda #1\;#2}
+\newcommand{\Qua}[3]{[#1\,#2\;#3]}
+
+\def\<{\langle}
+\def\>{\rangle}
+
+\newcommand{\union}{{\,{\cup}\,}}
+\newcommand{\elt}{{\,{\in}\,}}
+\newcommand{\eq}{{\,{=}\,}}
+\def\stimes{{\,\times\,}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+
+\def\cons{{}\bullet{}}
+
+%%%%%% grassetto all'interno di ambiente matematico
+\newcommand{\mbf}[1]{\mbox{{\bfseries #1}}}
+\newcommand{\smbf}[1]{\mbox{{\scriptsize\bfseries #1}}}
+
+\def\N{\mbf{N}}
+\def\X{\mbf{X}}
+\def\x{\mbf{x}}
+\def\sx{\smbf{x}}
+\def\Y{\mbf{Y}}
+\def\y{\mbf{y}}
+\def\sy{\smbf{y}}
+\def\E{\mbf{E}}
+\def\e{\mbf{e}}
+\def\T{\mbf{T}}
+\def\O{\mbf{O}}
+\def\Q{\mbf{Q}}
+\def\se{\smbf{e}}
+\def\Z{\mbf{Z}}
+\def\z{\mbf{z}}
+\def\sz{\smbf{z}}
+\def\F{\mbf{F}}
+\def\f{\mbf{f}}
+\def\A{\mbf{A}}
+\def\P{\mbf{P}}
+\def\B{\mbf{B}}
+\def\b{\mbf{b}}
+\def\m{\mbf{m}}
+\def\I{\mbf{I}}
+\def\ones{\mbf{1}}
+\def\ev{\mbf{ev}}
+\def\fv{\mbf{fv}}
+\def\sv{\mbf{sv}}
+
+%%%%%% commenti che non appaiono)
+\newcommand{\invisiblenote}[1]{}
+
+\reversemarginpar
+
+%%%%%% note a margine
+
+\newlength{\marginlineskip}
+\newlength{\marginwidth}
+\setlength{\marginlineskip}{3.5pt}
+\setlength{\marginwidth}{\marginparwidth}
+\addtolength{\marginwidth}{\marginparsep}
+
+\newlength{\savelineskip}
+\newcommand{\term}[1]{{\bfseries #1}}
+\newcommand{\newterm}[1]{%
+{\bfseries #1}
+\marginalnote{#1}}
+
+\newcommand{\marginalnote}[1]{\yesmarginalnote{#1}}
+
+\newcommand{\yesmarginalnote}[1]{%
+\setlength{\savelineskip}{\baselineskip}%
+\marginpar{%
+\raisebox{0pt}[0pt][0pt]{\parbox[c]{\marginparwidth}{\begin{flushleft} {\nt \uppercase{#1}}%
+\setlength{\baselineskip}{\marginlineskip}%
+\end{flushleft}}}}% 
+\setlength{\baselineskip}{\savelineskip}%
+}
+
+\newcommand{\nomarginalnote}[1]{}
+
+% \font\nt=phvrrn scaled 625
+
+\def\mdw@dots#1{\ensuremath{\mathpalette\mdw@dots@i{#1}}}
+\def\mdw@dots@i#1#2{%
+  \setbox\z@\hbox{$#1\mskip1.8mu$}%
+  \dimen@\wd\z@%
+  \setbox\z@\hbox{$#1.$}%
+  #2%
+}
+\def\Ddots{%
+  \mdw@dots{\mathinner{%
+    \mkern1mu%
+    \raise\dimen@\vbox{\kern7\dimen@\copy\z@}%
+    \mkern2mu%
+    \raise4\dimen@\copy\z@%
+    \mkern2mu%
+    \raise7\dimen@\box\z@%
+    \mkern1mu%
+  }}%
+}
+ 
