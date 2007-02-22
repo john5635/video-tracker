@@ -5,7 +5,32 @@
      %%%%%%%%%%%%%%%%%%%%
 
 \section{Sviluppo dell'applicativo}
-obiettivo sw
+
+\subsection{Obiettivi}
+L' obiettivo del software è quello di realizzare un' applicazione che esegua il tracking sulla base di un video passatogli come ingresso per ottenere informazioni sul tracking. Il scopo principale dell'applicazione è quelli di eseguire il tracciamento tramite il filtro di Kalman e Condensation, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
+Altri requisiti sono quelli di:
+
+\begin{itemize}
+ \item  fare scegliere all'utente l'oggetto da tracciare in caso di tracking multiplo: in questo caso il software si ferma sul primo frame del video, dando possibilità di scegliere l'oggetto di cui si vuol fare il tracciamento. Per migliorare la selezione di un oggetto, uno o più blob  vengono evidenziati da un rettangoli gialli.
+
+\item tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti; visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
+
+\item fornire un output razionalizzato su terminale e su filesystem per verificare rispettivamente la corretta esecuzione degli algoritmi e per avere un riscontro finale sulle performance e l'accuratezza di ognuno. Successivamente parsare i suddetti file per una rappresentazione grafica dell'accuratezza dei due metodi di tracking.
+
+\item mantenere il più possibile l' esecuzione dell'applicazione multipiattaforma. 
+
+
+\end{itemize}
+
+\'E bene sottolineare che il video in ingresso possiede delle restrizioni: infatti affinchè il background subctraction lavori in maniera ottima, è necessario che il video:
+\begin{itemize}
+ \item possieda semper uno sfondo fisso o che comunque non vari durante la ripresa. Cambiare sfondo sarrebbe come rinizializzare l'agoritmo per il detecting dei blob.
+\item possieda un numero ( $n > 5 $ ) di frame inziale che mostrino solo il background maggiore di quattro per migliorare, per facilitare il calcolo della \textit{ground truth}, cioè del blob osservato da cui prendere le misure per i due algoritmi.
+\item sia stato registrato da una postazione fissa e che la telecamera di ripersa non introduca nel video un moto relativo.s 
+ \end{itemize}
+
+Per svilluppare l'applicazione sono state utilizzate le librerie \textit{OpenCV}, emergenti nel campo della \textit{computer vision}  e sviluppate da Intel, rilasciandole sotto una licenza di tipo OpenSource, compatibile con la GNU GPL.
+
 
 ingresso video fatto in un certo modo (sfondo fisso, tot frame di background iniziale, telecamera fissa)
 
@@ -15,6 +40,7 @@ permette di selezionare QUALE oggetto seguire, farne il tracciamento reale, otte
 
 intro utilizzo librerie utilizzate intel openCV
 \subsection{Librerie Intel OpenCV}
+OpenCv è una libreria sviluppata da Intel e rilasciata sotto la licenza ``Intel License Agreement For Open Source Computer Vision Library''...
 
 \subsection{Control Flow del programma}
 intro del ciclozzo FOR e che cosa viene fatto in ordine con l'acquisizione frame/frame del video
