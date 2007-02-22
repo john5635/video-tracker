@@ -11,8 +11,43 @@ Qui dentro ci va su quali dati abbiamo testato e confrontato i due algoritmi
 
 i video, che tipi di video, video con occlusion, dire che in generale sono macchinine telecomandate, 
 
-\subsection{Caso 1}
+\subsection{Caso 1 - Video Movies12 occlusione}
 Descrizione del video e dei vari cambi ai parametri effettuati 
+
+MOD 3 Q 1000 S 1000
+
+VarianzaX VarianzaY condensation
+112,81
+
+Con queste impostazioni la dimensione dell'area di confidenza per Kalman non è sufficiente per mantenere traccia dell'oggetto, se viene persa una misurazione a causa dell'occlusione. Questo avviene ogni volta che l'oggetto viene nascosto, tuttavia non appena l'oggetto ripassa vicino a dove kalman si è fermato questo ricomincia ad essere tracciato correttamente. A differenza di kalman il condenstaion non perde mai l'oggetto, ma la stima del moto è decisamente meno precisa rispetto a quella effettuata dal filtro di kalman.
+
+MOD 3 Q 2000 S 1000
+
+VarianzaX VarianzaY condensation
+109,81
+
+Allargando l'area di confidenza per kalaman l'oggetto non viene mai perso e il tracciamento può essere valutato pressochè perfetto. Il comportamrento in questo caso è evidentemente migliore del Condesation.
+
+
+
+MOD 3 Q 1000 S 5000
+
+VarianzaX VarianzaY condensation
+112,81
+
+Aumentando il numero di samples per il condenstaion abbiamo voluto valutare come  si comporta modificando le condizioni del primo test. Confrontando i risulati sulla previsione del solo condesantion nei due casi si vede che uno considerevole aumento del numero di sample da 1000 a 5000 porta non porta in media alcun miglioramento.
+
+
+MOD 3 Q 1000 S 100
+
+Il risutalto  per il condensatin passando da 1000 a 100 sample invece è notevolemnte diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso.
+
+
+MOD 3 Q 1000 S 10
+
+Proseguendo nel diminuire il numero di samples per il condensation siamo passati a 10, il confronto tra il caso in cui i sample sono 1000 è chiaramento mostrato nel grafico seguente. La previsione è notevolemente peggiore e addirittura si può dire che mediamente con 10 samples il condens. si comporta quasi come kalman  che perde l'oggetto. Come ci si poteva aspettare in condizioni estreme di lavoro le previsioni sono decisamente inattendibili.
+
+Cosa cambiare: 
 
 per kalman - Q, R
 
@@ -21,9 +56,11 @@ per condensation- n samples
 numero frame su cui fare il modulo
 
 verifica presenza nell'ellisse ON/OFF
-\subsection{Caso 2}
+
+
+\subsection{Caso 2 - Tappeto No zoom}
 Descrizione del video e dei vari cambi ai parametri effettuati
-\subsection{Caso 3}
+\subsection{Caso 3 - Single car corto}
 Descrizione del video e dei vari cambi ai parametri effettuati
 
 mettere ad esempio il nostro caso iniziale (con smooth) per dire che essendo kalman così buono lo si mette in condizioni pessime di lavoro per notare il suo comportamento relativamente alla parte non lineare del moto
