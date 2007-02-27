@@ -92,13 +92,15 @@
 % \settowidth{\tmp}{\large \firstassistant}
 % \ifthenelse{\lengthtest{\gnat<\tmp}}{\setlength{\gnay}{\tmp}}
 
-\begin{minipage}[t]{\gnat}
+\begin{minipage}[t]{0.5\textwidth}%{\gnat}
  \large\textbf{Docente:} \\ \large \professor \\
 \large\textbf{Assistenti:} \\ \large \firstassistant \\ \large \secondassistant
 \end{minipage} \hfill
-\begin{minipage}[t]{\gnat}
- \large\textbf{Autori:} \\ \large\firstauthor \\ \large\secondauthor \\ \large\thirdauthor
 
+\begin{minipage}[t]{0.5\textwidth}%{\gnat}
+\begin{flushright}
+\large\textbf{Autori:} \\ \large\firstauthor \\ \large\secondauthor \\ \large\thirdauthor
+\end{flushright}
 \end{minipage} 
 \vskip .7em
 \hrule height0.1pt 
