@@ -150,7 +150,7 @@ void execute(char * aviName,int id ){
 			}
 			
 			else {
-				if (fr%3==0){
+				if (fr%2==0){
 				firstTime=false;
 				//distance = sqrt((double)(candidateCoordReal.cX - coordReal.cX)*(candidateCoordReal.cX - coordReal.cX) + (candidateCoordReal.cY - coordReal.cY)*(candidateCoordReal.cY - coordReal.cY));
 				
