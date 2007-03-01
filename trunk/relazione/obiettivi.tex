@@ -12,9 +12,61 @@ Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparaz
 \subsection{Kalman Filter}\label{kalman}
 Il Kalman Filter\cite{kalman-intro} è un efficiente filtro ricorsivo che valuta e stima lo stato di un sistema dinamico sulla base di una serie di misure soggette a rumore. Il filtro è molto potente in quanto supporta la stima degli stati passati, presenti e futuri del sistema anche quando la natura del sistema è sconosciuta. \'E usato in molti campi ingegneristici, che vanno dall'applicazione in tecnologie radar all'applicazione in computer vision, come utilizzato in questo stesso ambito.
 
-Per interpretare correttamente la rappresentazione matematica del filtro di Kalman è necessario introdurre i componenti del framework di lavoro, ovvero le matrici $A_k, B_k, F_k, H_k, P_k ,Q_k, R_k$
+Il filtro ha l'obiettivo di stimare lo stato $x \in \Re^n$ di un processo a tempo discreto governato dalla seguente equazione alle differenze
+\begin{equation}\label{eq:x}
+ x_k=Ax_{k-1}+Bu_{k-1}+w_{k-1}
+\end{equation} 
+dove 
+\begin{description}
+ \item [$A$] è la matrice di transizione del modello, ed è applicata allo stato precedente $x_{k-1}$; è quindi una matrice quadrata che mette in relazione due vettori delle stesse dimensioni: lo stato al tempo $k-1$ e lo stato al tempo $k$. Risulta la responsabile dell'aggiornamento dello stato.
+\item [$B$] è la matrice di controllo sull'input del sistema. \'E applicata al vettore di controllo $u_{k-1} \in \Re^l$ e mappa questo nella dimensione dello stato $x$; è quindi una matrice rettangolare $nxl$.
+\item [$w_k \in \Re^n$] è il rumore che affligge il processo. Si assume che sia descritto da una gaussiana a media $0$ e covarianza descritta dalla matrice $Q_k$. Formalmente $w_k \sim N(0,Q_k)$.
+\end{description}
 
-\textbf{descrivere seriamente il kalman filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
+Al tempo $k$ l'osservazione dello stato reale $x_k$ è effettuata tramite il vettore della misura $z \in \Re^m$ che è modellato da
+\begin{equation}\label{eq:z}
+z_k=Hx_k+v_k
+\end{equation}
+dove 
+\begin{description}
+ \item [$H$] è la matrice che mappa lo spazio dello stato reale nello spazio dello stato osservato e risulta per questo rettangolare, di dimensione $mxn$.
+\item [$v_k \in \Re^m$] è il rumore dell'osservazione, che come per il rumore $w_k$ è descritto da una gaussiana a media zero e covarianza $R_k$. Formalmente si può esprimere come $v_k \sim N(0,R_k)$.
+\end{description}
+ Da notare che lo stato iniziale ed i vettori che descrivono la presenza di rumore negli stati successivi sono da considerarsi mutualmente indipendenti.
+
+Come detto in precedenza il filtro di Kalman è un estimatore ricorsivo: questo significa che il filtro applica la sua stima dello stato del processo ed ottiene un feedback nella forma del vettore della misura, dal quale può aggiornare la sua computazione. 
+
+Le equazioni del filtro sono raggruppabili in due macrocategorie: \textit{time-update}, responsabili della proiezione nel tempo dello stato corrente per ottenere la stima a prori dello stato successivo (rappresentata dal vettore $\hat{x}_k^- \in \Re^n$), e \textit{measurement-update}, responsabili dell'incorporazione della misura allo stato corrente nella stima a priori, ottenendo così la stima a posteriori (rappresentata dal vettore $\hat{x}_k \in \Re^n$). 
+
+Solitamente lo stadio relativo al \textit{time-update} viene definito come \textit{predict}, mentre quello relatico al \textit{measurement-update} come \textit{correct}.
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.3]{PredCorr.jpg}
+\caption[Processo di predict/correct]{\textit{Il ciclio di calcolo del filtro di Kalman.}\label{fig:predictcorrect}}
+\end{figure}
+
+Le equazioni specifiche per il passo di predict, che proiettano lo stato e la covarianza dallo stato $k-1$ allo stato $k$ sono 
+\begin{equation}\label{eq:prior}
+\hat{x}_k^-=A \hat{x}_{k-1}+Bu_{k-1}
+\end{equation} 
+\begin{equation}
+P_k^-=A P_{k-1}A^T+Q
+\end{equation} 
+dove $A$ e $B$ derivano dalla formula (\ref{eq:x}), considerando sempre la covarianza relativa a $w$ come $Q$, mentre $P_k^-$ è una matrice che rappresenta la covarianza sull'errore nella stima a priori e $P_k$ è una matrice che rappresenta la covarianza sull'errore nella stima a posteriori.
+
+Le equazioni che invece formalizzano il passo di \textit{correct} effettuano una stima sul guadagno del filtro tra l'osservazione attuale e quella predetta (\ref{eq:K}), ottengono la stima a posteriori  (equazione (\ref{eq:post})) data la stima a priori effettuata nel passo di update (\ref{eq:prior}) e dall'osservazione dello stato reale, definita in \ref{eq:z}; viene calcolata anche la covarianza sull'errore nella stima a posteriori (\ref{eq:P}):
+\begin{equation}\label{eq:K}
+K_k = P_k^- K_T(HP_k^-H^T+R)^{-1}
+\end{equation} 
+
+\begin{equation}\label{eq:post}
+\hat{x}_k=\hat{x}_k^-+K_k(z_k-H\hat{x}_k^-)
+\end{equation} 
+
+\begin{equation}\label{eq:P}
+P_k=(1-K_kH)P_k^-
+\end{equation} 
 
 \subsection{ConDenSation}\label{condensation}
 \textbf{descrivere seriamente il particle filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
