@@ -11,7 +11,7 @@ Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparaz
 
 \subsection{Kalman Filter}\label{kalman}
 Il Kalman Filter\cite{kalman-intro} è un efficiente filtro ricorsivo che valuta e stima lo stato di un sistema dinamico sulla base di una serie di misure soggette a rumore. Il filtro è molto potente in quanto supporta la stima degli stati passati, presenti e futuri del sistema anche quando la natura del sistema è sconosciuta. \'E usato in molti campi ingegneristici, che vanno dall'applicazione in tecnologie radar all'applicazione in computer vision, come utilizzato in questo stesso ambito.
-
+\subsubsection{Definizione del modello}
 Il filtro ha l'obiettivo di stimare lo stato $x \in \Re^n$ di un processo a tempo discreto governato dalla seguente equazione alle differenze
 \begin{equation}\label{eq:x}
  x_k=Ax_{k-1}+Bu_{k-1}+w_{k-1}
@@ -45,8 +45,8 @@ Solitamente lo stadio relativo al \textit{time-update} viene definito come \text
 	\includegraphics[scale=0.3]{PredCorr.jpg}
 \caption[Processo di predict/correct]{\textit{Il ciclio di calcolo del filtro di Kalman.}\label{fig:predictcorrect}}
 \end{figure}
-
-Le equazioni specifiche per il passo di predict, che proiettano lo stato e la covarianza dallo stato $k-1$ allo stato $k$ sono 
+\subsubsection{Predict}
+Le equazioni specifiche per il passo di \textit{predict}, che proiettano lo stato e la covarianza dallo stato $k-1$ allo stato $k$ sono 
 \begin{equation}\label{eq:prior}
 \hat{x}_k^-=A \hat{x}_{k-1}+Bu_{k-1}
 \end{equation} 
@@ -54,6 +54,7 @@ Le equazioni specifiche per il passo di predict, che proiettano lo stato e la co
 P_k^-=A P_{k-1}A^T+Q
 \end{equation} 
 dove $A$ e $B$ derivano dalla formula (\ref{eq:x}), considerando sempre la covarianza relativa a $w$ come $Q$, mentre $P_k^-$ è una matrice che rappresenta la covarianza sull'errore nella stima a priori e $P_k$ è una matrice che rappresenta la covarianza sull'errore nella stima a posteriori.
+\subsubsection{Correct}
 
 Le equazioni che invece formalizzano il passo di \textit{correct} effettuano una stima sul guadagno del filtro tra l'osservazione attuale e quella predetta (\ref{eq:K}), ottengono la stima a posteriori  (equazione (\ref{eq:post})) data la stima a priori effettuata nel passo di update (\ref{eq:prior}) e dall'osservazione dello stato reale, definita in \ref{eq:z}; viene calcolata anche la covarianza sull'errore nella stima a posteriori (\ref{eq:P}):
 \begin{equation}\label{eq:K}
@@ -67,7 +68,7 @@ K_k = P_k^- K_T(HP_k^-H^T+R)^{-1}
 \begin{equation}\label{eq:P}
 P_k=(1-K_kH)P_k^-
 \end{equation} 
-
+\subsubsection{Parametri e configurazione del filtro}
 \subsection{ConDenSation}\label{condensation}
 \textbf{descrivere seriamente il particle filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
 
