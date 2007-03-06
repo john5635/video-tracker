@@ -43,7 +43,7 @@ Solitamente lo stadio relativo al \textit{time-update} viene definito come \text
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.3]{PredCorr.jpg}
-\caption[Processo di predict/correct]{\textit{Il ciclio di calcolo del filtro di Kalman.}\label{fig:predictcorrect}}
+\caption{\textit{Il ciclio di calcolo del filtro di Kalman.}\label{fig:predictcorrect}}
 \end{figure}
 \subsubsection{Predict}
 Le equazioni specifiche per il passo di \textit{predict}, che proiettano lo stato e la covarianza dallo stato $k-1$ allo stato $k$ sono 
@@ -68,7 +68,14 @@ K_k = P_k^- K_T(HP_k^-H^T+R)^{-1}
 \begin{equation}\label{eq:P}
 P_k=(1-K_kH)P_k^-
 \end{equation} 
+
 \subsubsection{Parametri e configurazione del filtro}
+L'esecuzione dell'algoritmo è direttamente dipendente dalla scelta che viene effettuata riguardo ai parametri 
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.4]{cicloKalman.png}
+\caption{\textit{Ciclo di Kalman completo, con parametri ed equazioni}\label{fig:completeKalman}}
+\end{figure}
 \subsection{ConDenSation}\label{condensation}
 \textbf{descrivere seriamente il particle filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
 
