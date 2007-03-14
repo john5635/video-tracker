@@ -7,11 +7,11 @@
 \section{Sviluppo dell'applicativo}
 
 \subsection{Obiettivi}
-L' obiettivo del software è quello di realizzare un applicativo che esegua model based tracking sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman e Condensation, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
+L' obiettivo del software è quello di realizzare un applicativo che esegua \textit{model based tracking} \ref{modelTracking} sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman \cite{kalman-intro} e il ConDensaTion \cite{kalman-condense}, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
 Altri requisiti funzionali sono quelli di:
 
 \begin{itemize}
- \item  fare scegliere all'utente l'oggetto da tracciare in caso di tracking multiplo: in questo caso il software si ferma sul primo frame del video, dando possibilità di scegliere l'oggetto di cui si vuol fare il tracciamento. Per migliorare la selezione di un oggetto, vengono evidenziati da un puntini gialli. Vedi figura \ref{fig:scelta2blob}
+ \item  fare scegliere all'utente l'oggetto da tracciare in caso di tracking multiplo: in questo caso il software si ferma sul primo frame del video, dando possibilità di scegliere l'oggetto di cui si vuol fare il tracciamento. Per migliorare la selezione di un oggetto, vengono evidenziati dei un puntini gialli in corrispondenza del blob identificato. Vedi figura \ref{fig:scelta2blob}
 
 \item tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti; visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
 
@@ -22,31 +22,37 @@ Altri requisiti funzionali sono quelli di:
 
 \end{itemize}
 
+I dettagli implementativi di questi punti sono rimandati alla sottosezione  \ref{ControlFlow}
+
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.5]{doppiascelta.png}
-\caption[Esempio di scelta tra due blob]{\textit{Esempio di scelta tra due blob su tracking multiplo: l'utente ha la possibilità di sccegliere su quale blob effettuare il tracciamento semplicemente cliccando vicino ad uno dei punti gialli. Il Sistema automaticamente selezionerà il blob più vicino.}\label{fig:scelta2blob}}
+\caption[Esempio di scelta tra due blob]{\textit{Esempio di scelta tra due blob su tracking multiplo: l'utente ha la possibilità di sccegliere su quale blob effettuare il tracciamento semplicemente cliccando vicino ad uno dei punti gialli. Il Sistema automaticamente selezionerà il blob più vicino attraverso il calcolo della distanza euclidea}\label{fig:scelta2blob}}
 \end{figure}
 
 
-\'E bene sottolineare che il video in ingresso possiede delle restrizioni: infatti affinchè il background subtraction lavori in maniera ottima, è necessario che il video:
+\'E bene sottolineare che il video in ingresso possiede delle restrizioni: infatti affinchè il \textit{background subtraction} lavori in maniera ottima, è necessario che il video:
 \begin{itemize}
  \item possieda semper uno sfondo fisso o che comunque non vari durante la ripresa. Cambiare sfondo sarrebbe come rinizializzare l'agoritmo per il detecting dei blob.
-\item possieda un numero ( $n > 25 $ ) di frame inziale che mostrino solo il backgroundper facilitare il calcolo della \textit{ground truth}, cioè del blob osservato da cui prendere le misure per i due algoritmi.
-\item sia stato registrato da una postazione fissa e che la telecamera di ripersa non introduca nel video un moto relativo.
+\item possieda un numero ( $n > 40 $ ) di frame inziale che mostrino solo il background per facilitare il calcolo della \textit{ground truth}, cioè del blob osservato da cui prendere le misure per i due algoritmi.
+\item sia stato registrato da una postazione fissa e quindi che la telecamera di ripersa non introduca nel video un moto relativo.
  \end{itemize}
 
-Per svilluppare l'applicazione sono state utilizzate le libreria \textit{OpenCV}, emergente nel campo della \textit{computer vision}  e sviluppata da Intel sotto una licenza di tipo OpenSource, compatibile con la GNU GPL.
+Qualsiasi video che rispetta questi tre vincoli è considerato non solo adeguato, ma ottimale per effettuare il tracking con la nostra applicazione.
 
 
-ingresso video fatto in un certo modo (sfondo fisso, tot frame di background iniziale, telecamera fissa)
 
-uno o + oggetti in moto
 
-permette di selezionare QUALE oggetto seguire, farne il tracciamento reale, ottenere le predizioni secondo k e c, e raccoglierne dati e risultati per la realizzazione di grafici
+%ingresso video fatto in un certo modo (sfondo fisso, tot frame di background iniziale, telecamera fissa)
 
-intro utilizzo librerie utilizzate intel openCV
+%uno o + oggetti in moto
+
+%permette di selezionare QUALE oggetto seguire, farne il tracciamento reale, ottenere le predizioni secondo k e c, e raccoglierne dati e risultati per la realizzazione di grafici
+
+%intro utilizzo librerie utilizzate intel openCV
 \subsection{Librerie Intel OpenCV}
+Per svilluppare l'applicazione sono state utilizzate le libreria \textit{OpenCV}, emergente nel campo della \textit{computer vision}  e sviluppata da Intel sotto una licenza di tipo OpenSource, compatibile con la GNU GPL.
+\'E bene però prima fare chiarezza sull'uso e lo scopo di queste librerie.\\
 La capacità di interpretare ed utilizzare correttamente le informazioni acquisite da una videocamera o fotocamera attualmente presenta molti problemi insoluti. Convertire un’immagine in informazioni “oggettive” astraendone il contenuto dalla pura rappresentazione luminosa, sebbene sia un’operazione banale per un cervello umano adulto è, a tutt’oggi, un problema di elevata complessità per un sistema automatico.
 Oltretutto il campo di ricerca è evidentemente molto giovane, con meno di trent’anni di esperienza. In quest’ottica si inserisce la necessità di una base comune di potenti strumenti analitici, primo dei quali una \textbf{libreria} che raccolga le funzionalità degli algoritmi più utilizzati e citati in letteratura, oltre che una serie di formati di rappresentazione dei dati secondo standard aperti e condivisi.\\
 Le librerie OpenCV (Open Source Computer Vision) nascono appunto a questo scopo; lo sviluppo prende le mossa da un gruppo di ricerca sponsorizzato da Intel. E’ infatti parzialmente basata sulla \textit{Intel Image Processing Library (IPL)}: tale prodotto è oggi integrato nella libreria commerciale IIPP (Intel Integrated Performance Primitives), con cui conserva piena compatibilità e che può eventualmente rendere disponibili un completo ventaglio di funzioni più specifiche.\\
@@ -61,7 +67,7 @@ Si vuol chiarire subito un fatto che può essere causa di equivoci: con il termi
 \item  Librerie di gestione hardware grafico, come digitalizzatori e frame-grabber. Pur includendo tipicamente una base di funzioni di trattamento sono generalmente da considerarsi come API dei relativi driver hardware.
 \end{enumerate}
 
-Le OpenCV, pur includendo alcune funzionalità tipiche di ciascuna delle famiglie citate \footnote{vedi esempio delle HighGui}, non fanno parte di nessuno di questi gruppi. L’utilizzo primario è infatti quello collegato alla visione artificiale, il cui problema principale, come già visto, è quello di estrarre dalle immagini o video dati significativi, trattabili in modo automatico. Tale campo di studio trova le sue applicazioni più comuni nella robotica, nei sistemi di  videosorveglianza evoluti e nei sistemi di monitoraggio e sicurezza, oltre che in ogni sistema di archiviazione automatica di informazioni visive.\\
+Le OpenCV, pur includendo alcune funzionalità tipiche di ciascuna delle famiglie citate \footnote{vedi esempio delle HighGui}, non fanno parte di nessuno di questi gruppi. L’utilizzo primario è infatti quello collegato alla visione artificiale, il cui problema principale, come già visto, è quello di estrarre da immagini/video dati significativi, trattabili in modo automatico. Tale campo di studio trova le sue applicazioni più comuni nella robotica, nei sistemi di  videosorveglianza evoluti e nei sistemi di monitoraggio e sicurezza, oltre che in ogni sistema di archiviazione automatica di informazioni visive.\\
 La libreria include attualmente più di 300 funzioni, che coprono le più svariate esigenze di trattamento di immagini, comprese funzioni matematiche ottimizzate (elevamento a potenza, logaritmi, conversioni cartesiane-polari, ecc.) ed  un completo pacchetto di algebra matriciale, sviluppato funzionalmente al resto del sistema.\\
 
 La principale categoria di uso rimane comunque il processing di tipo real-time su immagini e video. \\
@@ -71,10 +77,10 @@ Una panoramica generale delle librerie comprende questi aspetti della computer v
 \item Object Identification
 \item Segmentation and Recognition
 \item Face Recognition e Gesture Recognition
-\item Motion Tracking  riferimento al nostro prgetto
+\item Motion Tracking  riferimento al nostro progetto
 \end{enumerate}
 
-descrivere un po queste aree e dove si usano noi nel nostro progetto.
+%descrivere un po queste aree e dove si usano noi nel nostro progetto.
 
 
 
@@ -90,11 +96,45 @@ Alcuni riferimenti importanti per OpenCV:
 \end{itemize}
 
  
-\subsection{Control Flow del programma}
-intro del ciclozzo FOR e che cosa viene fatto in ordine con l'acquisizione frame/frame del video
+\subsection{Control Flow del programma}\label{ControlFlow}
+%intro del ciclozzo FOR e che cosa viene fatto in ordine con l'acquisizione frame/frame del video
+Come citato precedentemente, si va ora a evidenziare quelli che sono stato gli accorgimenti tecnici per implementare il nostro software di comparazione tra Kalman e Condensation.\\
+Si cercherà di non riportare tutto il codice sorgente, ma di evidenziare solo spezzoni di esso, che possono fornire preziose informazioni sulla struttura. \'E bene sottolineare che in linea con le OpenCV, la parte principale del software non è stata sviluppata secondo il paradigma Object Oriented, ma si è usato la razionalizzazione delle strutture dati in classi solo quando necessario.
+Il nucleo centrale dell' applicazione è il \textbf{ciclo for} che dipende dalla lunghezza del video da analizzare. Ogni calcolo verrà fatto quindi in \textbf{modalità online}, cioè ad ogni passo dentro il ciclo stesso. Ne listato di pseudo codice sottostante è riprotato l'idea dell' andamento dell'applicativo. 
+\newpage
+
+\lstset{language=c++}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=l,caption=Nucleo dell'Applicazione - execute.cpp ,breaklines=true,basicstyle=\small]{Nucleo dell'Applicazione - execute.cpp}
+
+void execute( file ){
+
+	video = captureFromAvi( file )
+	
+	initBackgroundSubtraction( video )
+
+	for( int fr = 1; frame = captureNextFrame( video ), fr++ ){
+	
+		updateBackgroundSubtraction( frame )
+		
+		if ( frame == FIRST_FRAME){
+			
+			blobs = getBlobSelectedFromUser( frame )
+	
+			initKalman( blobs );
+			
+			initCondensation( blobs );
+		}
+	
+		updateKalman();
+		updateCondensation();
+	}
+}
+
+\end{lstlisting}
 
 \subsubsection{Back subtraction}
-realizzazione online del backsub, librerie eccetera
+%realizzazione online del backsub, librerie eccetera
 \subsubsection{Predizione}
 \subsubsection{Rappresentazione della predizione}
 \subsubsection{HiGui}
