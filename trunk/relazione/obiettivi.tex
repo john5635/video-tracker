@@ -70,12 +70,21 @@ P_k=(1-K_kH)P_k^-
 \end{equation} 
 
 \subsubsection{Parametri e configurazione del filtro}
-L'esecuzione dell'algoritmo è direttamente dipendente dalla scelta che viene effettuata riguardo ai parametri 
+L'esecuzione dell'algoritmo è direttamente dipendente dalla scelta che viene effettuata riguardo ai parametri di configurazione, in particolare dai valori dei componenti delle matrici $Q$ ed $R$.
+
+La matrice che tiene conto della covarianza dell'errore sulla misura, $R$, è generalmente misurata prima dell'applicazione del filtro. Misurare questa grandezza è possibile perchè si suppone di poter misurare il processo in ogni momento, cosicchè possiamo avere anche delle misure ``offline'' con le quali possiamo affinare il calcolo.
+
+La determinazione dei valori della matrice $Q$ invece, è solitamente molto più complicata da ottenere, perchè non c'è la possibilità di osservare direttamente il processo che il filtro sta stimando. 
+
+In entrambi i casi la tecnica solitamente utilizzata per effettuare la stima tramite il filtro di Kalman è di renderlo più performante ``sintonizzando'' i valori di Q ed R e riapplicando il filtro, in modo da determinare empiricamente la miglior configurazione. 
+
+Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono costanti, anche la covarianza sull'errore della stima $P_k$ ed il guadagno di Kalman $K_k$ si stabilizzano velocemente fino a rimanere costanti.
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.4]{cicloKalman.png}
 \caption{\textit{Ciclo di Kalman completo, con parametri ed equazioni}\label{fig:completeKalman}}
 \end{figure}
+
 \subsection{ConDenSation}\label{condensation}
 \textbf{descrivere seriamente il particle filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
 
