@@ -100,8 +100,21 @@ Alcuni riferimenti importanti per OpenCV:
 %intro del ciclozzo FOR e che cosa viene fatto in ordine con l'acquisizione frame/frame del video
 Come citato precedentemente, si va ora a evidenziare quelli che sono stato gli accorgimenti tecnici per implementare il nostro software di comparazione tra Kalman e Condensation.\\
 Si cercherà di non riportare tutto il codice sorgente, ma di evidenziare solo spezzoni di esso, che possono fornire preziose informazioni sulla struttura. \'E bene sottolineare che in linea con le OpenCV, la parte principale del software non è stata sviluppata secondo il paradigma Object Oriented, ma si è usato la razionalizzazione delle strutture dati in classi solo quando necessario.
-Il nucleo centrale dell' applicazione è il \textbf{ciclo for} che dipende dalla lunghezza del video da analizzare. Ogni calcolo verrà fatto quindi in \textbf{modalità online}, cioè ad ogni passo dentro il ciclo stesso. Ne listato di pseudo codice sottostante è riprotato l'idea dell' andamento dell'applicativo. 
+Il nucleo centrale dell' applicazione è il \textbf{ciclo for} che dipende dalla lunghezza del video da analizzare. Ogni passo computazione verrà fatto in \textbf{modalità online}, cioè ad ogni passo dentro il ciclo stesso in maniera incrementale. Quindi in questo senso nessuno dei passi che andiamo a eseguire per fare il tracking risulta avere priorità su altri. \footnote{Per meglio spiegare gli effetti del metodo online si suppone di effettuare fuori dal cicolo il background subtraction su tutto il video e una volta finito questo passare all'analisi. Così facendo si appesantisce tutto l'algoritmo di calcolo e si dà una lunga attesa lato utente} \\
+
 \newpage
+
+I passi effettuati sono i seguenti:
+\begin{itemize}
+\item Apertura del video e ottenimento delle informazioni
+\item Ciclo su tutti frame del video
+\item Background Subtraction
+\item Aggiornmaneto di Kalaman e Condensation
+\item Rappresentazione dei risultati 
+\end{itemize}
+
+Nel listato di pseudo codice sottostante è riprotato l'idea dell' andamento dell'applicativo. 
+
 
 \lstset{language=c++}
 \lstset{commentstyle=\emph}
@@ -131,10 +144,77 @@ void execute( file ){
 	}
 }
 
+
+
 \end{lstlisting}
+
+Successivamente analizzeremo solo alcuni dei precedenti \textit{steps} elencati.
 
 \subsubsection{Back subtraction}
 %realizzazione online del backsub, librerie eccetera
+L'idea di base del \textit{Background Subtraction}  è quella di identificare il livello di background per un determinato video, segmentando ogni frame in altri due frames chiamati rispettivamente:
+
+\begin{itemize}
+\item Foreground Mask
+\item Background Mask
+\end{itemize}
+
+\begin{figure}[p]
+\centering
+	\includegraphics[scale=0.5]{bgsub.png}
+\caption[Esempio di background subtraction graduale]{\textit{Esempio di background subtraction graduale. Viene segnalato nella prima finestra quello che è il foreground del video e in seguito nella seconda l'effetto del background subtraction che mette in rilievo il blob bianco rilevato sullo sfondo}\label{fig:bgsub}}
+\end{figure}
+In letteratura vi sono diversi modelli e metodi per calcolare questa segmentazione tra foreground/background. In particolare citiamo:
+\begin{description}
+ \item[Distribuzione Unimodale] Il più semplice modello assume che l'intensità del valore di un pixel può essere modellata da una distribuzione unimodale, come una distribuzione Gaussiana $N(\mu,\sigma^2)$
+\item [Mixture of Gaussian MOG] Il modello MOG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo. In particolare un pixel sarà classificato come un pixel di foreground se la distribuzione a lui associata è stata classificata con minor peso e maggior varianza, viceversa verrà classificato come background pixel.
+\item [Tecniche Non Parametriche] Si stima la funziona di densità di probabilità per ogni pixel presi da tanti campioni usando la tecnica di stima sulla densità Kernel.
+\item [Approccio basato su regioni o frame]
+ \end{description}
+
+Nel nostro applicativo sarà usato il modello di Mixture of Gaussians, in quanto si vuole coprire anche video di una certa complessità e perchè le librerie offrono un buon supporto per questo modello. In particolare ne listato sottostate è visualizzato l'uso di esse nel file adetto al background subtraction.
+
+\lstset{language=c++}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=l,caption=Background Subtraction implementato con MOG - getBackground.cpp ,breaklines=true,basicstyle=\small]{Background Subtraction implementato con MOG - getBackground.cpp}
+
+
+void initBackgroundModel(CvBGStatModel ** bgmodel, IplImage* tmp_frame, CvGaussBGStatModelParams* paramMoG){
+	
+	paramMoG->win_size = 200; //200;
+	paramMoG->n_gauss = 3; //5;
+	paramMoG->bg_threshold = 0.1; //0.7;
+	paramMoG->std_threshold = 5; //2.5;
+	paramMoG->minArea = 200.f; //15.f;
+	paramMoG->weight_init = 0.01; //0.05;
+	paramMoG->variance_init = 30; //30*30;
+	*bgmodel = cvCreateGaussianBGModel(tmp_frame, paramMoG);
+	
+}
+
+
+///The function that make the Background subtraction with Gaussian model
+/**
+ * \param aviName the name of the avi video to process
+ * \return savedBackgroundImage the background of the video
+ */
+
+IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame){
+	 
+	//Updating the Gaussian Model
+
+	cvUpdateBGStatModel(tmp_frame, bg_model);
+  
+	
+	//returing the binary background
+
+	return bg_model->foreground;
+}
+
+
+\end{lstlisting}
+
+
 \subsubsection{Predizione}
 \subsubsection{Rappresentazione della predizione}
 \subsubsection{HiGui}
