@@ -86,7 +86,12 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 \end{figure}
 
 \subsection{ConDensation}\label{condensation}
-\cite{condensation}\textbf{descrivere seriamente il particle filter (tipo dagli articoli o dalla wiki) mettendo anche dettagli matematicosi}
+Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico conosciuto anche come Particle Filtering che basa il tracking su l'approssimazione dello statpdi un set di ``samples''
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.6]{samplesProb.png}
+\caption{\textit{Samples e relative probabilità}\label{fig:samplesProb}}
+\end{figure}
 
 \subsection{Descrizione dell' implementazione dei modelli}
 Fare cappello su cosa è un modello poi particolareggiare verso il nostro modello
@@ -98,4 +103,4 @@ ricordarsi di mettere la descrizione del background subtraction per quanto rigua
 come sono fatte le matrici che descrivono 
 dire che noi s'ha un generico sistema descritto unicamente dalla sua posizione sul piano e dalla sua velocità orizz e verticale
 
-Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore i 4 dimensioni di cui 2 posizione xy etc..)
+Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore di 4 dimensioni di cui 2 posizione xy etc..)
