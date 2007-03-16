@@ -86,14 +86,44 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 \end{figure}
 
 \subsection{ConDensation}\label{condensation}
-Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video.
+Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. 
 
+Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
+
+Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufruire di un algoritmo che lavora molteplici ipotesi, selezionandole di volta in volta probabilisticamente, e che risulta robusto rispetto a dati molto rumorosi ed a cambi di stato non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di kalman, che raggiunge il massimo della sua efficienza in ambiti lineari.
+
+A livello puramente teorico l'algoritmo si basa sulla determinazoine di una molteplicità di ipotesi sulla posizione dell'oggetto ad ogni passo (d'ora in poi chiamate anche \textit{``samples''}), dopodichè viene effettuata la selezione di una di queste dal set secondo criteri probabilistici; l'algoritmo riparte con la nuova generazione dei \textit{samples}, iterando. \textbf{\underline{L'algoritmo è basato su un modello dinamico.}questa cosa è da dire ma non so bene come}
+
+
+I passi dell'algoritmo prevedono quindi, scendendo un po' più nel dettaglio della trattazione: 
+
+Dato un set di $N$ \textit{samples} al tempo $t-1$
+
+\begin{equation}\label{eq:H}
+\H_{t-1}= \lbrace \overrightarrow{x_1}(t-1),\overrightarrow{x_2}(t-1), \ldots,  \overrightarrow{x_N}(t-1) \rbrace
+\end{equation} 
+
+con le relative probabilità associate
+\begin{equation}\label{eq:pH}
+\lbrace p(\overrightarrow{x_1}(t-1)),p(\overrightarrow{x_2}(t-1)), \ldots, p( \overrightarrow{x_N}(t-1)) \rbrace
+\end{equation} 
 
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.6]{samplesProb.png}
 \caption{\textit{Samples e relative probabilità}\label{fig:samplesProb}}
 \end{figure}
+
+la ripetizione per $N$ volte dei seguenti passi per la generazione di $\H_t$:
+\begin{itemize}
+\item Selezione probabilistica di una delle ipotesi $\overrightarrow{x_k}(t-1)$ dalle $\H_{t-1}$, con probabilità $p(\overrightarrow{x_k}(t-1))$
+\item Generazione di un nuovo vettore di stato $\overrightarrow{s}(t-1)$, da una distribuzione centrata in   $\overrightarrow{x_k}(t-1)$
+\item Ottenimento di un nuovo set di ipotesi, tramite un modello dinamico e il filtro di Kalman $\overrightarrow{x}(t)=f(\overrightarrow{s}(t-1))$
+\item Stima della probabilità $p(\overrightarrow{z}(t)|\overrightarrow{x}(t))$ del dato osservato $\overrightarrow{z}(t)$ dato lo stato $\overrightarrow{x}(i)$
+\item Utilizzo del teorema di Bayes per l'ottenimento della $p(\overrightarrow{x}(t)|\overrightarrow{z}(t))$, ovvero ottenimento della \textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}, da cui deriva il nome dell'alogritmo.
+\end{itemize}
+
+
 
 \subsection{Descrizione dell' implementazione dei modelli}
 Fare cappello su cosa è un modello poi particolareggiare verso il nostro modello
