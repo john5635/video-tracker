@@ -5,7 +5,7 @@ Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramit
 
 Il secondo passo, ovvero l'applicazione del tracking al video, rappresenta il punto di maggior interesse del lavoro in quanto consiste nell'elaborazione di una stima della posizione al frame successivo dell'oggetto selezionato; l'esecuzione si basa sull'elaborazione dei dati ottenuti dal processo di localizzazione dell'oggetto.
 
-Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparazione dei due più importanti algoritmi di tracking basato su modelli: il filtro di Kalman, descritto nella sezione \ref{kalman} ed il Condensation, descritto nella sezione \ref{condensation}.
+Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparazione dei due più importanti algoritmi di tracking basato su modelli: il filtro di Kalman, conosciuto in letteratura sin dalla fine degli anni '50 (sarà descritto nella sezione \ref{kalman}) e , ed il Condensation, decisamente più recente rispetto al primo, riconducibile alala fine degli anni '90 (descritto nella sezione \ref{condensation}).
 
 \textbf{Questa parte va espansa mettendo un po' di discorsi sul tracking generale e poi andando a parare sul tracking model based}
 
@@ -88,7 +88,13 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 \subsection{ConDensation}\label{condensation}
 Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. 
 
-Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
+Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.6]{hand.png}
+\caption{\textit{Esempio di applicazione del ConDensation per la rilevazione del contorno di una mano}\label{fig:hand}}
+\end{figure}
 
 Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufruire di un algoritmo che lavora molteplici ipotesi, selezionandole di volta in volta probabilisticamente, e che risulta robusto rispetto a dati molto rumorosi ed a cambi di stato non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di kalman, che raggiunge il massimo della sua efficienza in ambiti lineari.
 
