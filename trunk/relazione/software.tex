@@ -7,11 +7,11 @@
 \section{Sviluppo dell'applicativo}
 
 \subsection{Obiettivi}
-L' obiettivo del software è quello di realizzare un applicativo che esegua \textit{model based tracking} \ref{modelTracking} sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman \cite{kalman-intro} e il ConDensaTion \cite{kalman-condense}, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
+L' obiettivo del software è quello di realizzare un applicativo che esegua \textit{model based tracking} \ref{modelTracking} sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman \cite{kalman-intro} e il ConDensation \cite{kalman-condense}, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
 Altri requisiti funzionali sono quelli di:
 
 \begin{itemize}
- \item  fare scegliere all'utente l'oggetto da tracciare in caso di tracking multiplo: in questo caso il software si ferma sul primo frame del video, dando possibilità di scegliere l'oggetto di cui si vuol fare il tracciamento. Per migliorare la selezione di un oggetto, vengono evidenziati dei un puntini gialli in corrispondenza del blob identificato. Vedi figura \ref{fig:scelta2blob}
+ \item  fare scegliere all'utente l'oggetto da tracciare in caso di tracking multiplo: in questo caso il software si ferma sul primo frame del video, dando possibilità di scegliere l'oggetto di cui si vuol fare il tracciamento. Per migliorare la selezione di un oggetto, vengono evidenziati dei puntini gialli in corrispondenza dei blob identificato. Vedi figura \ref{fig:scelta2blob}
 
 \item tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti; visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
 
@@ -31,14 +31,14 @@ I dettagli implementativi di questi punti sono rimandati alla sottosezione  \ref
 \end{figure}
 
 
-\'E bene sottolineare che il video in ingresso possiede delle restrizioni: infatti affinchè il \textit{background subtraction} lavori in maniera ottima, è necessario che il video:
+\'E bene sottolineare che il video in ingresso possiede delle restrizioni; infatti affinchè il \textit{background subtraction} lavori in maniera ottima, è necessario che il video:
 \begin{itemize}
  \item possieda semper uno sfondo fisso o che comunque non vari durante la ripresa. Cambiare sfondo sarrebbe come rinizializzare l'agoritmo per il detecting dei blob.
 \item possieda un numero ( $n > 40 $ ) di frame inziale che mostrino solo il background per facilitare il calcolo della \textit{ground truth}, cioè del blob osservato da cui prendere le misure per i due algoritmi.
 \item sia stato registrato da una postazione fissa e quindi che la telecamera di ripersa non introduca nel video un moto relativo.
  \end{itemize}
 
-Qualsiasi video che rispetta questi tre vincoli è considerato non solo adeguato, ma ottimale per effettuare il tracking con la nostra applicazione.
+Qualsiasi video che rispetti questi tre vincoli è considerato non solo adeguato, ma ottimale per effettuare il tracking con la nostra applicazione.
 
 
 
@@ -51,11 +51,11 @@ Qualsiasi video che rispetta questi tre vincoli è considerato non solo adeguato
 
 %intro utilizzo librerie utilizzate intel openCV
 \subsection{Librerie Intel OpenCV}
-Per svilluppare l'applicazione sono state utilizzate le libreria \textit{OpenCV}, emergente nel campo della \textit{computer vision}  e sviluppata da Intel sotto una licenza di tipo OpenSource, compatibile con la GNU GPL.
+Per svilluppare l'applicazione sono state utilizzate le librerie \textit{OpenCV} (Open Source Computer Vision), emergente nel campo della \textit{computer vision}  e sviluppata da Intel sotto una licenza di tipo OpenSource, compatibile con la GNU GPL.
 \'E bene però prima fare chiarezza sull'uso e lo scopo di queste librerie.\\
 La capacità di interpretare ed utilizzare correttamente le informazioni acquisite da una videocamera o fotocamera attualmente presenta molti problemi insoluti. Convertire un’immagine in informazioni “oggettive” astraendone il contenuto dalla pura rappresentazione luminosa, sebbene sia un’operazione banale per un cervello umano adulto è, a tutt’oggi, un problema di elevata complessità per un sistema automatico.
 Oltretutto il campo di ricerca è evidentemente molto giovane, con meno di trent’anni di esperienza. In quest’ottica si inserisce la necessità di una base comune di potenti strumenti analitici, primo dei quali una \textbf{libreria} che raccolga le funzionalità degli algoritmi più utilizzati e citati in letteratura, oltre che una serie di formati di rappresentazione dei dati secondo standard aperti e condivisi.\\
-Le librerie OpenCV (Open Source Computer Vision) nascono appunto a questo scopo; lo sviluppo prende le mossa da un gruppo di ricerca sponsorizzato da Intel. E’ infatti parzialmente basata sulla \textit{Intel Image Processing Library (IPL)}: tale prodotto è oggi integrato nella libreria commerciale IIPP (Intel Integrated Performance Primitives), con cui conserva piena compatibilità e che può eventualmente rendere disponibili un completo ventaglio di funzioni più specifiche.\\
+Le librerie OpenCV  nascono appunto a questo scopo; lo sviluppo prende le mossa da un gruppo di ricerca sponsorizzato da Intel. E’ infatti parzialmente basata sulla \textit{Intel Image Processing Library (IPL)}: tale prodotto è oggi integrato nella libreria commerciale IIPP (Intel Integrated Performance Primitives), con cui conserva piena compatibilità e verso la quale rende disponibili un completo ventaglio di funzioni più specifiche.\\
 Tra i punti di forza sottolineiamo inoltre la politica di licenza utilizzata, in stile BSD e definita nella ``Intel License Agreement For Open Source Computer Vision Library'', completamente compatibile con la licenza GPL. A grandi linee questo permette una libera ridistribuzione sia in forma sorgente che binaria, anche all’interno di prodotti commerciali, a condizione di mantenere le note di copyright e di non utilizzare il nome Intel a scopo promozionale di prodotti derivati.\\
 Inoltre un' altra potenzialità offerta è la caratteristica di essere \textit{cross-platform}: cioè possono essere compilate e usate sia sotto sistema operativo Microsft Windows che GNU/Linux. Questa caratteristica le rende molto appetibili per i requisiti di portabilià che ci eravamo prefissi di raggiungere.\\ Da notare che le librerie sono scritte in linguaggio C e non fanno uso quindi di un linguaggio orientato agli oggetti.
 
@@ -87,20 +87,20 @@ Una panoramica generale delle librerie comprende questi aspetti della computer v
 
 \subsubsection{Riferimenti}
 
-Come molti progetti opensource in maturazione \footnote{La versione 1.0 ufficiale è stata rilasciata nel tardo 2006; parte del progetto è stato scritto con librerie in beta testing} è stata carente la parte che riguarda la documentazione. Nonostante la presenza di un colosso alla spalle e di una struttura basata sul modello wiki, la documentazione ufficiale in pdf e html, anche se facilmente fruibile, non è stata sufficiente per colmare le lacune iniziali. Per questo motivo è stato effettuato un grosso lavoro di studio per capire il funzionamento del toolkit OpenCv, che spesso è terminato con la ricerca di documentazione in website asiatici, dove sembra che queste librerie siano molto gradite.\\
+Come molti progetti opensource in maturazione \footnote{La versione 1.0 ufficiale è stata rilasciata nel tardo 2006; parte del progetto è stato scritto con librerie in beta testing} è stata carente la parte che riguarda la documentazione. Nonostante la presenza di un colosso alle spalle e di una struttura basata sul modello wiki, la documentazione ufficiale in pdf e html, anche se facilmente fruibile, non è stata sufficiente per colmare le lacune iniziali. Per questo motivo è stato effettuato un grosso lavoro di studio per capire il funzionamento del toolkit OpenCv, che spesso è terminato con la ricerca di documentazione in website asiatici, dove sembra che queste librerie siano molto gradite.\\
 Alcuni riferimenti importanti per OpenCV:
 \begin{itemize}
- \item \htmladdnormallink{Sito web ufficiale}{http://www.intel.com/technology/computing/opencv/index.htm}
-\item \htmladdnormallink{Portale di wiki}{http://opencvlibrary.sourceforge.net}
-\item \htmladdnormallink{ OpenCv - Groups Community}{http://tech.groups.yahoo.com/group/OpenCV/}
+ \item \htmladdnormallink{Sito web ufficiale}{http://www.intel.com/technology/computing/opencv/index.htm} \cite{opencv}
+\item \htmladdnormallink{Portale di wiki}{http://opencvlibrary.sourceforge.net} \cite{opencvwiki}
+\item \htmladdnormallink{ OpenCv - Groups Community}{http://tech.groups.yahoo.com/group/OpenCV/} \cite{opencvgroups}
 \end{itemize}
 
- 
+
 \subsection{Control Flow del programma}\label{ControlFlow}
 %intro del ciclozzo FOR e che cosa viene fatto in ordine con l'acquisizione frame/frame del video
 Come citato precedentemente, si va ora a evidenziare quelli che sono stato gli accorgimenti tecnici per implementare il nostro software di comparazione tra Kalman e Condensation.\\
 Si cerca di non riportare tutto il codice sorgente, ma di evidenziare solo spezzoni di esso, che possono fornire preziose informazioni sulla struttura. \'E bene sottolineare che in linea con le OpenCV, la parte principale del software non è stata sviluppata secondo il paradigma Object Oriented, ma si è usato la creazione di strutture dati sottoforma di classi solo quando necessario.
-Il nucleo centrale dell' applicazione è il \textbf{ciclo for}, il quale dipende dalla lunghezza del video da analizzare. Ogni passo di computazione verrà fatto in \textbf{modalità online}, cioè ad ogni passo dentro il ciclo stesso, in maniera incrementale. In questo senso nessuno dei passi che andiamo a eseguire per fare il tracking risulta avere priorità su altri. \footnote{Per meglio spiegare gli effetti del metodo online si suppone di effettuare fuori dal cicolo il background subtraction su tutto il video e una volta finito questo passare all'analisi. Così facendo si appesantisce tutto l'algoritmo di calcolo e si fornisce una lunga e inutile attesa lato utente} \\
+Il nucleo centrale dell' applicazione è il \textbf{ciclo for}, il quale dipende dalla lunghezza del video da analizzare. Ogni passo di computazione verrà fatto in \textbf{modalità online}, cioè ad ogni passo dentro il ciclo stesso, in maniera incrementale. In questo senso nessuno dei passi che andiamo a eseguire per fare il tracking risulta avere priorità su altri. \footnote{Per meglio spiegare gli effetti del metodo online si suppone di effettuare fuori dal ciclo il background subtraction su tutto il video e una volta finito questo passare all'analisi. Così facendo si appesantisce tutto l'algoritmo di calcolo e si fornisce una lunga e inutile attesa lato utente} \\
 
 \newpage
 
