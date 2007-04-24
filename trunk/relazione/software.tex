@@ -59,7 +59,7 @@ Le librerie OpenCV  nascono appunto a questo scopo; lo sviluppo prende le mossa 
 Tra i punti di forza sottolineiamo inoltre la politica di licenza utilizzata, in stile BSD e definita nella ``Intel License Agreement For Open Source Computer Vision Library'', completamente compatibile con la licenza GPL. A grandi linee questo permette una libera ridistribuzione sia in forma sorgente che binaria, anche all’interno di prodotti commerciali, a condizione di mantenere le note di copyright e di non utilizzare il nome Intel a scopo promozionale di prodotti derivati.\\
 Inoltre un' altra potenzialità offerta è la caratteristica di essere \textit{cross-platform}: cioè possono essere compilate e usate sia sotto sistema operativo Microsft Windows che GNU/Linux. Questa caratteristica le rende molto appetibili per i requisiti di portabilià che ci eravamo prefissi di raggiungere.\\ Da notare che le librerie sono scritte in linguaggio C e non fanno uso quindi di un linguaggio orientato agli oggetti.
 
-\subsubsection{Aree funzionali delle librerie}
+\subsubsection{Aree funzionali delle librerie}\label{AreeFunz}
 Si vuol chiarire subito un fatto che può essere causa di equivoci: con il termine ``libreria grafica'' infatti si identificano genericamente almeno tre famiglie di librerie, i cui scopi sono sostanzialmente differenti:
 \begin{enumerate}
  \item  I Toolkit, ovvero librerie di primitive per la creazione di oggetti grafici di interfaccia (finestre, icone, bottoni,ecc). Parzialemente ricoperto in OpenCV dalle HighGui.
@@ -107,10 +107,12 @@ Il nucleo centrale dell' applicazione è il \textbf{ciclo for}, il quale dipende
 Gli \textit{steps} effettuati durante l'esecuzione del software sono i seguenti:
 \begin{itemize}
 \item Apertura del video da filesystem e ottenimento delle informazioni
-\item Ciclo su tutti frame del video
-\item Background Subtraction
-\item Aggiornmaneto di Kalman e Condensation
-\item Rappresentazione dei risultati 
+\item Ciclo su tutti frame del video:
+	\begin{enumerate}
+	\item Background Subtraction
+	\item Aggiornmaneto di Kalman e Condensation
+	\item Rappresentazione dei risultati 
+	\end{enumerate}
 \end{itemize}
 
 Nel listato di pseudo codice sottostante è riportata l'idea dell'andamento dell'applicativo.
@@ -159,11 +161,7 @@ L'idea di base del \textit{Background Subtraction}  è quella di identificare il
 \item Background Mask
 \end{itemize}
 
-\begin{figure}[hbp]
-\centering
-	\includegraphics[scale=0.5]{bgsub.png}
-\caption[Esempio di background subtraction graduale]{\textit{Esempio di background subtraction graduale. Viene segnalato nella prima finestra quello che è il foreground del video e in seguito nella seconda l'effetto del background subtraction che mette in rilievo il blob bianco rilevato sullo sfondo. Ovviamente come si vede nella figura se l'algoritmo non lavora in maniera ottimale è possibile ottenere blob che non esistono nell'immagine di partenza.}\label{fig:bgsub}}
-\end{figure}
+
 
 In letteratura vi sono diversi modelli e/o metodi per calcolare la segmentazione tra foreground/background. In particolare citiamo:
 \begin{description}
@@ -237,6 +235,13 @@ Dalla prima funzione si nota come vengano inizializzate i parametri su cui poi s
 \end{itemize}
 Per il resto del codice è giusto notare che ogni volta che si processa un nuovo frame anche l'algoritmo viene aggiornato su quel frame.
 
+\begin{figure}[hbp]
+\centering
+	\includegraphics[scale=0.5]{bgsub.png}
+\caption[Esempio di background subtraction graduale]{\textit{Esempio di background subtraction graduale. Viene segnalato nella prima finestra quello che è il foreground del video e in seguito nella seconda l'effetto del background subtraction che mette in rilievo il blob bianco rilevato sullo sfondo. Ovviamente come si vede nella figura se l'algoritmo non lavora in maniera ottimale è possibile ottenere blob che non esistono nell'immagine di partenza.}\label{fig:bgsub}}
+\end{figure}
+\newpage
+
 \subsubsection{Predizione}
 
 \lstset{language=c++}
@@ -274,16 +279,93 @@ float* updateKalman(CvKalman * kalman, coord coord){
 \end{lstlisting}
 
 Come già affermato nella sezione \ref{kalman} nella figura \ref{fig:predictcorrect}, si nota che l'aggiornamento di Kalman è effettuato richiamando le funzioni \texttt{cvKalmanPredict(kalman,u);} e  \texttt{cvKalmanCorrect(kalman, measurement);}; in particolare la prima effettua il predict sulla base del vettore \texttt{u} degli ingressi del sistema (che ne nostro caso non influenza il sistema) e la seconda realizza il correct sulla base dalla misura, ottenuta dal \textit{background subtraction} e dalla \textit{blob detection}. \\
-La predizione come accordato nella \ref{sec:modelli} è rappresentat da un vettore di due componenti, dove la prima rappresenta l'ascissa e la seconda l'ordinata nel piano del Video, con centro in alto a sinistra.
+La predizione, come accordato nella \ref{sec:modelli}, è rappresentata da un vettore di due componenti, dove la prima rappresenta l'ascissa e la seconda l'ordinata nel piano del Video,che hanno come centro il pixel in alto a sinistra.
 
 \begin{figure}[hbp]
 \centering
-	\includegraphics[scale=0.75]{piano.png}
+	\includegraphics[scale=0.45]{piano.png}
 \caption[Rappresentazione del vettore dello stato]{\textit{Rappresentazione del vettore dello stato}\label{fig:pianoStato}}
 \end{figure}
 
+\newpage
 %\subsubsection{Rappresentazione della predizione}
 \subsubsection{HiGui}
+Come accennato nella sezione \ref{AreeFunz}, le librerie OpenCv offrono anche un parte di toolkit per realizzare semplici widget grafici in cui poter visualizzare immagini o video, oppure semplici form per incrementare/decrementare il tuning di determinati parametri. \'E bene sottolineare che esse permettono anche la gestione degli eventi lato utente; per esempio è possibile catturare eventuali click del mouse. Queste widget risultano molto utile ovviamente se si vuole che l'utente interagisca in maniera attiva con il software: nel nostro caso si è usato una semplice \textit{NamedWindow}, fornita da questo toolkti, in cui visualizzare il video con i relativi tracciamenti; in più si è creato un gestore di eventi per catturare eventuali click del mouse che permettono all'utente di selezionare il blob da tracciare in caso di tracking multiplo.
+Il codice seguente mostra l'uso delle HiGui per realizzare quanto detto:
 
+\lstset{language=c++}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=r,caption=Uso delle HiGui - execute.cpp ,breaklines=true,basicstyle=\small]{Uso delle HiGui - execute.cpp}
+
+//! Create the window
+
+cvNamedWindow( "video-tracker", 1 );
+
+...
+
+if (frame == FIRSTFRAME) {
+
+	cvSetMouseCallback( "video-tracker", on_mouse, 0);
+	
+	...
+
+}
+
+...
+
+//! Display the temp frame in the window
+
+cvShowImage("video-tracker", tmp_frame);
+
+...
+
+
+//! Left Click Mouse Event Functions
+
+void on_mouse( int event, int x, int y, int flags, void* param ){
+ 
+	switch( event ){
+		case CV_EVENT_LBUTTONDOWN:{
+		CLICK[0]=x;
+		CLICK[1]=y;
+		}break;
+	}
+}
+
+
+\end{lstlisting}
 \subsubsection{Scripting GNUPlot}
+Oltre lo sviluppo software, si è anche riusciti a salvare in output i risultati su file testuali, in modo tale da effettuare una successiva lettura con un qualsiasi visualizzatore di grafici com Execel o Matlab. I file prodotti contengono le coordinate, prese frame per frame, del blob stimato con il background subtraction e dei due tracciamenti. Inoltre è anche generato un file riassuntivo con i princiapli coefficieni di rendimento dei due metodi di tracking, quali varianza media e distanza media tra blob osservato e misurato.\\
+Fatto ciò si è scelto il sistema libero GNUPlot per interpretare e graficare in maniera automatizzata i dati raccolti, con la possibilità di creare anche immagini su hardisk al volo dei grafici. Si è infatti prodotto uno scritp bash \footnote{che comunque si esegue anche su Windows fornito di GNUPlot} che automatizza il \textit{processing} dell'output.\\
+Lo script risulta il seguente:
 
+\lstset{language=bash}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=r,caption=Script bash che invoca GNUPlot con i vari file di configurazione - gplot.sh ,breaklines=true,basicstyle=\small]{Script bash che invoca GNUPlot con i vari file di configurazione - gplot.sh}
+#!/bin/bash
+
+gnuplot -persist plot-png > plot.png
+gnuplot -persist plot-window 
+gnuplot -persist plot-distances
+gnuplot -persist plot-distances-png > plot-distances.png
+
+
+\end{lstlisting}
+
+
+\lstset{language=bash}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=r,caption=Un esempio di file di configurazione dello scritp che visualizza il grafico - plot-window ,breaklines=true,basicstyle=\scriptsize]{Un esempio di file di configurazione dello scritp che visualizza il grafico - plot-window}
+#gnuplitting scripiting
+
+set key left below Right noreverse enhanced box linetype -1 linewidth 1.000 samplen 4 spacing 1 width 0 height 0 autotitles
+
+set title 'Kalman and Condensation comparison'
+
+set grid
+
+plot 'coordinateKalman.txt' with point pt 1 , 'coordinateCondensation.txt' with point pt 1, 'coordinateReali.txt' with point pt 1
+
+
+
+\end{lstlisting}
