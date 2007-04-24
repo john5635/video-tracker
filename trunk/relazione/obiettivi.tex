@@ -123,6 +123,7 @@ la ripetizione per $N$ volte dei seguenti passi per la generazione di $\H_t$:
 \item Utilizzo del teorema di Bayes per l'ottenimento della $p(\overrightarrow{x}(t)|\overrightarrow{z}(t))$, ovvero ottenimento della \textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}, da cui deriva il nome dell'alogritmo.
 \end{itemize}
 
+Il risultato che se ne ottiene quindi è un nuovo set di $N$ \textit{samples} per il tempo $t$.
 %%%%%%%%%%%%%%%%%%%
 %Meo io mi concentrerie di più su quest ultima parte che viene dove descrivi i modelli piuttosto che sulla teoria del %condensation. quella secondo me può essere fatto più all' acqua di rose.
 %%%%%%%%%%%%%%%%%%%
@@ -137,3 +138,30 @@ come sono fatte le matrici che descrivono
 dire che noi s'ha un generico sistema descritto unicamente dalla sua posizione sul piano e dalla sua velocità orizz e verticale
 
 Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore di 4 dimensioni di cui 2 posizione xy etc..)
+$ A = 
+\begin{bmatrix}
+ 1 & 0 & \Delta t & 0 \\
+ 0 & 1 & 0 & \Delta t \\
+ 0 & 0 & 1 & 0 \\
+ 0 & 0 & 0 & 1
+\end{bmatrix}
+$
+
+$ B =\begin{bmatrix} 0 \\ 0 \\ 0 \\ g \Delta t \end{bmatrix}$
+
+$ H = \begin{bmatrix} 
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0
+\end{bmatrix} $
+
+$ R = \begin{bmatrix} 
+0.285 & 0.005\\
+0.005 & 0.046
+\end{bmatrix} $
+
+$ Q = \begin{bmatrix} 
+0.01 & 0 & 0 & 0\\
+0 & 0.01 & 0 & 0\\
+0 & 0 & 0.01 & 0\\
+0 & 0 & 0 & 0.01
+\end{bmatrix} $
