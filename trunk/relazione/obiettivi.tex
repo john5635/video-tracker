@@ -88,17 +88,21 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 \subsection{ConDensation}\label{condensation}
 Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. 
 
-Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
-
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.6]{hand.png}
 \caption{\textit{Esempio di applicazione del ConDensation per la rilevazione del contorno di una mano}\label{fig:hand}}
 \end{figure}
 
+Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
+
+
+
 Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufruire di un algoritmo che lavora molteplici ipotesi, selezionandole di volta in volta probabilisticamente, e che risulta robusto rispetto a dati molto rumorosi ed a cambi di stato non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di kalman, che raggiunge il massimo della sua efficienza in ambiti lineari.
 
-A livello puramente teorico l'algoritmo si basa sulla determinazoine di una molteplicità di ipotesi sulla posizione dell'oggetto ad ogni passo (d'ora in poi chiamate anche \textit{``samples''}), dopodichè viene effettuata la selezione di una di queste dal set secondo criteri probabilistici; l'algoritmo riparte con la nuova generazione dei \textit{samples}, iterando. \textbf{\underline{L'algoritmo è basato su un modello dinamico.}questa cosa è da dire ma non so bene come}
+A livello puramente teorico l'algoritmo si basa sulla determinazoine di una molteplicità di ipotesi sulla posizione dell'oggetto ad ogni passo (d'ora in poi chiamate anche \textit{``samples''}), dopodichè viene effettuata la selezione di una di queste dal set secondo criteri probabilistici; l'algoritmo riparte con la nuova generazione dei \textit{samples}, iterando. 
+
+\textbf{L'algoritmo è basato su un modello dinamico.questa cosa è da dire ma non so bene come}
 
 
 I passi dell'algoritmo prevedono quindi, scendendo un po' più nel dettaglio della trattazione: 
