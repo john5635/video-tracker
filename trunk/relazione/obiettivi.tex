@@ -1,5 +1,5 @@
 \section{Metodi di tracking basati su modelli} \label{modelTracking}
-Il \textit{video tracking} è il processo secondo il quale si localizza un oggetto in movimento all'interno di uno stram video e rappresenta uno dei più interessanti problemi di \textit{computer vision}. Esistono svariati approcci al video tracking, ognuno orientato ad ottimizzare le prestazioni relativamente al campo d'azione. In questo lavoro è stata effettuata la scelta di effettuare il tracking secondo l'approccio basato su modelli, che viene eseguito secondo due passi fondamentali: la localizzazione dell'oggetto da tracciare ed il tracciamento effettivo.
+Il \textit{video tracking} è il processo secondo il quale si localizza un oggetto in movimento all'interno di uno stream video e rappresenta uno dei più interessanti problemi di \textit{computer vision}. Esistono svariati approcci al video tracking, ognuno orientato ad ottimizzare le prestazioni relativamente al campo d'azione. In questo lavoro è stato scelto di effettuare il tracking secondo l'approccio basato su modelli, che viene eseguito secondo due passi fondamentali: la localizzazione dell'oggetto da tracciare ed il tracciamento effettivo.
 
 Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramite il \textit{background subtraction} (descritto nella sezione ???) e consiste nella rilevazione dell'oggetto all'interno dell'immagine e nell'ottenimento delle informazioni relative.
 
@@ -38,7 +38,7 @@ Come detto in precedenza il filtro di Kalman è un estimatore ricorsivo: questo 
 
 Le equazioni del filtro sono raggruppabili in due macrocategorie: \textit{time-update}, responsabili della proiezione nel tempo dello stato corrente per ottenere la stima a prori dello stato successivo (rappresentata dal vettore $\hat{x}_k^- \in \Re^n$), e \textit{measurement-update}, responsabili dell'incorporazione della misura allo stato corrente nella stima a priori, ottenendo così la stima a posteriori (rappresentata dal vettore $\hat{x}_k \in \Re^n$). 
 
-Solitamente lo stadio relativo al \textit{time-update} viene definito come \textit{predict}, mentre quello relatico al \textit{measurement-update} come \textit{correct}.
+Solitamente lo stadio relativo al \textit{time-update} viene definito come \textit{predict}, mentre quello relativo al \textit{measurement-update} come \textit{correct}.
 
 \begin{figure}[hb]
 \centering
