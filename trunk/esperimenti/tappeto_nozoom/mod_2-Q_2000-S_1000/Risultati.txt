@@ -1,0 +1,7 @@
+Varianza Media per il condensation 
+VarX: 55 
+VarY: 41
+
+Distanza Media tra la previsione di Kalman e il blob reale: 30
+
+Distanza Media tra la previsione del Condensation e il blob reale: 15
