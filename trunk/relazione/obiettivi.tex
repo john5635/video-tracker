@@ -11,7 +11,7 @@ Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparaz
 
 \subsection{Kalman Filter}\label{kalman}
 Il Kalman Filter\cite{kalman-intro} è un efficiente filtro ricorsivo che valuta e stima lo stato di un sistema dinamico sulla base di una serie di misure soggette a rumore. Il filtro è molto potente in quanto supporta la stima degli stati passati, presenti e futuri del sistema anche quando la natura del sistema è sconosciuta. \'E usato in molti campi ingegneristici, che vanno dall'applicazione in tecnologie radar all'applicazione in computer vision, come utilizzato in questo stesso ambito.
-\subsubsection{Definizione del modello}
+\subsubsection{Definizione del modello}\label{modelKalman}
 Il filtro ha l'obiettivo di stimare lo stato $x \in \Re^n$ di un processo a tempo discreto governato dalla seguente equazione alle differenze
 \begin{equation}\label{eq:x}
  x_k=Ax_{k-1}+Bu_{k-1}+w_{k-1}
@@ -69,7 +69,7 @@ K_k = P_k^- K_T(HP_k^-H^T+R)^{-1}
 P_k=(1-K_kH)P_k^-
 \end{equation} 
 
-\subsubsection{Parametri e configurazione del filtro}
+\subsubsection{Parametri e configurazione del filtro}\label{tuning}
 L'esecuzione dell'algoritmo è direttamente dipendente dalla scelta che viene effettuata riguardo ai parametri di configurazione, in particolare dai valori dei componenti delle matrici $Q$ ed $R$.
 
 La matrice che tiene conto della covarianza dell'errore sulla misura, $R$, è generalmente misurata prima dell'applicazione del filtro. Misurare questa grandezza è possibile perchè si suppone di poter misurare il processo in ogni momento, cosicchè possiamo avere anche delle misure ``offline'' con le quali possiamo affinare il calcolo.
@@ -95,8 +95,6 @@ Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \ci
 \end{figure}
 
 Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
-
-
 
 Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufruire di un algoritmo che lavora molteplici ipotesi, selezionandole di volta in volta probabilisticamente, e che risulta robusto rispetto a dati molto rumorosi ed a cambi di stato non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di kalman, che raggiunge il massimo della sua efficienza in ambiti lineari.
 
@@ -138,29 +136,65 @@ Il risultato che se ne ottiene quindi è un nuovo set di $N$ \textit{samples} pe
 %Meo io mi concentrerie di più su quest ultima parte che viene dove descrivi i modelli piuttosto che sulla teoria del %condensation. quella secondo me può essere fatto più all' acqua di rose.
 %%%%%%%%%%%%%%%%%%%
 \subsection{Descrizione dell' implementazione dei modelli} \label{sec:modelli}
-Solitamente si considera come \textit{Modello} la rappresentazione di un oggetto o di un fenomeno che corrisponsa alla cosa modellata per il fatto  di riprodorne le caratteristiche ed i comportamenti fondamentali. 
+Solitamente in letteratura si considera come \textit{Modello} la rappresentazione di un oggetto o di un fenomeno che corrisponsa alla cosa modellata per il fatto  di riprodorne le caratteristiche ed i comportamenti fondamentali. 
+
 Risulta quindi fondamentale riuscire a definire un modello formale il più precisamente possibile, in modo da garantire che l'astrazione matematica dell'evento che vogliamo poi utilizzare per l'esecuzione degli esperimenti sia il più coerente possibile all'entità reale. 
 
-Fare cappello su cosa è un modello poi particolareggiare verso il nostro modello
+L'obiettivo è stato quello di modellare il moto generico di un oggetto nel piano, per poi riuscire tramite model based tracking a predirne il moto. Inizialmente la modellazione si è basata sull'osservazione del fenomeno fisico della caduta di un grave e sulla successiva scrittura dell sistema dinamico che lo rappresenti a livello teorico. L'attenzione si è poi volta all'estensione del modello costruito per un moto che non fosse solo di caduta verticale, ma che potesse spaziare anche su di un piano con una certa velocità verticale e orizzontale. 
 
-QUESTA PARTE VA FATTA BENE
+Il modello quindi risulta la rappresentazione formale della posizione del punto di interesse sul piano, della velocità del punto sul piano stesso e quindi dell'aggiornamento della posizione; rispetto al modello iniziale, il modello sul quale sono stati effettuati gli esperimenti è quindi dotato di una strutturazione a due componenti, $x$ ed $y$, piuttosto che una semplice componente verticale e di una variabile $g$ che consente di regolare la misura della accellerazione gravitazionale espressa in pixel/s
+%\footnote{questa unità di misura deriva dalla unità di misura del video (pixel) riportat al tempo. Quindi per ogni moto andrà fatta la conversione da$ m/s^2$ alla nostra unità $pixel/s^2$}.
 
-ricordarsi di mettere la descrizione del background subtraction per quanto riguarda il ruolo dell'oggetto.
+Come descritto nella sezione \ref{modelKalman}, il modello si struttura sulla definizione delle matrici e dei vettori alla base delle equazioni \ref{eq:x} e \ref{eq:z}.
 
-come sono fatte le matrici che descrivono 
-dire che noi s'ha un generico sistema descritto unicamente dalla sua posizione sul piano e dalla sua velocità orizz e verticale
+L'equazione \ref{eq:x} descrive l'aggiornamento dello stato del modello, rappresentato appunto dal vettore $\overrightarrow{x_k}$ al tempo precedente $\overrightarrow{x_{k-1}}$, del vettore di controllo $\overrightarrow{u_{k-1}}$ e del rumore sul processo $w_{k-1}$. 
 
-Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore di 4 dimensioni di cui 2 posizione xy etc..)
-$ A = 
+Il vettore $x$ risulta essere di dimensione $4 x 1$, della forma 
+\begin{equation}\label{eq:vettoreX}
+ \overrightarrow{x}=\begin{bmatrix} x \\ y \\ v_x \\ v_y \end{bmatrix}
+\end{equation} 
+
+dove ogni componente risulta:
+\begin{itemize}
+\item $x$ l'ascissa della posizione sul piano cartesiano come rappresentato dalla figura \ref{fig:pianoStato}.
+\item $y$ l'ordinata della posizione sul piano cartesiano come rappresentato dalla figura \ref{fig:pianoStato}.
+\item $v_x$ la velocità della componente orizzontale.
+\item $v_y$ a velocità della componente verticale.
+\end{itemize}
+
+Responsabile della mappatura del suddetto stato al tempo $k-1$ verso lo stato al tempo $k$ è la matrice $A$, matrice di transizione del modello, che risulta essere quadrata ($4 x 4$) in quanto mantiene la relazione tra due vettori delle stesse dimensioni.
+\begin{equation}\label{eq:matriceA}
+ A = 
 \begin{bmatrix}
  1 & 0 & \Delta t & 0 \\
  0 & 1 & 0 & \Delta t \\
  0 & 0 & 1 & 0 \\
  0 & 0 & 0 & 1
 \end{bmatrix}
-$
+\end{equation} 
 
-$ B =\begin{bmatrix} 0 \\ 0 \\ 0 \\ g \Delta t \end{bmatrix}$
+dove i parametri al suo interno mappano la transizione di ogni componente: rispettivamente le velocità passate vengono sovrascritte da quelle nuove e lo stato aggiornato dall'equazione $x + \Delta t \cdot x$
+
+Il vettore $B$, moltiplicato per il vettore dei controlli esterni $u$, comporta una modifica al sistema solo sull'ultima componente (velocità verticale), infatti come detto precedentemente, si da la possibilità di poter controllare un eventuale accelerazione gravitazionale. Nella realizzazione comunque si è impostato il parametro $g$ come nullo, per tracciare il moto su un piano.
+
+\begin{equation}
+ B =\begin{bmatrix} 0 \\ 0 \\ 0 \\ g \Delta t \end{bmatrix}\end{equation} 
+
+L'ultima componente della relazione \ref{eq:x} è la modellazione vettoriale del rumore, rappresentata come visto tramite il vettore $w$; assumendo il rumore come gaussiano risulta di interesse la descrizione della matrice che modella la covarianza di questo, rappresentata da $Q$, già descritta nella sezione \ref{tuning} riguardo all'importanza che riveste nella sintonizzazione del filtro di Kalman.
+
+\begin{equation}
+Q = \begin{bmatrix} 
+0.01 & 0 & 0 & 0\\
+0 & 0.01 & 0 & 0\\
+0 & 0 & 0.01 & 0\\
+0 & 0 & 0 & 0.01
+\end{bmatrix}\end{equation} 
+
+
+%Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore di 4 dimensioni di cui 2 posizione xy etc..)
+
+
+
 
 $ H = \begin{bmatrix} 
 1 & 0 & 0 & 0\\
@@ -172,9 +206,3 @@ $ R = \begin{bmatrix}
 0.005 & 0.046
 \end{bmatrix} $
 
-$ Q = \begin{bmatrix} 
-0.01 & 0 & 0 & 0\\
-0 & 0.01 & 0 & 0\\
-0 & 0 & 0.01 & 0\\
-0 & 0 & 0 & 0.01
-\end{bmatrix} $
