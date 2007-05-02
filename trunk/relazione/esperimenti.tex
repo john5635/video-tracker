@@ -1,27 +1,78 @@
-     %%%%%%%%%%%%%%%%%%%%
-     %                  %
+﻿     %%%%%%%%%%%%%%%%%%%%
+     %                                                   %
      %  capitolo1.tex   %
      %                  %
      %%%%%%%%%%%%%%%%%%%%
 
 \section{Esperimenti}
 
-\subsection{Data-set description}
-Qui dentro ci va su quali dati abbiamo testato e confrontato i due algoritmi
+Abbiamo provato il nostro software su tre diversi video. Tutti e tre sono filmati in cui la camera è fissa e c'è un singolo oggetto in movimento, che può sia uscire dall'inquadratura che nascondersi dietro qualche oggetto all'interno della scena (occlusione). In tutti e tre nei primi frames  non compare alcun oggetto in moto, questo per facilitare il Background Subtraction.\\
 
-i video, che tipi di video, video con occlusion, dire che in generale sono macchinine telecomandate, 
+Per ciascun video abbiamo osservato/confrontato il comportamento dei due filtri al variare di alcuni parametri quali:
+\begin{itemize}
+\item frequenza di campionamento (MOD)
+\item covarianza relativa al rumore del processo studiato (Q), che stabilisce la tolleranza consentita alla predizione di Kalman
+\item numero di campioni utilizzati dal Condensation\\
+\end{itemize}
 
-\subsection{Caso 1 - Video Movies12 occlusione}
-Descrizione del video e dei vari cambi ai parametri effettuati 
+I risultati prodotti per ciascuna prova sono rappresentati in due grafici:
+\begin{itemize}
+\item Il primo rappresenta per ogni campionamento:
+\begin{itemize}
+\item la posizione dell'oggetto
+\item la posizione predetta dal filtro di Kalman
+\item la posizione predetta dal Condensation
+\end{itemize}
+\item Il secondo rappresenta quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
+\end{itemize}
 
-MOD 3 Q 1000 S 1000
+Inoltre per ogni test viene dato il valore medio della distanza tra posizione predetta e posizione reale per i due filtri \begin{math}(\bar \delta_K, \bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
 
-VarianzaX VarianzaY condensation
-112,81
+\newpage
+
+\subsection{Video: movies12.mjpeg}
+\begin{itemize}
+\item risoluzione: 640x480
+\item fps: 25.00
+\item durata: 50.4 s
+\end{itemize}
+
+Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.5]{movie12.png}
+\caption{\textit{movie12 screenshot}\label{fig:movie12 screenshot}}
+\end{figure}
+ 
+\newpage
+
+\subsubsection{Test 1: MOD=3 , Q=1000, S=1000}
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_1000/plot.png}
+\caption{\textit{Test 1: Tracciamento}\label{fig:Test 1}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_1000/plot-distances.png}
+\caption{\textit{Test 1: Previsioni}\label{fig:Test 1}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K: 105 \end{math}
+\item \begin{math} \bar \delta_C: 18 \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (112,81)
+\end{itemize}
 
 Con queste impostazioni la dimensione dell'area di confidenza per Kalman non è sufficiente per mantenere traccia dell'oggetto, se viene persa una misurazione a causa dell'occlusione. Questo avviene ogni volta che l'oggetto viene nascosto, tuttavia non appena l'oggetto ripassa vicino a dove kalman si è fermato questo ricomincia ad essere tracciato correttamente. A differenza di kalman il condenstaion non perde mai l'oggetto, ma la stima del moto è decisamente meno precisa rispetto a quella effettuata dal filtro di kalman.
 
-MOD 5 Q 2000 S 1000
+\newpage
+
+\subsubsection{Test 2: MOD=5, Q=2000, S=1000}
 
 VarianzaX VarianzaY condensation
 109,81
@@ -30,7 +81,7 @@ Allargando l'area di confidenza per kalaman l'oggetto non viene mai perso e il t
 
 
 
-MOD 3 Q 1000 S 5000
+\subsubsection{Test 3: MOD=3, Q=1000, S=5000}
 
 VarianzaX VarianzaY condensation
 112,81
@@ -38,32 +89,22 @@ VarianzaX VarianzaY condensation
 Aumentando il numero di samples per il condenstaion abbiamo voluto valutare come  si comporta modificando le condizioni del primo test. Confrontando i risulati sulla previsione del solo condesantion nei due casi si vede che uno considerevole aumento del numero di sample da 1000 a 5000 porta non porta in media alcun miglioramento.
 
 
-MOD 3 Q 1000 S 100
+\subsubsection{Test 4: MOD=3, Q=1000, S=100}
 
-Il risutalto  per il condensatin passando da 1000 a 100 sample invece è notevolemnte diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso.
+Il risutalto  per il condensation passando da 1000 a 100 sample invece è notevolemnte diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso.
 
 
-MOD 3 Q 1000 S 10
+\subsubsection{Test 5: MOD=3, Q=1000, S=10}
 
 Proseguendo nel diminuire il numero di samples per il condensation siamo passati a 10, il confronto tra il caso in cui i sample sono 1000 è chiaramento mostrato nel grafico seguente. La previsione è notevolemente peggiore e addirittura si può dire che mediamente con 10 samples il condens. si comporta quasi come kalman  che perde l'oggetto. Come ci si poteva aspettare in condizioni estreme di lavoro le previsioni sono decisamente inattendibili.
 
-Cosa cambiare: 
 
-per kalman - Q, R
-
-per condensation- n samples
-
-numero frame su cui fare il modulo
-
-verifica presenza nell'ellisse ON/OFF
-
-
-\subsection{Caso 2 - Tappeto No zoom}
-Descrizione del video e dei vari cambi ai parametri effettuati
-\subsection{Caso 3 - Single car corto}
+\subsection{Video: tappeto_nomod.avi}
 Descrizione del video e dei vari cambi ai parametri effettuati
 
-mettere ad esempio il nostro caso iniziale (con smooth) per dire che essendo kalman così buono lo si mette in condizioni pessime di lavoro per notare il suo comportamento relativamente alla parte non lineare del moto
-\subsection{Commento dei risultati ottenuti}
+\subsubsection{Caso 3 - Single car corto}
+Descrizione del video e dei vari cambi ai parametri effettuati mettere ad esempio il nostro caso iniziale (con smooth) per dire che essendo kalman così buono lo si mette in condizioni pessime di lavoro per notare il suo comportamento relativamente alla parte non lineare del moto
+
+\subsubsection{Commento dei risultati ottenuti}
 qui presumo di vadano gli screenshot pazzi di GNUplot
 
