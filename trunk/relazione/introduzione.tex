@@ -1,9 +1,21 @@
 \section{Introduzione}
 Questa relazione descrive lo studio effettuato, i metodi utilizzati ed i risultati raggiunti per la realizzazione dell'elaborato relativo al corso di Analisi delle immagini e dei video, appartenente al corso di laurea specialistica in Ingegneria Informatica di Firenze, tenuto dal Prof. Pietro Pala.
 
-L'elaborato si è incentrato sullo studio di due algoritmi di tracking video, il filtro di Kalman ed il ConDensation, iniziando con l'approfondimento delle rispettive basi teoriche per poi passare all'implementazione di entrambi, finalizzata all'ottenimento di risultati comparativi, che sono stati catalogati ed interpretati.
+L'elaborato si è incentrato sullo studio di due algoritmi di \textit{tracking} video, il filtro di Kalman ed il ConDensation, iniziando con l'approfondimento delle rispettive basi teoriche per poi passare all'implementazione di entrambi, finalizzata all'ottenimento di risultati comparativi, che sono stati catalogati ed interpretati. Lo sviluppo dell'elaborato è stato coordinato all'interno del Media Integration and Communication Center\footnote{MICC, http://www.micc.unifi.it/} in particolare dall'Ing. Walter Nunziati e dall'Ing. Andrew D. Bagdanov, ai quali va un particolare ringraziamento per l'attenzione che hanno riposto in questo lavoro.
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.6]{micc.png}
+\caption{\textit{Media Integration and Communication Centre, Firenze}\label{fig:micc}}
+\end{figure}
 
-L'implementazione del software che ha fornito i risultati comparativi è stata effettuata nel linguaggio di programmazione C++ tramite le librerie per il computer vision OpenCV\footnote{Open Source Computer Vision Library http://www.intel.com/technology/computing/opencv/}, sviluppate internamente ad Intel, ma rese pubblicamente fruibili ed utilizzabili tramite una licenza GPL-compatibile; lo sviluppo del codice è stato effettuato sotto controllo di versione Subversion (SVN), in hosting presso Google Code\footnote{http://code.google.com/p/video-tracker/}.
+L'implementazione del software che ha fornito i risultati comparativi è stata effettuata nel linguaggio di programmazione C++ tramite le librerie per il computer vision OpenCV\footnote{Open Source Computer Vision Library http://www.intel.com/technology/computing/opencv/}, sviluppate internamente ad Intel, ma rese pubblicamente fruibili ed utilizzabili tramite una licenza \textit{GPL-compatibile}; lo sviluppo del codice è stato effettuato sotto controllo di versione Subversion (SVN), in hosting presso Google Code\footnote{http://code.google.com/p/video-tracker/}. Il software è stato reso pubblico sotto licenza libera GNU GPL\footnote{GNU General Public License http://www.gnu.org/licenses/gpl.html}.
 
+Grazie al sistema di controllo di versione è stato possibile sviluppare il software contemporaneamente sia sotto architettura Unix (nello specifico diverse distribuzioni di GNU/Linux) che sotto architettura Microsoft Windows, risultando così pienamente compatibile con entrambe.
+
+Con questa relazione ci si prefigge l'obiettivo di ripercorrere il cammino fatto nello sviluppo dell'elaborato, iniziando nel primo capitolo con una introduzione ai due metodi di \textit{tracking}, con un breve approfondimento delle rispettive basi matematiche per poi concludere focalizzando l'attenzione sulla specifica implementazione del modello utilizzato.
+
+La descrizione passerà nel secondo capitolo ad affrontare lo sviluppo del software che ha reso possibile lo sviluppo della comparazione, approfondendo i punti fondamentali delle librerie utilizzate per andare poi ad analizzare dettagliatamente il \textit{control-flow} del programma. 
+
+L'ultima sezione sarà invece dedicata allo studio dei risultati ottenuti, e fornirà i risultati più importanti di tutta la serie di esperimenti che sono stati compiuti con il software ottenuto, riportandone grafici comparativi e schermate di esecuzione.
 
 %Rapida descrizione dell'elaborato e di come si articola la relazione, motivazioni della ricerca ecc...
