@@ -1,13 +1,13 @@
 \section{Metodi di tracking basati su modelli} \label{modelTracking}
 Il \textit{video tracking} è il processo secondo il quale si localizza un oggetto in movimento all'interno di uno stream video e rappresenta uno dei più interessanti problemi di \textit{computer vision}. Esistono svariati approcci al video tracking, ognuno orientato ad ottimizzare le prestazioni relativamente al campo d'azione. In questo lavoro è stato scelto di effettuare il tracking secondo l'approccio basato su modelli, che viene eseguito secondo due passi fondamentali: la localizzazione dell'oggetto da tracciare ed il tracciamento effettivo.
 
-Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramite il \textit{background subtraction} (descritto nella sezione ???) e consiste nella rilevazione dell'oggetto all'interno dell'immagine e nell'ottenimento delle informazioni relative.
+Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramite il \textit{background subtraction} (descritto nella sezione \ref{sec:bgsub}) e consiste nella rilevazione dell'oggetto all'interno dell'immagine e nell'ottenimento delle informazioni relative.
 
 Il secondo passo, ovvero l'applicazione del tracking al video, rappresenta il punto di maggior interesse del lavoro in quanto consiste nell'elaborazione di una stima della posizione al frame successivo dell'oggetto selezionato; l'esecuzione si basa sull'elaborazione dei dati ottenuti dal processo di localizzazione dell'oggetto.
 
 Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparazione dei due più importanti algoritmi di tracking basato su modelli: il filtro di Kalman, conosciuto in letteratura sin dalla fine degli anni '50 (sarà descritto nella sezione \ref{kalman}) e , ed il Condensation, decisamente più recente rispetto al primo, riconducibile alala fine degli anni '90 (descritto nella sezione \ref{condensation}).
 
-\textbf{Questa parte va espansa mettendo un po' di discorsi sul tracking generale e poi andando a parare sul tracking model based}
+%\textbf{Questa parte va espansa mettendo un po' di discorsi sul tracking generale e poi andando a parare sul tracking model based}
 
 \subsection{Kalman Filter}\label{kalman}
 Il Kalman Filter\cite{kalman-intro} è un efficiente filtro ricorsivo che valuta e stima lo stato di un sistema dinamico sulla base di una serie di misure soggette a rumore. Il filtro è molto potente in quanto supporta la stima degli stati passati, presenti e futuri del sistema anche quando la natura del sistema è sconosciuta. \'E usato in molti campi ingegneristici, che vanno dall'applicazione in tecnologie radar all'applicazione in computer vision, come utilizzato in questo stesso ambito.
@@ -136,7 +136,7 @@ Il risultato che se ne ottiene quindi è un nuovo set di $N$ \textit{samples} pe
 %Meo io mi concentrerie di più su quest ultima parte che viene dove descrivi i modelli piuttosto che sulla teoria del %condensation. quella secondo me può essere fatto più all' acqua di rose.
 %%%%%%%%%%%%%%%%%%%
 \subsection{Descrizione dell' implementazione dei modelli} \label{sec:modelli}
-Solitamente in letteratura si considera come \textit{Modello} la rappresentazione di un oggetto o di un fenomeno che corrisponsa alla cosa modellata per il fatto  di riprodorne le caratteristiche ed i comportamenti fondamentali. 
+Solitamente in letteratura si considera come \textit{Modello} la rappresentazione di un oggetto che corrisponda al fenomeno modellato per il fatto  di riprodurne le caratteristiche ed i comportamenti fondamentali. 
 
 Risulta quindi fondamentale riuscire a definire un modello formale il più precisamente possibile, in modo da garantire che l'astrazione matematica dell'evento che vogliamo poi utilizzare per l'esecuzione degli esperimenti sia il più coerente possibile all'entità reale. 
 
@@ -173,15 +173,16 @@ Responsabile della mappatura del suddetto stato al tempo $k-1$ verso lo stato al
 \end{bmatrix}
 \end{equation} 
 
-dove i parametri al suo interno mappano la transizione di ogni componente: rispettivamente le velocità passate vengono sovrascritte da quelle nuove e lo stato aggiornato dall'equazione $x + \Delta t \cdot x$
+dove i parametri al suo interno mappano la transizione di ogni componente: rispettivamente le posizioni passate vengono sovrascritte da quelle nuove e lo stato aggiornato dall'equazione $x + \Delta t \cdot v_x$,per ogni riga della matrice.
 
-Il vettore $B$, moltiplicato per il vettore dei controlli esterni $u$, comporta una modifica al sistema solo sull'ultima componente (velocità verticale), infatti come detto precedentemente, si da la possibilità di poter controllare un eventuale accelerazione gravitazionale. Nella realizzazione comunque si è impostato il parametro $g$ come nullo, per tracciare il moto su un piano.
+Il vettore $B$, moltiplicato per il vettore dei controlli esterni $u$, comporta una modifica al sistema solo sull'ultima componente (velocità verticale), infatti come detto precedentemente, si da la possibilità di poter controllare un' eventuale accelerazione gravitazionale. Nella realizzazione comunque si è impostato il parametro $g$ come nullo, per tracciare il moto su un piano.
 
 \begin{equation}
  B =\begin{bmatrix} 0 \\ 0 \\ 0 \\ g \Delta t \end{bmatrix}\end{equation} 
 
-L'ultima componente della relazione \ref{eq:x} è la modellazione vettoriale del rumore, rappresentata come visto tramite il vettore $w$; assumendo il rumore come gaussiano risulta di interesse la descrizione della matrice che modella la covarianza di questo, rappresentata da $Q$, già descritta nella sezione \ref{tuning} riguardo all'importanza che riveste nella sintonizzazione del filtro di Kalman.
+L'ultima componente della relazione \ref{eq:x} è la modellazione vettoriale del rumore, rappresentata come visto tramite il vettore $w$; assumendo il rumore come gaussiano risulta di interesse la descrizione della matrice che modella la covarianza di questo, rappresentata da $Q$, già descritta nella sezione \ref{tuning} riguardo all'importanza che riveste nella sintonizzazione del filtro di Kalman, come si è ampiamente spiegato nella sezione \ref{sec:esperimenti} Esperimenti .
 
+ 
 \begin{equation}
 Q = \begin{bmatrix} 
 0.01 & 0 & 0 & 0\\
@@ -194,15 +195,31 @@ Q = \begin{bmatrix}
 %Cosa si prende per varianza di uno dell'altro, come è fatto lo stato (vettore di 4 dimensioni di cui 2 posizione xy etc..)
 
 
+Le ultime due matrici che compaiono nelle equazioni del modello riguardano la misura, cioè i valore ottenuti dal background subtraction. 
 
+La prima ( \ref{eq:matriceH} ) pesa il valore dell'osservazione, effettuata dal background subtraction, per correggere la predizione del filtro di kalman.
 
-$ H = \begin{bmatrix} 
+\begin{equation} \label{eq:matriceH}
+ H = \begin{bmatrix} 
 1 & 0 & 0 & 0\\
 0 & 1 & 0 & 0
-\end{bmatrix} $
+\end{bmatrix}
+\end{equation}
 
-$ R = \begin{bmatrix} 
+
+La seconda ( \ref{eq:matriceR} ) rappresenta la covarianza associata al rumore nella misura, che nel nostro caso assume i valori sottostanti.
+
+
+\begin{equation}\label{eq:matriceR}
+ R = \begin{bmatrix} 
 0.285 & 0.005\\
 0.005 & 0.046
-\end{bmatrix} $
+\end{bmatrix} 
+\end{equation}
 
+~\\
+Il nostro modello viene inserito nell'applicazione combinando l'uso del calcolo matriciale fornito dalle OpenCv con il parsing di un file testuale \texttt{data.txt}, che risulta essere l'input dei dati dell' applicazione.\\
+\'E bene sottolineare che questo modello è usato ovviamente il kalman,ma soprattutto è riutilizzato anche nell'algoritmo ConDensation per ricalcolare i valori dei samples.
+
+
+Per maggior approfondimento sullo sviluppo, costruzione e progettazione del software si rimanda alla sezione \ref{sec:software}.
