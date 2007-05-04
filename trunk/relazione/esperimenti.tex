@@ -26,7 +26,32 @@ I risultati prodotti per ciascuna prova sono rappresentati in due grafici:
 \item Il secondo rappresenta quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
 \end{itemize}
 
+
+Abbiamo provato il nostro software su tre diversi video. Tutti e tre sono filmati in cui la camera è fissa e c'è un singolo oggetto in movimento, che può sia uscire dall'inquadratura che nascondersi dietro qualche oggetto all'interno della scena (occlusione). In tutti e tre nei primi frames  non compare alcun oggetto in moto, questo per facilitare il Background Subtraction.\\
+
+Per ciascun video abbiamo osservato/confrontato il comportamento dei due filtri al variare di alcuni parametri quali:
+\begin{itemize}
+\item frequenza di campionamento (MOD)
+\item covarianza relativa al rumore del processo studiato (Q), che stabilisce la tolleranza consentita alla predizione di Kalman
+\item numero di campioni utilizzati dal Condensation\\
+\end{itemize}
+
+I risultati prodotti per ciascuna prova sono rappresentati in due grafici:
+\begin{itemize}
+\item Il primo rappresenta per ogni campionamento:
+\begin{itemize}
+\item la posizione dell'oggetto
+\item la posizione predetta dal filtro di Kalman
+\item la posizione predetta dal Condensation
+\end{itemize}
+\item Il secondo rappresenta quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
+\end{itemize}
+
 Inoltre per ogni test viene dato il valore medio della distanza tra posizione predetta e posizione reale per i due filtri \begin{math}(\bar \delta_K, \bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
+
+
+Inoltre per ogni test viene dato il valore medio della distanza tra posizione predetta e posizione reale per i due filtri \begin{math}(\bar \delta_K, \bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
+
 
 \newpage
 
@@ -37,6 +62,17 @@ Inoltre per ogni test viene dato il valore medio della distanza tra posizione pr
 \item durata: 50.4 s
 \end{itemize}
 
+
+Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.5]{movie12.png}
+\caption{\textit{movie12 screenshot}\label{fig:movie12 screenshot}}
+\end{figure}
+ 
+\newpage
+
 Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
 
 \begin{figure}[hb]
@@ -46,7 +82,6 @@ Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata
 \end{figure}
  
 \newpage
-
 \subsubsection{Test 1: MOD=3 , Q=1000, S=1000}
 
 \begin{figure}[hb]
@@ -72,33 +107,231 @@ Con queste impostazioni la dimensione dell'area di confidenza per Kalman non è 
 
 \newpage
 
-\subsubsection{Test 2: MOD=5, Q=2000, S=1000}
+\subsubsection{Test 2: MOD=3, Q=2000, S=1000}
 
-VarianzaX VarianzaY condensation
-109,81
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_2000-S_1000/plot.png}
+\caption{\textit{Test 2: Tracciamento}\label{fig:Test 2}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_2000-S_1000/plot-distances.png}
+\caption{\textit{Test 2: Previsioni}\label{fig:Test 2}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K: 0 \end{math}
+\item \begin{math} \bar \delta_C: 18 \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (112,81)
+\end{itemize}
 
 Allargando l'area di confidenza per kalaman l'oggetto non viene mai perso e il tracciamento può essere valutato pressochè perfetto. Il comportamrento in questo caso è evidentemente migliore del Condesation.
 
-
-
+\newpage
 \subsubsection{Test 3: MOD=3, Q=1000, S=5000}
 
-VarianzaX VarianzaY condensation
-112,81
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_5000/plot.png}
+\caption{\textit{Test 3: Tracciamento}\label{fig:Test 3}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_5000/plot-distances.png}
+\caption{\textit{Test 3: Previsioni}\label{fig:Test 3}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K: 105 \end{math}
+\item \begin{math} \bar \delta_C: 17 \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (109,81)
+\end{itemize}
 
 Aumentando il numero di samples per il condenstaion abbiamo voluto valutare come  si comporta modificando le condizioni del primo test. Confrontando i risulati sulla previsione del solo condesantion nei due casi si vede che uno considerevole aumento del numero di sample da 1000 a 5000 porta non porta in media alcun miglioramento.
 
-
+\newpage
 \subsubsection{Test 4: MOD=3, Q=1000, S=100}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_100/plot.png}
+\caption{\textit{Test 4: Tracciamento}\label{fig:Test 4}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_100/plot-distances.png}
+\caption{\textit{Test 4: Previsioni}\label{fig:Test 4}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K: 105 \end{math}
+\item \begin{math} \bar \delta_C: 24 \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (140,92)
+\end{itemize}
+
 
 Il risutalto  per il condensation passando da 1000 a 100 sample invece è notevolemnte diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso.
 
-
+\newpage
 \subsubsection{Test 5: MOD=3, Q=1000, S=10}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_10/plot.png}
+\caption{\textit{Test 5: Tracciamento}\label{fig:Test 5}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_10/plot-distances.png}
+\caption{\textit{Test 5: Previsioni}\label{fig:Test 5}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K: 105 \end{math}
+\item \begin{math} \bar \delta_C: 55 \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (195,112)
+\end{itemize}
+
 
 Proseguendo nel diminuire il numero di samples per il condensation siamo passati a 10, il confronto tra il caso in cui i sample sono 1000 è chiaramento mostrato nel grafico seguente. La previsione è notevolemente peggiore e addirittura si può dire che mediamente con 10 samples il condens. si comporta quasi come kalman  che perde l'oggetto. Come ci si poteva aspettare in condizioni estreme di lavoro le previsioni sono decisamente inattendibili.
 
+\newpage
+\subsection{Video: tappetonomod.avi}
 
+\begin{itemize}
+\item risoluzione: 320x240
+\item fps: 10.00
+\item durata: 60 s
+\end{itemize}
+
+Si tratta di una ripresa trasversale dall'alto. L'oggetto in movimento è un'automobilina radiocomandata che si muove su un'area delimitata da un tappeto. Il moto dell'automobilina subisce repentine accelerazioni e decelerazioni. Non ci sono oggetti occludenti, ma l'automobilina entra ed esce totalmente o parzialmente più di una volta dalla scena.
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.5]{tappeto_nomod.png}
+\caption{\textit{tappeto-nomod screenshot}\label{fig:tappeto-nomod screenshot}}
+\end{figure}
+
+\newpage
+\subsubsection{Test 6: MOD=3, Q=1000, S=1000}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_3-Q_1000-S_1000/plot.png}
+\caption{\textit{Test 6: Tracciamento}\label{fig:Test 6}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/movie12/mod_3-Q_1000-S_1000/plot-distances.png}
+\caption{\textit{Test 6: Previsioni}\label{fig:Test 6}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K:  \end{math}
+\item \begin{math} \bar \delta_C:  \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\end{itemize}
+
+\newpage
+\subsubsection{Test 7: MOD=5, Q=1000, S=1000}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_5-Q_1000-S_1000/plot.png}
+\caption{\textit{Test 7: Tracciamento}\label{fig:Test 7}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_5-Q_1000-S_1000/plot-distances.png}
+\caption{\textit{Test 7: Previsioni}\label{fig:Test 7}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K:  \end{math}
+\item \begin{math} \bar \delta_C:  \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\end{itemize}
+
+\newpage
+\subsubsection{Test 8: MOD=2, Q=1000, S=1000}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_2-Q_1000-S_1000/plot.png}
+\caption{\textit{Test 8: Tracciamento}\label{fig:Test 8}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_2-Q_1000-S_1000/plot-distances.png}
+\caption{\textit{Test 8: Previsioni}\label{fig:Test 8}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K:  \end{math}
+\item \begin{math} \bar \delta_C:  \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\end{itemize}
+
+\newpage
+\subsubsection{Test 9: MOD=1, Q=2000, S=1000}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_1-Q_2000-S_1000/plot.png}
+\caption{\textit{Test 9: Tracciamento}\label{fig:Test 9}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_1-Q_2000-S_1000/plot-distances.png}
+\caption{\textit{Test 9: Previsioni}\label{fig:Test 9}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K:  \end{math}
+\item \begin{math} \bar \delta_C:  \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\end{itemize}
+
+\newpage
+\subsubsection{Test 10: MOD=1, Q=5000, S=1000}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_1-Q_5000-S_1000/plot.png}
+\caption{\textit{Test 10: Tracciamento}\label{fig:Test 10}}
+\end{figure}
+
+\begin{figure}[hb]
+\centering
+\includegraphics[scale=0.4]{../../esperimenti/tappeto_nozoom/mod_1-Q_5000-S_1000/plot-distances.png}
+\caption{\textit{Test 10: Previsioni}\label{fig:Test 10}}
+\end{figure}
+
+Statistiche:
+\begin{itemize}
+\item \begin{math} \bar \delta_K:  \end{math}
+\item \begin{math} \bar \delta_C:  \end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\end{itemize}
+
+\newpage
 \subsection{Video tappeto nomod avi}
 Descrizione del video e dei vari cambi ai parametri effettuati
 
