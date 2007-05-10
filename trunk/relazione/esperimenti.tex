@@ -11,7 +11,7 @@ Abbiamo provato il nostro software su tre diversi video. Tutti e tre sono filmat
 Per ciascun video abbiamo osservato/confrontato il comportamento dei due filtri al variare di alcuni parametri quali:
 \begin{itemize}
 \item frequenza di campionamento (MOD)
-\item covarianza relativa al rumore del processo studiato (Q), che stabilisce la tolleranza consentita alla predizione di Kalman
+\item covarianza relativa al rumore del processo studiato (Q) (stabilisce la tolleranza consentita alla predizione del filtro di Kalman)
 \item numero di campioni utilizzati dal Condensation\\
 \end{itemize}
 
@@ -23,34 +23,10 @@ I risultati prodotti per ciascuna prova sono rappresentati in due grafici:
 \item la posizione predetta dal filtro di Kalman
 \item la posizione predetta dal Condensation
 \end{itemize}
-\item Il secondo rappresenta quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
+\item Il secondo rappresenta per ogni campionamento di quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
 \end{itemize}
 
-
-Abbiamo provato il nostro software su tre diversi video. Tutti e tre sono filmati in cui la camera è fissa e c'è un singolo oggetto in movimento, che può sia uscire dall'inquadratura che nascondersi dietro qualche oggetto all'interno della scena (occlusione). In tutti e tre nei primi frames  non compare alcun oggetto in moto, questo per facilitare il Background Subtraction.\\
-
-Per ciascun video abbiamo osservato/confrontato il comportamento dei due filtri al variare di alcuni parametri quali:
-\begin{itemize}
-\item frequenza di campionamento (MOD)
-\item covarianza relativa al rumore del processo studiato (Q), che stabilisce la tolleranza consentita alla predizione di Kalman
-\item numero di campioni utilizzati dal Condensation\\
-\end{itemize}
-
-I risultati prodotti per ciascuna prova sono rappresentati in due grafici:
-\begin{itemize}
-\item Il primo rappresenta per ogni campionamento:
-\begin{itemize}
-\item la posizione dell'oggetto
-\item la posizione predetta dal filtro di Kalman
-\item la posizione predetta dal Condensation
-\end{itemize}
-\item Il secondo rappresenta quanto rispettivamente ciascuna predizione si discosta dalla posizione reale dell'oggetto.
-\end{itemize}
-
-Inoltre per ogni test viene dato il valore medio della distanza tra posizione predetta e posizione reale per i due filtri \begin{math}(\bar \delta_K, \bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
-
-
-Inoltre per ogni test viene dato il valore medio della distanza tra posizione predetta e posizione reale per i due filtri \begin{math}(\bar \delta_K, \bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
+Inoltre per ogni test viene dato il valore medio della distanza (in pixels) tra posizione predetta e posizione reale, sia per il filtro di Kalman \begin{math}(\bar \delta_K)\end{math} che per il Condensation \begin{math}(\bar \delta_C)\end{math}, oltre al valore della varianza media per il Condensation \begin{math}(\sigma_x,\sigma_y)\end{math}.
 
 
 \newpage
@@ -62,16 +38,11 @@ Inoltre per ogni test viene dato il valore medio della distanza tra posizione pr
 \item durata: 50.4 s
 \end{itemize}
 
-
-Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
-
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.5]{movie12.jpg}
 \caption{\textit{movie12 screenshot}}
 \end{figure}
- 
-%\newpage
 
 Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
 
@@ -103,7 +74,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (112,81)
 \end{itemize}
 
-Con queste impostazioni la dimensione dell'area di confidenza per Kalman non è sufficiente per mantenere traccia dell'oggetto, se viene persa una misurazione a causa dell'occlusione. Questo avviene ogni volta che l'oggetto viene nascosto, tuttavia non appena l'oggetto ripassa vicino a dove kalman si è fermato questo ricomincia ad essere tracciato correttamente. A differenza di kalman il condenstaion non perde mai l'oggetto, ma la stima del moto è decisamente meno precisa rispetto a quella effettuata dal filtro di kalman.
+Appare evidente che con queste impostazioni il filtro di Kalman non è in grado di mantenere traccia correttamente dell'oggetto, poichè più di una misurazione è persa a causa dell'occlusione. L'area di tolleranza per Kalman non è sufficiente. Tuttavia non appena l'oggetto ripassa vicino a dove Kalman si è fermato, questo ricomincia ad essere tracciato correttamente. Differentemente il Condenstaion non perde mai l'oggetto, ma la stima del moto è decisamente meno precisa.
 
 \newpage
 
@@ -128,7 +99,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (112,81)
 \end{itemize}
 
-Allargando l'area di confidenza per kalaman l'oggetto non viene mai perso e il tracciamento può essere valutato pressochè perfetto. Il comportamrento in questo caso è evidentemente migliore del Condesation.
+Allargando l'area di confidenza per Kalman l'oggetto non viene mai perso e il tracciamento risulta pressochè perfetto. Il comportamrento in questo caso è evidentemente migliore del Condesation. Purtroppo un'area di confidenza troppo ampia potrebbe in alcune circostanze far perdere di validità al tracciamento. 
 
 \newpage
 \subsubsection{Test 3: MOD=3, Q=1000, S=5000}
@@ -152,7 +123,8 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (109,81)
 \end{itemize}
 
-Aumentando il numero di samples per il condenstaion abbiamo voluto valutare come  si comporta modificando le condizioni del primo test. Confrontando i risulati sulla previsione del solo condesantion nei due casi si vede che uno considerevole aumento del numero di sample da 1000 a 5000 porta non porta in media alcun miglioramento.
+Con questo test cominciamo a verificare il comportamento del Condensation alla variazione del numero di samples.
+E' immediato osservare come aumentando il numero di samples da 1000 a 5000 questo non porti in media nessun significativo miglioramento.
 
 \newpage
 \subsubsection{Test 4: MOD=3, Q=1000, S=100}
@@ -177,7 +149,8 @@ Statistiche:
 \end{itemize}
 
 
-Il risutalto  per il condensation passando da 1000 a 100 sample invece è notevolemnte diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso.
+Di contro con questo test si nota come passando da 1000 a 100 samples invece il risultato sia notevolemente diverso. La stima del moto come si vede dal grafico è notevolemente peggiore nel secondo caso. 
+Fortunatamente ha anche poco senso limitare così tanto il numero di samples, mentre un numero molto alto di samples per noi non comporta nessun particolare svantaggio. 
 
 \newpage
 \subsubsection{Test 5: MOD=3, Q=1000, S=10}
@@ -202,7 +175,7 @@ Statistiche:
 \end{itemize}
 
 
-Proseguendo nel diminuire il numero di samples per il condensation siamo passati a 10, il confronto tra il caso in cui i sample sono 1000 è chiaramento mostrato nel grafico seguente. La previsione è notevolemente peggiore e addirittura si può dire che mediamente con 10 samples il condens. si comporta quasi come kalman  che perde l'oggetto. Come ci si poteva aspettare in condizioni estreme di lavoro le previsioni sono decisamente inattendibili.
+Abbiamo proseguito nel diminuire il numero di Samples per il Condensation passando a 10, il confronto tra il caso in cui i samples erano 1000 è autoesplicativo: il risultato è notevolemente peggiore. Come ci si poteva aspettare in condizioni estreme di lavoro le previsioni sono decisamente inattendibili.
 
 \newpage
 \subsection{Video: tappetonomod.avi}
@@ -243,7 +216,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (53,22)
 \end{itemize}
 
-La macchinina si sposta in modo molto rapido. Kalman si comporta in modo egregio fintato che l'oggetto si trova nell'inquadratura e che l'accelerazione della macchina non è tale da far uscire l'oggetto dall'area di previsione.
+La macchinina si sposta in modo molto rapido. Kalman si comporta in modo egregio fintato che l'oggetto si trova nell'inquadratura e che l'accelerazione della macchina non è tale da far uscire l'oggetto dall'area di previsione. Il Condensation mantiene un buon comportamento anche se mai perfetto.
 
 \newpage
 \subsubsection{Test 7: MOD=5, Q=1000, S=1000}
@@ -267,7 +240,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (56,40)
 \end{itemize} 
 
-Come prevedibile la rapidità di moto di questo oggetto mal si concilia una misurazione effettuata ad intervalli ampi. Entrambi i filtri si comportano in modo non proprio efficiente e perdono quasi immediatamente l'oggetto.
+Come prevedibile la rapidità di moto di questo oggetto mal si concilia una misurazione effettuata ad intervalli ampi. Entrambi i filtri si comportano in modo non proprio ottimale, in particolare Kalman perde quasi immediatamente l'oggetto. 
 
 \newpage
 \subsubsection{Test 8: MOD=2, Q=1000, S=1000}
@@ -291,7 +264,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (55,41)
 \end{itemize}
 
-La situazione decisamente migliora se invece campioniamo ogni 2 frames. Kalman fintato che non perde l'oggetto si comporta decisamente meglio del Condensation, in media però il Condensation risulta migliore.
+La situazione decisamente migliora se invece campioniamo ogni 2 frames. Kalman fintato che non perde l'oggetto si comporta meglio del Condensation, in media però il Condensation risulta migliore.
 
 
 \newpage
@@ -316,7 +289,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (55,41)
 \end{itemize}
 
-Ingrandendo l'area di tolleranza per Kalman e prendendo la misura ogni frame Kalman traccia perfettamente il moto dell'oggetto e anche il Condensation migliora il proprio comportamento.
+Ingrandendo l'area di tolleranza per Kalman e prendendo la misura ogni frame Kalman traccia perfettamente il moto dell'oggetto e anche il Condensation migliora il proprio comportamento. Questa è una situazione ottimale, però decisamente poco realistica. Sono risultati che possiamo ottenere solo perchè stiamo tracciando il moto di un oggetto del quale conosciamo tutto dettagliatamente (Video Stream).
 
 \newpage
 \subsubsection{Test 10: MOD=1, Q=500, S=1000}
@@ -340,7 +313,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (55,41)
 \end{itemize}
 
-Anche diminuendo l'area dell'ellisse di tolleranza per Kalman i risultati non cambiano
+Campionando ogni frame, anche diminuendo l'area dell'ellisse di tolleranza per Kalman i risultati non cambiano.
 
 \newpage
 \subsection{Video: singlecar.avi}
@@ -382,6 +355,7 @@ Statistiche:
 \end{itemize}
 
 In questo test si hanno i risultati più comuni: se l'oggetto scompare dalle scena e riappare in punti molto distanti da dove è scomparso il filtro di Kalman lo perde, ma quando l'oggetto è individuato correttamente Kalman è migliore del Condensation. 
+Tuttavia in media il Condensation è molto più preciso nella predizione.
 
 \newpage
 \subsubsection{Test 12: MOD=10, Q=5000, S=1000}
@@ -405,7 +379,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (114,83)
 \end{itemize}
 
-Il video in questione si presta ad un tracciamento effettuato ad intervalli più ampi poichè non ci sono brusche accelerazioni o frenate. Il problema principale sul filtro di Kalman resta ed è perciò evidente la necessità di incrementare l'area di tolleranza per migliorare le prestazioni del filtro. 
+Il video in questione si presta ad un tracciamento effettuato ad intervalli anche ampi poichè non ci sono brusche accelerazioni o frenate. Il problema principale sul filtro di Kalman resta (perdere l'oggetto se scompare) ed è perciò evidente la necessità di incrementare l'area di tolleranza per migliorare le prestazioni del filtro. 
 
 \newpage
 \subsubsection{Test 13: MOD=6, Q=1000, S=1000}
@@ -429,8 +403,8 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (113,82)
 \end{itemize}
 
-Anche riducendo in numero di frames di campionamento la situazione non cambia molto, anzi per un caso crediamo dovuto alla natura del video la situazione addirittura peggiora per Kalman.
-Decidiamo perciò di togliere il controllo sulla correttezza del rilevamento da parte di Kalman e costringiamo questo a lavorare nelle condizionidi minima tolleranza sull'errore.
+Anche riducendo in numero di frames di campionamento la situazione non cambia molto, anzi per un caso crediamo dovuto alla natura del video stesso la situazione addirittura peggiora per il filtro di Kalman.
+Decidiamo perciò di togliere il controllo sulla correttezza del rilevamento da parte di Kalman e ci poniamo come unico obiettivo quello di farlo lavorare in condizioni di minima tolleranza sull'errore.
 
 \newpage
 \subsubsection{Test 14: MOD=6, Q=1, S=1000}
@@ -454,7 +428,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (113,82)
 \end{itemize}
 
-Il comportamento è più o meno il solito, solo che togliendo il controllo sul rilevamento corretto da parte di Kalman, se l'oggetto scompare siamo comuque in grado di tracciarlo, il filtro di Kalman lo ''insegue''. 
+Togliendo il controllo sulla correttezza della predizione da parte di Kalman, se l'oggetto scompare siamo comuque in grado di tracciarlo (il filtro di Kalman lo ''insegue''). In media Kalman sbaglia pochissimo, il tracciamento è quasi perfetto.
 L'obiettivo è ora quello di metterci in una situazione ipotetica in cui Kalman si comporta peggio del Condensation.
 
 \newpage
@@ -479,6 +453,8 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (113,82)
 \end{itemize}
 
+Riduciamo l'errore consentito sulla predizione, l'ellisse di tolleranza si riduce imponendo a Kalma di sbagliare il meno possibile. In questo test i risultati ottenuti non si discostano molto da quelli precedenti, l'oggetto è sempre tracciato ottimamente dal filtro di Kalman.
+
 \newpage
 \subsubsection{Test 16: MOD=6, Q=0.001, S=1000}
 
@@ -497,11 +473,11 @@ Statistiche:
 Statistiche:
 \begin{itemize}
 \item \begin{math} \bar \delta_K: 66 \end{math}
-\item \begin{math} \bar \delta_C: 82 \end{math}
+\item \begin{math} \bar \delta_C: 43 \end{math}
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (114,82)
 \end{itemize}
 
-Come previsto il filtro di Kalman comincia a peggiorare il proprio comportamento. 
+Come previsto il filtro di Kalman comincia finalmente a peggiorare il proprio comportamento anche se in media è sempre migliore dell'altro. 
 
 \newpage
 \subsubsection{Test 17: MOD=6, Q=0.0001, S=1000}
@@ -525,7 +501,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (114,83)
 \end{itemize}
 
-Kalman non riesce più a tracciare correttamente l'oggetto.
+In questo test Kalman non riesce più a tracciare correttamente l'oggetto. Appare qui evidente come alcune zone si dimostrino particolarmente critiche per il filtro di Kalman.
 
 \newpage
 \subsubsection{Test 18: MOD=1, Q=0.0001, S=1000}
@@ -542,12 +518,13 @@ Kalman non riesce più a tracciare correttamente l'oggetto.
 \caption{\textit{Test 18: Previsioni}}
 \end{figure}
 
-Qui il comportamento di Kalman è migliore rispetto a prima, questo rende più evidente come Kalman si trovi in difficoltà soprattutto nel tracciare zone di non linearità del moto dell'oggetto. (smoothness)
+Abbiamo variato anche la frequenza di campionamento.
+Qui il comportamento di Kalman è migliore rispetto al test precedente ed è più chiaro come Kalman si trovi in difficoltà soprattutto nel tracciare zone di non linearità del moto dell'oggetto. (smoothness)
 
 Statistiche:
 \begin{itemize}
-\item \begin{math} \bar \delta_K:  \end{math}
-\item \begin{math} \bar \delta_C:  \end{math}
-\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (,)
+\item \begin{math} \bar \delta_K: 22 \end{math}
+\item \begin{math} \bar \delta_C: 8\end{math}
+\item \begin{math}(\sigma_x,\sigma_y)\end{math}: (111,85)
 \end{itemize}
 
