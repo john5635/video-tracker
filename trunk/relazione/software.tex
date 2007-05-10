@@ -7,7 +7,7 @@
 \section{Sviluppo dell'applicativo}\label{sec:software}
 
 \subsection{Obiettivi}
-L' obiettivo del software è quello di realizzare un applicativo che esegua \textit{model based tracking} \ref{modelTracking} sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman \cite{kalman-intro} e il ConDensation \cite{kalman-condense}, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
+L' obiettivo del software è quello di realizzare un applicativo che esegua \textit{model based tracking} (vedi sezione \ref{modelTracking}) sulla base di un video passatogli come ingresso. Più nel dettaglio l'applicazione esegue il tracciamento tramite il filtro di Kalman \cite{kalman-intro} e il ConDensation \cite{kalman-condense}, in maniera tale da poter confrontare le prestazioni dell' uno e dell'altro.\\
 Altri requisiti funzionali sono quelli di:
 
 \begin{itemize}
@@ -247,6 +247,12 @@ Per il resto del codice è giusto notare che ogni volta che si processa un nuovo
 \newpage
 
 \subsubsection{Predizione}
+La parte di predizione dei dei due algoritmi è descritta nei file \texttt{kalman.cpp} e \texttt{condensation.cpp} ed è sufficientemente semplice, grazie all'astrazione fornita dalle librerie OpenCV.\\
+Nel listato sottostante è rappresentato il passo di predizione del filtro di Kalman, già inizializzato , che effettua in sequenza:
+\begin{enumerate}
+ \item La predizione (\textit{Predict - Time Update}) del nuovo punto di stato sulla base del modello dinamico da noi descritto, cioè sulla base delle matrici A,B ed u.
+\item La correzione (\textit{Correct - Measurament Update}) sul nuovo punto sulla base della misura ottenuta dalla \textit{ground truth} con il metodo del Background Subtraction. \'E da notare come nel vettore \texttt{measurement} vengono proprio inserite le componenti ottenute dall'osservazione.
+\end{enumerate}
 
 \lstset{language=c++}
 \lstset{commentstyle=\emph}
@@ -282,14 +288,65 @@ float* updateKalman(CvKalman * kalman, coord coord){
 
 \end{lstlisting}
 
-Come già affermato nella sezione \ref{kalman} nella figura \ref{fig:predictcorrect}, si nota che l'aggiornamento di Kalman è effettuato richiamando le funzioni \texttt{cvKalmanPredict(kalman,u);} e  \texttt{cvKalmanCorrect(kalman, measurement);}; in particolare la prima effettua il predict sulla base del vettore \texttt{u} degli ingressi del sistema (che ne nostro caso non influenza il sistema) e la seconda realizza il correct sulla base dalla misura, ottenuta dal \textit{background subtraction} e dalla \textit{blob detection}. \\
-La predizione, come accordato nella \ref{sec:modelli}, è rappresentata da un vettore di due componenti, dove la prima rappresenta l'ascissa e la seconda l'ordinata nel piano del Video,che hanno come centro il pixel in alto a sinistra.
 
-\begin{figure}[hbp]
-\centering
-	\includegraphics[scale=0.45]{piano.png}
-\caption[Rappresentazione del vettore dello stato]{\textit{Rappresentazione del vettore dello stato}\label{fig:pianoStato}}
-\end{figure}
+
+
+
+Quanto detto è stato già ampiamente dimostrato nella sezione \ref{kalman} e in particolare nella figura \ref{fig:predictcorrect}; a livello di codice si nota che l'aggiornamento di Kalman è effettuato richiamando le funzioni \texttt{cvKalmanPredict(kalman,u)} e  \texttt{cvKalmanCorrect(kalman, measurement)}\\
+Infine è bene sottolineare che la predizione, come accordato nella \ref{sec:modelli}, è rappresentata da un vettore di due componenti, dove la prima rappresenta l'ascissa e la seconda l'ordinata nel piano del Video, che hanno come centro (0,0) il pixel in alto a sinistra.\\
+\newpage
+Lo studio che è stato effettuato per la descrizione del modello dinamico non è servito solo nel filtro di Kalman, ma è stato riusato anche nell'algoritmo del ConDensation. La matrice di transizione dello stato A, infatti è usata in esso per inizializzare ogni samples dell'algoritmo, generando i valori con un \textit{random seed} e limitandoli sulla base di due margini. Quanto detto è implementato nel listato sottostante nella funzione \texttt{initCondensation}.\\
+Infine il processo di aggiornamento del condensation vede fondamentalmente due passi principali:
+\begin{enumerate}
+ \item l'aggiornamento delle varie probabilità per ogni samples inizializzato sulla base dell'osservazione ottenuta dalla \textit{ground truth}. Eseguito dall funzione \texttt{updateProcessProbDens}
+\item  la scelta del sample a probabilità maggiore, operazione delegata dalla funzione presente in OpenCv dal nome \texttt{cvConDensUpdateByTime}
+\end{enumerate}
+
+
+
+\lstset{language=c++}
+\lstset{commentstyle=\emph}
+\begin{lstlisting}[frame=r,caption=Predizione di Condensation- condensation.cpp ,breaklines=true,basicstyle=\small]{Predizione di Condensation- condensation.cpp}
+
+CvConDensation* initCondensation ( CvMat** indexMat, int nSample, int maxWidth, int maxHeight ){
+	
+	int DP = indexMat[0]->cols; //! number of state vector dimensions */
+	int MP = indexMat[2]->rows; //! number of measurement vector dimensions */
+
+	CvConDensation* ConDens = cvCreateConDensation( DP, MP, nSample );
+	
+	...
+
+	for (int i=0;i<DP*DP;i++){
+		ConDens->DynamMatr[i]= indexMat[0]->data.fl[i];
+	}
+
+	cvConDensInitSampleSet(ConDens, lowerBound, upperBound);
+	
+	CvRNG rng_state = cvRNG(0xffffffff);
+	
+	for(int i=0; i < nSample; i++){
+		ConDens->flSamples[i][0] = cvRandInt( &rng_state ) % maxWidth;
+		ConDens->flSamples[i][1] = cvRandInt( &rng_state ) % maxHeight;
+	}
+
+	
+	return ConDens;
+}
+
+coord updateCondensation ( CvConDensation* ConDens, coord Measurement, float * stdDX_ptr, float * stdDY_ptr){
+	coord prediction;
+	
+	updateProcessProbDens(ConDens, Measurement, stdDX_ptr, stdDY_ptr);
+	
+	cvConDensUpdateByTime(ConDens);
+	
+	prediction.set(ConDens->State[0], ConDens->State[1]);
+	return prediction;	
+}
+
+
+\end{lstlisting}
 
 \newpage
 %\subsubsection{Rappresentazione della predizione}
@@ -338,9 +395,10 @@ void on_mouse( int event, int x, int y, int flags, void* param ){
 
 
 \end{lstlisting}
+\newpage
 \subsubsection{Scripting GNUPlot}
 Oltre lo sviluppo software, si è anche riusciti a salvare in output i risultati su file testuali, in modo tale da effettuare una successiva lettura con un qualsiasi visualizzatore di grafici com Execel o Matlab. I file prodotti contengono le coordinate, prese frame per frame, del blob stimato con il background subtraction e dei due tracciamenti. Inoltre è anche generato un file riassuntivo con i princiapli coefficieni di rendimento dei due metodi di tracking, quali varianza media e distanza media tra blob osservato e misurato.\\
-Fatto ciò si è scelto il sistema libero GNUPlot per interpretare e graficare in maniera automatizzata i dati raccolti, con la possibilità di creare anche immagini su hardisk al volo dei grafici. Si è infatti prodotto uno scritp bash \footnote{che comunque si esegue anche su Windows fornito di GNUPlot} che automatizza il \textit{processing} dell'output.\\
+Fatto ciò si è scelto il sistema libero GNUPlot per interpretare e graficare in maniera automatizzata i dati raccolti, con la possibilità di creare anche immagini su hardisk al volo dei grafici. Si è infatti prodotto uno scritp bash, (fruibile anche sui sistemi Windows con GNUPlot) ,che automatizza il \textit{processing} dell'output.\\
 Lo script risulta il seguente:
 
 \lstset{language=bash}
@@ -373,3 +431,9 @@ plot 'coordinateKalman.txt' with point pt 1 , 'coordinateCondensation.txt' with 
 
 
 \end{lstlisting}
+
+\begin{figure}[b]
+\centering
+	\includegraphics[scale=0.45]{piano.png}
+\caption[Rappresentazione del vettore dello stato]{\textit{Rappresentazione del vettore dello stato}\label{fig:pianoStato}}
+\end{figure}

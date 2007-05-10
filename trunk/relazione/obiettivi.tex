@@ -5,7 +5,7 @@ Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramit
 
 Il secondo passo, ovvero l'applicazione del tracking al video, rappresenta il punto di maggior interesse del lavoro in quanto consiste nell'elaborazione di una stima della posizione al frame successivo dell'oggetto selezionato; l'esecuzione si basa sull'elaborazione dei dati ottenuti dal processo di localizzazione dell'oggetto.
 
-Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparazione dei due più importanti algoritmi di tracking basato su modelli: il filtro di Kalman, conosciuto in letteratura sin dalla fine degli anni '50 (sarà descritto nella sezione \ref{kalman}) e , ed il Condensation, decisamente più recente rispetto al primo, riconducibile alala fine degli anni '90 (descritto nella sezione \ref{condensation}).
+Gli obiettivi di questo elaborato sono la realizzazione, l'analisi e la comparazione dei due più importanti algoritmi di tracking basato su modelli: il filtro di Kalman, conosciuto in letteratura sin dalla fine degli anni '50 (sarà descritto nella sezione \ref{kalman}) e , ed il Condensation, decisamente più recente rispetto al primo, riconducibile alla fine degli anni '90 (descritto nella sezione \ref{condensation}).
 
 %\textbf{Questa parte va espansa mettendo un po' di discorsi sul tracking generale e poi andando a parare sul tracking model based}
 
@@ -36,7 +36,7 @@ dove
 
 Come detto in precedenza il filtro di Kalman è un estimatore ricorsivo: questo significa che il filtro applica la sua stima dello stato del processo ed ottiene un feedback nella forma del vettore della misura, dal quale può aggiornare la sua computazione. 
 
-Le equazioni del filtro sono raggruppabili in due macrocategorie: \textit{time-update}, responsabili della proiezione nel tempo dello stato corrente per ottenere la stima a prori dello stato successivo (rappresentata dal vettore $\hat{x}_k^- \in \Re^n$), e \textit{measurement-update}, responsabili dell'incorporazione della misura allo stato corrente nella stima a priori, ottenendo così la stima a posteriori (rappresentata dal vettore $\hat{x}_k \in \Re^n$). 
+Le equazioni del filtro sono raggruppabili in due macrocategorie: \textit{time-update}, responsabili della proiezione nel tempo dello stato corrente per ottenere la stima a priori dello stato successivo (rappresentata dal vettore $\hat{x}_k^- \in \Re^n$), e \textit{measurement-update}, responsabili dell'incorporazione della misura allo stato corrente nella stima a priori, ottenendo così la stima a posteriori (rappresentata dal vettore $\hat{x}_k \in \Re^n$). 
 
 Solitamente lo stadio relativo al \textit{time-update} viene definito come \textit{predict}, mentre quello relativo al \textit{measurement-update} come \textit{correct}.
 
@@ -84,6 +84,8 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 	\includegraphics[scale=0.4]{cicloKalman.png}
 \caption{\textit{Ciclo di Kalman completo, con parametri ed equazioni}\label{fig:completeKalman}}
 \end{figure}
+
+\newpage
 
 \subsection{ConDensation}\label{condensation}
 Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. 
@@ -140,9 +142,9 @@ Solitamente in letteratura si considera come \textit{Modello} la rappresentazion
 
 Risulta quindi fondamentale riuscire a definire un modello formale il più precisamente possibile, in modo da garantire che l'astrazione matematica dell'evento che vogliamo poi utilizzare per l'esecuzione degli esperimenti sia il più coerente possibile all'entità reale. 
 
-L'obiettivo è stato quello di modellare il moto generico di un oggetto nel piano, per poi riuscire tramite model based tracking a predirne il moto. Inizialmente la modellazione si è basata sull'osservazione del fenomeno fisico della caduta di un grave e sulla successiva scrittura dell sistema dinamico che lo rappresenti a livello teorico. L'attenzione si è poi volta all'estensione del modello costruito per un moto che non fosse solo di caduta verticale, ma che potesse spaziare anche su di un piano con una certa velocità verticale e orizzontale. 
+L'obiettivo è stato quello di modellare il moto generico di un oggetto nel piano, per poi riuscire tramite model based tracking a predirne il moto. Inizialmente la modellazione si è basata sull'osservazione del fenomeno fisico della caduta di un grave (\textit{Bouncing Ball}) e sulla successiva scrittura dell sistema dinamico che lo rappresenti a livello teorico. L'attenzione si è poi volta all'estensione del modello costruito per un moto che non fosse solo di caduta verticale, ma che potesse spaziare anche su di un piano con una certa velocità verticale e orizzontale. 
 
-Il modello quindi risulta la rappresentazione formale della posizione del punto di interesse sul piano, della velocità del punto sul piano stesso e quindi dell'aggiornamento della posizione; rispetto al modello iniziale, il modello sul quale sono stati effettuati gli esperimenti è quindi dotato di una strutturazione a due componenti, $x$ ed $y$, piuttosto che una semplice componente verticale e di una variabile $g$ che consente di regolare la misura della accellerazione gravitazionale espressa in pixel/s
+Il modello quindi risulta la rappresentazione formale della posizione del punto di interesse sul piano, della velocità del punto sul piano stesso e quindi dell'aggiornamento della posizione; rispetto al modello iniziale, il modello sul quale sono stati effettuati gli esperimenti è quindi dotato di una strutturazione a due componenti, $x$ ed $y$, piuttosto che una semplice componente verticale.% e di una variabile $g$ che consente di regolare la misura della accellerazione gravitazionale espressa in pixel/s
 %\footnote{questa unità di misura deriva dalla unità di misura del video (pixel) riportat al tempo. Quindi per ogni moto andrà fatta la conversione da$ m/s^2$ alla nostra unità $pixel/s^2$}.
 
 Come descritto nella sezione \ref{modelKalman}, il modello si struttura sulla definizione delle matrici e dei vettori alla base delle equazioni \ref{eq:x} e \ref{eq:z}.
@@ -175,12 +177,13 @@ Responsabile della mappatura del suddetto stato al tempo $k-1$ verso lo stato al
 
 dove i parametri al suo interno mappano la transizione di ogni componente: rispettivamente le posizioni passate vengono sovrascritte da quelle nuove e lo stato aggiornato dall'equazione $x + \Delta t \cdot v_x$,per ogni riga della matrice.
 
-Il vettore $B$, moltiplicato per il vettore dei controlli esterni $u$, comporta una modifica al sistema solo sull'ultima componente (velocità verticale), infatti come detto precedentemente, si da la possibilità di poter controllare un' eventuale accelerazione gravitazionale. Nella realizzazione comunque si è impostato il parametro $g$ come nullo, per tracciare il moto su un piano.
+Il vettore $B$, moltiplicato per il vettore dei controlli esterni $u$, comporta una modifica al sistema solo sull'ultima componente (velocità verticale).\\%, infatti come detto precedentemente, si da la possibilità di poter controllare un' eventuale accelerazione gravitazionale.
+Nella realizzazione si è impostato il parametro $g$  e $ \Delta t$ pari ad 1, per tracciare il moto su un piano, in quanto non si avevano forze esterne, che potessero condizionano il sistema. 
 
 \begin{equation}
  B =\begin{bmatrix} 0 \\ 0 \\ 0 \\ g \Delta t \end{bmatrix}\end{equation} 
 
-L'ultima componente della relazione \ref{eq:x} è la modellazione vettoriale del rumore, rappresentata come visto tramite il vettore $w$; assumendo il rumore come gaussiano risulta di interesse la descrizione della matrice che modella la covarianza di questo, rappresentata da $Q$, già descritta nella sezione \ref{tuning} riguardo all'importanza che riveste nella sintonizzazione del filtro di Kalman, come si è ampiamente spiegato nella sezione \ref{sec:esperimenti} Esperimenti .
+L'ultima componente della relazione \ref{eq:x} è la modellazione vettoriale del rumore, rappresentata come visto tramite il vettore $w$; assumendo il rumore come gaussiano risulta di interesse la descrizione della matrice che modella la covarianza di questo, rappresentata da $Q$, già descritta nella sezione \ref{tuning} riguardo all'importanza che riveste nella sintonizzazione del filtro di Kalman, come si è ampiamente spiegato nella sezione \ref{sec:esperimenti}~~Esperimenti .
 
  
 \begin{equation}
@@ -219,7 +222,8 @@ La seconda ( \ref{eq:matriceR} ) rappresenta la covarianza associata al rumore n
 
 ~\\
 Il nostro modello viene inserito nell'applicazione combinando l'uso del calcolo matriciale fornito dalle OpenCv con il parsing di un file testuale \texttt{data.txt}, che risulta essere l'input dei dati dell' applicazione.\\
-\'E bene sottolineare che questo modello è usato ovviamente il kalman,ma soprattutto è riutilizzato anche nell'algoritmo ConDensation per ricalcolare i valori dei samples.
+
+\'E bene sottolineare che questo modello è usato ovviamente il kalman, ma soprattutto la matrice A di transizione dello stato è riutilizzata anche nell'algoritmo ConDensation per ricalcolare i valori dei samples.
 
 
 Per maggior approfondimento sullo sviluppo, costruzione e progettazione del software si rimanda alla sezione \ref{sec:software}.
