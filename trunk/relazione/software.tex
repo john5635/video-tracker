@@ -350,13 +350,13 @@ coord updateCondensation ( CvConDensation* ConDens, coord Measurement, float * s
 
 \newpage
 %\subsubsection{Rappresentazione della predizione}
-\subsubsection{HiGui}
+\subsubsection{HighGui}
 Come accennato nella sezione \ref{AreeFunz}, le librerie OpenCv offrono anche un parte di toolkit per realizzare semplici widget grafici in cui poter visualizzare immagini o video, oppure semplici form per incrementare/decrementare il tuning di determinati parametri. \'E bene sottolineare che esse permettono anche la gestione degli eventi lato utente; per esempio è possibile catturare eventuali click del mouse. Queste widget risultano molto utile ovviamente se si vuole che l'utente interagisca in maniera attiva con il software: nel nostro caso si è usato una semplice \textit{NamedWindow}, fornita da questo toolkti, in cui visualizzare il video con i relativi tracciamenti; in più si è creato un gestore di eventi per catturare eventuali click del mouse che permettono all'utente di selezionare il blob da tracciare in caso di tracking multiplo.
-Il codice seguente mostra l'uso delle HiGui per realizzare quanto detto:
+Il codice seguente mostra l'uso delle HighGui per realizzare quanto detto:
 
 \lstset{language=c++}
 \lstset{commentstyle=\emph}
-\begin{lstlisting}[frame=r,caption=Uso delle HiGui - execute.cpp ,breaklines=true,basicstyle=\small]{Uso delle HiGui - execute.cpp}
+\begin{lstlisting}[frame=r,caption=Uso delle HighGui - execute.cpp ,breaklines=true,basicstyle=\small]{Uso delle HighGui - execute.cpp}
 
 //! Create the window
 
