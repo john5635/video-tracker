@@ -102,18 +102,15 @@ Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufru
 
 A livello puramente teorico l'algoritmo si basa sulla determinazoine di una molteplicità di ipotesi sulla posizione dell'oggetto ad ogni passo (d'ora in poi chiamate anche \textit{``samples''}), dopodichè viene effettuata la selezione di una di queste dal set secondo criteri probabilistici; l'algoritmo riparte con la nuova generazione dei \textit{samples}, iterando. 
 
-\textbf{L'algoritmo è basato su un modello dinamico.questa cosa è da dire ma non so bene come}
-
-
 I passi dell'algoritmo prevedono quindi, scendendo un po' più nel dettaglio della trattazione: 
 
-Dato un set di $N$ \textit{samples} al tempo $t-1$
+Dato un set di $N$ \textit{samples} al tempo $t-1$, che nell'applicazione nel nostro contesto risultano rappresentati da punti all'interno dell'area rettangolare dell'immagine
 
 \begin{equation}\label{eq:H}
 \H_{t-1}= \lbrace \overrightarrow{x_1}(t-1),\overrightarrow{x_2}(t-1), \ldots,  \overrightarrow{x_N}(t-1) \rbrace
 \end{equation} 
 
-con le relative probabilità associate
+ognuno con la relativa probabilità associata
 \begin{equation}\label{eq:pH}
 \lbrace p(\overrightarrow{x_1}(t-1)),p(\overrightarrow{x_2}(t-1)), \ldots, p( \overrightarrow{x_N}(t-1)) \rbrace
 \end{equation} 
@@ -128,7 +125,7 @@ la ripetizione per $N$ volte dei seguenti passi per la generazione di $\H_t$:
 \begin{itemize}
 \item Selezione probabilistica di una delle ipotesi $\overrightarrow{x_k}(t-1)$ dalle $\H_{t-1}$, con probabilità $p(\overrightarrow{x_k}(t-1))$
 \item Generazione di un nuovo vettore di stato $\overrightarrow{s}(t-1)$, da una distribuzione centrata in   $\overrightarrow{x_k}(t-1)$
-\item Ottenimento di un nuovo set di ipotesi, tramite un modello dinamico e il filtro di Kalman $\overrightarrow{x}(t)=f(\overrightarrow{s}(t-1))$
+\item Ottenimento di un nuovo set di ipotesi, tramite un modello dinamico basato sulla matrice $A$ descritta in \ref{eq:matriceA} $\overrightarrow{x}(t)=f(\overrightarrow{s}(t-1))$
 \item Stima della probabilità $p(\overrightarrow{z}(t)|\overrightarrow{x}(t))$ del dato osservato $\overrightarrow{z}(t)$ dato lo stato $\overrightarrow{x}(i)$
 \item Utilizzo del teorema di Bayes per l'ottenimento della $p(\overrightarrow{x}(t)|\overrightarrow{z}(t))$, ovvero ottenimento della \textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}, da cui deriva il nome dell'alogritmo.
 \end{itemize}
