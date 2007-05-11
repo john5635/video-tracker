@@ -82,7 +82,7 @@ Una panoramica generale delle librerie comprende questi aspetti della computer v
 \item Object Identification
 \item Segmentation and Recognition
 \item Face Recognition e Gesture Recognition
-\item Motion Tracking  riferimento al nostro progetto
+\item Motion Tracking
 \end{enumerate}
 
 %descrivere un po queste aree e dove si usano noi nel nostro progetto.
@@ -397,8 +397,8 @@ void on_mouse( int event, int x, int y, int flags, void* param ){
 \end{lstlisting}
 \newpage
 \subsubsection{Scripting GNUPlot}
-Oltre lo sviluppo software, si è anche riusciti a salvare in output i risultati su file testuali, in modo tale da effettuare una successiva lettura con un qualsiasi visualizzatore di grafici com Execel o Matlab. I file prodotti contengono le coordinate, prese frame per frame, del blob stimato con il background subtraction e dei due tracciamenti. Inoltre è anche generato un file riassuntivo con i princiapli coefficieni di rendimento dei due metodi di tracking, quali varianza media e distanza media tra blob osservato e misurato.\\
-Fatto ciò si è scelto il sistema libero GNUPlot per interpretare e graficare in maniera automatizzata i dati raccolti, con la possibilità di creare anche immagini su hardisk al volo dei grafici. Si è infatti prodotto uno scritp bash, (fruibile anche sui sistemi Windows con GNUPlot) ,che automatizza il \textit{processing} dell'output.\\
+Oltre lo sviluppo software, si è anche riusciti a salvare in output i risultati su file testuali, in modo tale da effettuare una successiva lettura con un qualsiasi visualizzatore di grafici com Excel o Matlab. I file prodotti contengono le coordinate, prese frame per frame, del blob stimato con il background subtraction e dei due tracciamenti. Inoltre è anche generato un file riassuntivo con i princiapli coefficieni di rendimento dei due metodi di tracking, quali varianza media e distanza media tra blob osservato e misurato.\\
+Fatto ciò si è scelto il sistema libero GNUPlot per interpretare e dare una rappresentazione grafica automatizzata dei dati raccolti, con la possibilità di creare anche immagini su hardisk al volo dei grafici. Si è infatti prodotto uno scritp bash, (fruibile anche sui sistemi Windows con GNUPlot) ,che automatizza il \textit{processing} dell'output.\\
 Lo script risulta il seguente:
 
 \lstset{language=bash}
