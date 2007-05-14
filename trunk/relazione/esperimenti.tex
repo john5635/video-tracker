@@ -6,7 +6,9 @@
 
 \section{Esperimenti}\label{sec:esperimenti}
 
-Abbiamo provato il nostro software su tre diversi video. Tutti e tre sono filmati in cui la camera è fissa e c'è un singolo oggetto in movimento, che può sia uscire dall'inquadratura che nascondersi dietro qualche oggetto all'interno della scena (occlusione). In tutti e tre nei primi frames  non compare alcun oggetto in moto, questo per facilitare il Background Subtraction.\\
+Il software prodotto è stato testato su molteplici video, tra i quali ne sono stati selezionati tre che si distinguevano per le condizioni di esecuzione, in particolare stimolando caratteristiche specifiche dei due algoritmi di tracking, in modo da efatizzarne i risultati. I tre filmati sono caratterizzati da una ripresa a camera fissa, con un singolo oggetto in movimento che può sia uscire dall'inquadratura che nascondersi dietro qualche ostacolo all'interno della scena (occlusione). 
+
+In ognuno dei tre filmati i primi frames sono di solo sfondo, ovvero non compare alcun oggetto in moto; questa scelta è stata effettuata per facilitare l'applicazione del Background Subtraction.\\
 
 Per ciascun video abbiamo osservato/confrontato il comportamento dei due filtri al variare di alcuni parametri quali:
 \begin{itemize}
@@ -31,7 +33,7 @@ Inoltre per ogni test viene dato il valore medio della distanza (in pixels) tra 
 
 \newpage
 
-\subsection{Video: movies12.mjpeg}
+\subsection{Video: movies12.mjpeg}\label{sec:video-occ}
 \begin{itemize}
 \item risoluzione: 640x480
 \item fps: 25.00

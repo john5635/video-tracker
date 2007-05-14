@@ -1,1 +1,38 @@
 \section{Conclusioni}
+
+Come visto nell'arco di questa relazione il lavoro sviluppato come elaborato per l'esame di Analisi Immagini e Video si è finalizzato in approfondimenti teorici e sperimentazioni pratiche volta a consolidare quanto studiato durante il corso, in modo particolare quanto affrontato relativamente all'analisi e tracking di video. 
+
+L'elaborato è stato caratterizzato da una prima fase di approfondimento teorico sull'argomento, sotto la coordinazione e la guida di Walter Nunziati del MICC, che ha reso noti quali fossero gli articoli scientifici relativi all'argomento che risultassero basilari come bagaglio conoscitivo di partenza, da aggiungere alle nozioni di base del corso; in particolare, segnalando \cite{kalman-intro} e \cite{condensation} l'attenzione si è focalizzata sulle tecniche e sugli argomenti di tracking video, facendo nascere l'idea di sviluppare un software che consentisse di effettuare un confronto empirico sulle effettive prestazioni di questi due algoritmi.
+
+L'obiettivo alla base di tutto il lavoro era quindi quello di riportare risultati comparativi sotto condizioni specifiche, in particolare cercando di capire quali fossero le condizioni di lavoro ottimale dei due approcci, per riuscire a documentare quale fosse il comportamento di entrambi in queste condizioni(occlusioni, non linearità, accelerazioni etc.).
+
+Per riuscire a realizzare quanto appena descritto si è reso indispensabile realizzare un software che implementasse i due algoritmi di tracking, che, come prevedibile, ha rivestito il ruolo di maggior importanza nell'arco dello sviluppo di tutto il lavoro. Il software è stato sviluppato con il linguaggio di programmazione C++, sfruttando le librerie opensource per lo sviluppo in ambito di \emph{Computer Vision} OpenCV \cite{opencv}. Lo sviluppo software si è dimostrato di valenza importantissima nell'arco del lavoro in quanto non solo ha fornito un valido strumento di valutazione per la raccolta di dati che era prefissa come obiettivo, ma ha permesso in stadio di sviluppo di rendere chiaro e attualizzato nella pratica tutto il bagaglio conoscitivo che aveva caratterizzato la prima parte dell'impegno.
+
+Lungo il percorso che ha portato al software che è stato sfrtuttato per la raccolta dei dati sono state affrontate in maniera specifica e profonda alcune tematiche particolari, apparentemente anche leggermente distanti dalla linea guida principale, ma che in realtà risultano la struttura portante del lavoro dell'applicativo. 
+
+Facenti parte di questa struttura di base del software realizzato sono stati gli argomenti di base del tracking video, quindi tutte le tematiche teoriche che spaziano dalle basi del tracking video, in particolare rispetto al background subtraction (descritto nelle sez. tot), fino ad arrivare agli specifici metodi per far tracking basato su modelli: filtro di Kalman e ConDensation.
+
+Per iniziare è stato necessario creare un sistema per ottenere la cosidetta ``groud thruth'' , cioè la misura del soggetto da tracciare, che viene presa come valore per aggiornare i due metodi.
+Si è scelto come sistema un background subtraction di tipo "Mixture of Gaussian" in quanto permette una serie di benefici nel ``detecting'' del soggetto, rispetto ad una semplice e spartana differenza di maschere di immagini. I benefici sono stati i seguenti:
+
+\begin{itemize}
+\item risultati ottimali anche con video complessiti da elaborare rispetto a metodi più semplici.
+\item possibilità di fare il tuning dei parametri, regolabili filmato per filmato. \footnote{Un possibile sviluppo futuro potrebbe essere la creazione di un form scritto in HighGui per l'inizializzazione dei suddetti parametri all'avvio del software}
+\item discreta efficienza, nonstante il metodo sia complesso, garantita anche dall'alto livello con cui viene implementato in OpenCV.
+\end{itemize}
+
+Come già accennato inizialmente, nonostante la parte più corposa e importante dell'elaborato sia quella appena descritta, questa risulta avere un senso effettivo solamente se analizzata con lo scopo di trarne risultati descrittivi, vero obiettivo di tutto il lavoro. L'analisi dettagliata di questi è stata approfonditamente documentata nella sezione \ref{sec:esperimenti}, dalla quale possono essere estratti quelli più significativi, in modo da rendere chiaro quale sia l'obiettivo raggiunto da questo lavoro. 
+
+I risultati forniti in questa relazione sono stati catalogati scegliendo inizialmente i video che maggiormente riuscissero ad evidenziare i punti di forza dell'uno e dell'altro metodo, dopodichè per ogni video sono stati presentati i risultati specifici per una particolare condizione relativa al \emph{tuning} degli appositi parametri. 
+
+I parametri che sono stati variati sono la frequenza di tracking, ovvero il numero di frame che intercorrono tra due consecutive applicazioni dell'algoritmo, la tolleranza consentita alla predizione dell'algoritmo di Kalman, ed il numero di samples che vengono utilizzati per il condensation. Il tuning su questi parametri ci ha consentito di forzare l'utilizzo dei due algoritmi in condizioni normali ma soprattutto nelle condizioni ottimali solo di uno dei due algoritmi alla volta, in modo da studiare la risposta reciproca in questa stimolazione.
+
+Il primo risultato che è stato possibile notare è la maggior robustezza del 
+
+Di particolare importanza inoltre sono stati i risultati provenienti dal tracking con occlusione, descritti nella sezione \ref{sec:video-occ}, dove l'oggetto del tracking durante il moto poteva nascondersi dietro ad ostacoli presenti nella scena
+
+
+
+
+
+%Si cerca ora di sintetizzare quali sono stati i risultati pratici (già approfonditi nella sezione Esperimenti ) per ogni per ogni argomento trattato, evidenziando benefici e svantaggi di un metodo rispetto ad un altro; 
