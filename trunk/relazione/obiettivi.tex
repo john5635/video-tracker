@@ -1,4 +1,4 @@
-﻿\section{Metodi di tracking basati su modelli} \label{modelTracking}
+\section{Metodi di tracking basati su modelli} \label{modelTracking}
 Il \textit{video tracking} è il processo secondo il quale si localizza un oggetto in movimento all'interno di uno stream video e rappresenta uno dei più interessanti problemi di \textit{computer vision}. Esistono svariati approcci al video tracking, ognuno orientato ad ottimizzare le prestazioni relativamente al campo d'azione. In questo lavoro è stato scelto di effettuare il tracking secondo l'approccio basato su modelli, che viene eseguito secondo due passi fondamentali: la localizzazione dell'oggetto da tracciare ed il tracciamento effettivo.
 
 Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramite il \textit{background subtraction} (descritto nella sezione \ref{sec:bgsub}) e consiste nella rilevazione dell'oggetto all'interno dell'immagine e nell'ottenimento delle informazioni relative.
@@ -129,12 +129,12 @@ Per passare dal vettore di stato $H_{t}$ al successivo $H_{t+1}$ si eseguono i s
 \item Si campiona la posizione reale dell'oggetto al passo t. [$\overrightarrow{z}(t)$]
 \item Si calcola la posizione per ciascun sample secondo lo spostamento dato dal modello dinamico che in qualche modo descrive il moto dell'oggetto: 
 \begin{equation}
-	$\overrightarrow{x_i}(t+1)$= f($\overrightarrow{x_i}(t)$)
+	\overrightarrow{x_i}(t+1)= f(\overrightarrow{x_i}(t))
 \end{equation}
 \item Si stima la probabilità $p(\overrightarrow{z}(t))$ secondo la densità di probabilità che caratterizza i campioni all'istante t.
 \item Per ogni sample è ricalcolata la probabilità condizionata applicando il teorema di Bayes:
 \begin{equation}
-	p_i(\overrightarrow{x_i}(t+1))= p($\overrightarrow{x_i}(t)$\|$\overrightarrow{z}(t)$)
+	p_i(\overrightarrow{x_i}(t+1))= p(\overrightarrow{x_i}(t)\|\overrightarrow{z}(t))
 \end{equation}
 \end{enumerate}
 
