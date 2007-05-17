@@ -1,4 +1,4 @@
-\section{Metodi di tracking basati su modelli} \label{modelTracking}
+﻿\section{Metodi di tracking basati su modelli} \label{modelTracking}
 Il \textit{video tracking} è il processo secondo il quale si localizza un oggetto in movimento all'interno di uno stream video e rappresenta uno dei più interessanti problemi di \textit{computer vision}. Esistono svariati approcci al video tracking, ognuno orientato ad ottimizzare le prestazioni relativamente al campo d'azione. In questo lavoro è stato scelto di effettuare il tracking secondo l'approccio basato su modelli, che viene eseguito secondo due passi fondamentali: la localizzazione dell'oggetto da tracciare ed il tracciamento effettivo.
 
 Il primo passo, computazionalmente non molto oneroso, è stato realizzato tramite il \textit{background subtraction} (descritto nella sezione \ref{sec:bgsub}) e consiste nella rilevazione dell'oggetto all'interno dell'immagine e nell'ottenimento delle informazioni relative.
@@ -90,30 +90,55 @@ Possiamo notare inoltre che quando nell'esecuzione le matrici $P$ e $Q$ sono cos
 \subsection{ConDensation}\label{condensation}
 Il ConDensation (\textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}) \cite{condensation} è un algoritmo probabilistico molto noto in \textit{computer-vision}, conosciuto anche come Particle Filtering. 
 
+Peculiarità di questo algoritmo è quella di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}. L'algoritmo risulta ottimo nel tracking di traiettorie non lineari o afflitte da rumore non gaussiano.
+
 \begin{figure}[hb]
 \centering
 	\includegraphics[scale=0.6]{hand.jpg}
 \caption{\textit{Esempio di applicazione del ConDensation per la rilevazione del contorno di una mano}\label{fig:hand}}
 \end{figure}
 
-Il principale obiettivo di questo algoritmo è quello di riuscire a stimare e tracciare con precisione i contorni di un oggetto in movimento all'interno di un video, come si può vedere dalla figura \ref{fig:hand}; data questa particolare peculiarità risulta ottimo nel tracking di traiettorie non lineari, afflitte da rumore non gaussiano.
+Per quanto rigurda il nostro lavoro il Condensation ci interessa perchè risulta robusto rispetto a dati molto rumorosi ed a cambiamenti di stato non lineari. La semplicità di questo permette di utilizzare per la descrizione approssimata del moto dell'oggetto anche modelli dinamici non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di Kalman, che viceversa raggiunge il massimo della sua efficienza in ambiti lineari. 
 
-Nel nostro lavoro questo risulta particolarmente utile in quanto possiamo usufruire di un algoritmo che lavora molteplici ipotesi, selezionandole di volta in volta probabilisticamente, e che risulta robusto rispetto a dati molto rumorosi ed a cambi di stato non lineari. In modo particolare è quest'ultima caratteristica che lo contraddistingue in modo netto con il filtro di kalman, che raggiunge il massimo della sua efficienza in ambiti lineari.
+L'algoritmo utilizza un campionamento casuale e ordinato per modellare funzioni di densità di probabilità arbitrariamente complesse. Utilizza N campioni pesati per approssimare la curva che descrive la distribuzione dei dati.
 
-A livello puramente teorico l'algoritmo si basa sulla determinazoine di una molteplicità di ipotesi sulla posizione dell'oggetto ad ogni passo (d'ora in poi chiamate anche \textit{``samples''}), dopodichè viene effettuata la selezione di una di queste dal set secondo criteri probabilistici; l'algoritmo riparte con la nuova generazione dei \textit{samples}, iterando. 
+Ciascun campione - sample - consiste dunque di uno stato e di un peso. Il peso è proporzionale alla probabilità che lo stato del sample sia lo stato predetto dall'algoritmo.
 
-I passi dell'algoritmo prevedono quindi, scendendo un po' più nel dettaglio della trattazione: 
+Chiamiamo con $H_{t}$ il vettore dei samples \{$\overrightarrow{s_1}(t),\overrightarrow{s_1}(t),...,\overrightarrow{s_N}(t)$\} all'istante $t$. (ipotesi)
+\begin{equation}
+	\overrightarrow{s_i}(t)= \{\overrightarrow{x_i}(t),p(x_i(t))\}
+\end{equation}
 
-Dato un set di $N$ \textit{samples} al tempo $t-1$, che nell'applicazione nel nostro contesto risultano rappresentati da punti all'interno dell'area rettangolare dell'immagine
+$\overrightarrow{x_i}(t)$ è la posizione stimata per il sample $i$ all'istante $t$.\\
+$p(\overrightarrow{x_i}(t))$ è la probabilità associata alla posizione $\overrightarrow{x_i}(t)$ che caratterizza il sample $i$\\
 
-\begin{equation}\label{eq:H}
-\H_{t-1}= \lbrace \overrightarrow{x_1}(t-1),\overrightarrow{x_2}(t-1), \ldots,  \overrightarrow{x_N}(t-1) \rbrace
-\end{equation} 
+\textbf{Inizializzazione - passo 0}\\
+Al primo passo dell'algoritmo si inizializza tutti i samples:
+\begin{itemize}
+\item Ciascuna posizione può essere scelta in modo casuale secondo una distibuzione uniforme.
+\item La probabilità associata a ciascun sample al primo passo è invece distribuita secondo una gaussiana standard centrata nel valore medio tra il valore massimo e il valore minimo assumibile per la posizione dell'oggetto e la relativa varianza.
 
-ognuno con la relativa probabilità associata
-\begin{equation}\label{eq:pH}
-\lbrace p(\overrightarrow{x_1}(t-1)),p(\overrightarrow{x_2}(t-1)), \ldots, p( \overrightarrow{x_N}(t-1)) \rbrace
-\end{equation} 
+\end{itemize}
+
+
+\textbf{Esecuzione - passo t}\\
+Il sample $\overrightarrow{s_i}(t)$ con probabilità maggiore è la predizione per il Condensation.\\
+
+Per passare dal vettore di stato $H_{t}$ al successivo $H_{t+1}$ si eseguono i seguenti passi:
+\begin{enumerate}
+\item Si campiona la posizione reale dell'oggetto al passo t. [$\overrightarrow{z}(t)$]
+\item Si calcola la posizione per ciascun sample secondo lo spostamento dato dal modello dinamico che in qualche modo descrive il moto dell'oggetto: 
+\begin{equation}
+	$\overrightarrow{x_i}(t+1)$= f($\overrightarrow{x_i}(t)$)
+\end{equation}
+\item Si stima la probabilità $p(\overrightarrow{z}(t))$ secondo la densità di probabilità che caratterizza i campioni all'istante t.
+\item Per ogni sample è ricalcolata la probabilità condizionata applicando il teorema di Bayes:
+\begin{equation}
+	p_i(\overrightarrow{x_i}(t+1))= p($\overrightarrow{x_i}(t)$\|$\overrightarrow{z}(t)$)
+\end{equation}
+\end{enumerate}
+
+Il risultato otteenuto è un nuovo set di $N$ \textit{samples} per il tempo $t$.
 
 \begin{figure}[hb]
 \centering
@@ -121,16 +146,6 @@ ognuno con la relativa probabilità associata
 \caption{\textit{Samples e relative probabilità}\label{fig:samplesProb}}
 \end{figure}
 
-la ripetizione per $N$ volte dei seguenti passi per la generazione di $\H_t$:
-\begin{itemize}
-\item Selezione probabilistica di una delle ipotesi $\overrightarrow{x_k}(t-1)$ dalle $\H_{t-1}$, con probabilità $p(\overrightarrow{x_k}(t-1))$
-\item Generazione di un nuovo vettore di stato $\overrightarrow{s}(t-1)$, da una distribuzione centrata in   $\overrightarrow{x_k}(t-1)$
-\item Ottenimento di un nuovo set di ipotesi, tramite un modello dinamico basato sulla matrice $A$ descritta in \ref{eq:matriceA} $\overrightarrow{x}(t)=f(\overrightarrow{s}(t-1))$
-\item Stima della probabilità $p(\overrightarrow{z}(t)|\overrightarrow{x}(t))$ del dato osservato $\overrightarrow{z}(t)$ dato lo stato $\overrightarrow{x}(i)$
-\item Utilizzo del teorema di Bayes per l'ottenimento della $p(\overrightarrow{x}(t)|\overrightarrow{z}(t))$, ovvero ottenimento della \textbf{Con}ditional \textbf{Dens}ity Propag\textbf{ation}, da cui deriva il nome dell'alogritmo.
-\end{itemize}
-
-Il risultato che se ne ottiene quindi è un nuovo set di $N$ \textit{samples} per il tempo $t$.
 %%%%%%%%%%%%%%%%%%%
 %Meo io mi concentrerie di più su quest ultima parte che viene dove descrivi i modelli piuttosto che sulla teoria del %condensation. quella secondo me può essere fatto più all' acqua di rose.
 %%%%%%%%%%%%%%%%%%%
