@@ -46,7 +46,7 @@ Inoltre per ogni test viene dato il valore medio della distanza (in pixels) tra 
 \caption{\textit{movie12 screenshot}}
 \end{figure}
 
-Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta diestro questa per un po'. L'automobilina non esce mai dalla scena.
+Si tratta di una ripresa trasversale dall'alto di un automobilina radiocomandata. In questa scena i punti di occlusione sono due: una scatola al centro della scena e un ostacolo sulla sinistra. La macchina non subisce repentine accelerazioni o decelerazioni, in generale ruota attorno alla scatola centrale e riamane nascosta dietro questa per un po'. L'automobilina non esce mai dalla scena.
 
 %\begin{figure}[hb]
 %\centering%
@@ -218,7 +218,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (53,22)
 \end{itemize}
 
-La macchinina si sposta in modo molto rapido. Kalman si comporta in modo egregio fintato che l'oggetto si trova nell'inquadratura e che l'accelerazione della macchina non è tale da far uscire l'oggetto dall'area di previsione. Il Condensation mantiene un buon comportamento anche se mai perfetto.
+La macchinina si sposta in modo molto rapido. Kalman si comporta in modo egregio fintanto che l'oggetto si trova nell'inquadratura e che l'accelerazione della macchina non è tale da far uscire l'oggetto dall'area di previsione. Il Condensation mantiene un buon comportamento anche se mai perfetto.
 
 \newpage
 \subsubsection{Test 7: MOD=5, Q=1000, S=1000}
@@ -381,7 +381,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (114,83)
 \end{itemize}
 
-Il video in questione si presta ad un tracciamento effettuato ad intervalli anche ampi poichè non ci sono brusche accelerazioni o frenate. Il problema principale sul filtro di Kalman resta (perdere l'oggetto se scompare) ed è perciò evidente la necessità di incrementare l'area di tolleranza per migliorare le prestazioni del filtro. 
+Il video in questione si presta ad un tracciamento effettuato ad intervalli anche ampi poichè non ci sono brusche accelerazioni o frenate. Il problema principale sul filtro di Kalman resta che perde l'oggetto se scompare ed è perciò evidente la necessità di incrementare l'area di tolleranza per migliorare le prestazioni del filtro. 
 
 \newpage
 \subsubsection{Test 13: MOD=6, Q=1000, S=1000}
@@ -430,7 +430,7 @@ Statistiche:
 \item \begin{math}(\sigma_x,\sigma_y)\end{math}: (113,82)
 \end{itemize}
 
-Togliendo il controllo sulla correttezza della predizione da parte di Kalman, se l'oggetto scompare siamo comuque in grado di tracciarlo (il filtro di Kalman lo ''insegue''). In media Kalman sbaglia pochissimo, il tracciamento è quasi perfetto.
+Togliendo il controllo sulla correttezza della predizione da parte di Kalman, se l'oggetto scompare siamo comuque in grado di tracciarlo (il filtro di Kalman lo ``insegue''). In media Kalman sbaglia pochissimo, il tracciamento è quasi perfetto.
 L'obiettivo è ora quello di metterci in una situazione ipotetica in cui Kalman si comporta peggio del Condensation.
 
 \newpage

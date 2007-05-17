@@ -233,7 +233,7 @@ IplImage* updateBackground(CvBGStatModel *bg_model, IplImage * tmp_frame){
 
 \end{lstlisting}
 
-Dalla prima funzione si nota come vengano inizializzate i parametri su cui poi sarà costruito il modello di previsione del foreground; in particolare si nota che:
+Dalla prima funzione si nota come vengano inizializzati i parametri su cui poi sarà costruito il modello di previsione del foreground; in particolare si nota che:
 
 \begin{itemize}
 \item ogni pixel è classificato come processo che condivide 3 gaussiane 
@@ -294,7 +294,7 @@ float* updateKalman(CvKalman * kalman, coord coord){
 
 
 
-Quanto detto è stato già ampiamente dimostrato nella sezione \ref{kalman} e in particolare nella figura \ref{fig:predictcorrect}; a livello di codice si nota che l'aggiornamento di Kalman è effettuato richiamando le funzioni \texttt{cvKalmanPredict(kalman,u)} e  \texttt{cvKalmanCorrect(kalman, measurement)}\\
+Quanto detto è stato già ampiamente dimostrato nella sezione \ref{kalman} e in particolare nella figura \ref{fig:predictcorrect}; a livello di codice si nota che l'aggiornamento di Kalman è effettuato richiamando le funzioni \texttt{cvKalmanPredict(kalman,u)} e  \texttt{cvKalmanCorrect(kalman, measurement)}.\\
 Infine è bene sottolineare che la predizione, come accordato nella \ref{sec:modelli}, è rappresentata da un vettore di due componenti, dove la prima rappresenta l'ascissa e la seconda l'ordinata nel piano del Video, che hanno come centro (0,0) il pixel in alto a sinistra.\\
 \newpage
 Lo studio che è stato effettuato per la descrizione del modello dinamico non è servito solo nel filtro di Kalman, ma è stato riusato anche nell'algoritmo del ConDensation. La matrice di transizione dello stato A, infatti è usata in esso per inizializzare ogni samples dell'algoritmo, generando i valori con un \textit{random seed} e limitandoli sulla base di due margini. Quanto detto è implementato nel listato sottostante nella funzione \texttt{initCondensation}.\\
@@ -353,7 +353,7 @@ coord updateCondensation ( CvConDensation* ConDens, coord Measurement, float * s
 \newpage
 %\subsubsection{Rappresentazione della predizione}
 \subsubsection{HighGui}
-Come accennato nella sezione \ref{AreeFunz}, le librerie OpenCv offrono anche un parte di toolkit per realizzare semplici widget grafici in cui poter visualizzare immagini o video, oppure semplici form per incrementare/decrementare il tuning di determinati parametri. \'E bene sottolineare che esse permettono anche la gestione degli eventi lato utente; per esempio è possibile catturare eventuali click del mouse. Queste widget risultano molto utile ovviamente se si vuole che l'utente interagisca in maniera attiva con il software: nel nostro caso si è usato una semplice \textit{NamedWindow}, fornita da questo toolkti, in cui visualizzare il video con i relativi tracciamenti; in più si è creato un gestore di eventi per catturare eventuali click del mouse che permettono all'utente di selezionare il blob da tracciare in caso di tracking multiplo.
+Come accennato nella sezione \ref{AreeFunz}, le librerie OpenCv offrono anche un parte di toolkit per realizzare semplici widget grafici in cui poter visualizzare immagini o video, oppure semplici form per incrementare/decrementare il tuning di determinati parametri. \'E bene sottolineare che esse permettono anche la gestione degli eventi lato utente; per esempio è possibile catturare eventuali click del mouse. Queste widget risultano molto utile ovviamente se si vuole che l'utente interagisca in maniera attiva con il software: nel nostro caso si è usato una semplice \textit{NamedWindow}, fornita da questo toolkit, in cui visualizzare il video con i relativi tracciamenti; in più si è creato un gestore di eventi per catturare eventuali click del mouse che permettono all'utente di selezionare il blob da tracciare in caso di tracking multiplo.
 Il codice seguente mostra l'uso delle HighGui per realizzare quanto detto:
 
 \lstset{language=c++}
