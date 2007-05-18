@@ -1,0 +1,152 @@
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/theme/beamerthemeScarletHannover.sty,v 1.10 2004/10/11 16:10:12 tantau Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\DeclareOptionBeamer{width}
+{\PassOptionsToPackage{width=#1}{beamerouterthemesidebar}}
+
+\DeclareOptionBeamer{hideothersubsections}
+{\PassOptionsToPackage{hideothersubsections=#1}{beamerouterthemesidebar}}
+
+\DeclareOptionBeamer{hideallsubsections}
+{\PassOptionsToPackage{hideallsubsections=#1}{beamerouterthemesidebar}}
+
+\ProcessOptionsBeamer
+
+
+
+\mode<presentation>
+\logo{\includegraphics[width=.1\textwidth]{unifiScarlet.jpg}}
+\useoutertheme[height=0pt,left]{sidebar}
+
+%\usecolortheme{seahorse}
+%\usecolortheme{rose}
+%\setbeamercolor*{titlelike}{parent=structure}
+
+\useinnertheme{circles}
+\setbeamertemplate{frametitle}[default][top,right]
+
+% We use *part* of the outer theme "shadow" but without the "split" theme
+% This gives us a (hacked) drop shadow on the sidebar and frametitle bar
+\pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
+  color(0pt)=(frametitle.bg);
+  color(\paperwidth)=(frametitle right.bg)}
+
+\AtBeginDocument{
+  %
+  \pgfdeclareverticalshading{beamer@topborder}{\paperwidth}{%
+    color(0pt)=(black);
+    color(1pt)=(black)}
+  \pgfdeclarehorizontalshading{beamer@sideborder}{\paperheight}{%
+    color(0pt)=(black);
+    color(1pt)=(black)}
+
+  \pgfdeclareverticalshading{beamer@topshade}{\paperwidth}{%
+    color(0pt)=(bg);
+    color(4pt)=(black!50!bg)}
+  \pgfdeclareverticalshading{beamer@topshadesidebarcover}{\beamer@sidebarwidth}{%
+    color(0pt)=(black);
+    color(4pt)=(black)}
+  \pgfdeclareverticalshading{beamer@topshadesidebarcoverwhite}{6pt}{%
+    color(0pt)=(white);
+    color(4pt)=(white)}
+
+  \pgfdeclarehorizontalshading{beamer@sideshade}{\paperheight}{%
+    color(0pt)=(black!50!bg);
+    color(4pt)=(bg)}
+% An attempt at getting the shadings to meet nicely, FAILED
+%  \pgfdeclarehorizontalshading{beamer@sidediagshade}{5.66pt}{%
+%    color(0pt)=(green!50!bg);
+%    color(5.66pt)=(bg)}
+}
+
+\addtobeamertemplate{sidebar \beamer@sidebarside}
+{}
+{
+%Want to "rewind" to the top of the sidebar, but how?
+%drop-shadow:
+\vskip-\paperwidth\hskip\beamer@sidebarwidth\pgfuseshading{beamer@sideshade}
+%border: \vskip-\paperwidth\hskip\beamer@sidebarwidth\pgfuseshading{beamer@sideborder}
+}
+
+% End Shadow
+
+%Sidebarfoot
+\addtobeamertemplate{footline}
+{%
+   \usebeamercolor[fg]{author in sidebar}
+    \vskip-1.5cm\hskip4.2pt
+  \insertlogo\kern1em\vskip5pt%
+}
+
+\mode
+<all>
+
+% We declare the main color theme: Scarlet & Cream
+\definecolor{UNL@Scarlet}{RGB}{140,17,17}
+\definecolor{Sbaush-LightScarlet}{RGB}{240,235,235}
+\definecolor{Sbaush-Scarlet}{RGB}{80,17,17}
+
+\definecolor{Ubuntu}{RGB}{140,90,60}
+\definecolor{LightUbuntu}{RGB}{219,164,107}
+\definecolor{DarkUbuntu}{RGB}{69,40,24}
+% Alternate UNL@Reds: 204,0,0 (unl.edu) <--seems to be the best
+%                     240,7,46 (logo)
+%                     255,25,25 (original)
+%                     140,17,17 ("scarlet")
+\definecolor{UNL@Cream}{RGB}{245,240,219}
+%Cream          245  240  219
+%Cream2         245  255  250 - Whitest
+%Dairy Cream    249  228  188 - more peachy
+%Cream Brulee   255  229  160 - peach
+%Cream Can      245  200   92 - Almost a peach
+%Coconut Cream  248  247  220 - More white
+\definecolor{UNL@DarkGrey}{RGB}{35,35,35}
+\definecolor{UNL@Grey}{RGB}{100,100,100}
+\definecolor{UNL@LightGrey}{RGB}{200,200,200}
+\definecolor{UNL@VeryLightGrey}{RGB}{225,225,225}
+
+%Inner settings
+\setbeamercolor{block title}{fg=white,bg=Sbaush-Scarlet} %
+\setbeamercolor{block body}{fg=black,bg=white!90!UNL@Scarlet}%Sbaush-LightScarlet}
+
+\setbeamercolor{block title example}{fg=block title.fg,bg=UNL@Scarlet} %
+\setbeamercolor{block body example}{fg=block body.fg,bg=block body.bg} %
+\setbeamercolor{block title alerted}{fg=block title.fg,bg=block title.bg} %
+\setbeamercolor{block body alerted}{fg=block body.fg,bg=block body.bg} %
+\setlength{\parskip}{.1cm}
+
+%Outer settings
+
+\setbeamertemplate{sidebar canvas \beamer@sidebarside}[vertical shading][top=UNL@Scarlet,bottom=UNL@Scarlet]%!100!white!50]
+
+% \setbeamercolor*{palette sidebar primary}{use=structure,fg=red}
+ \setbeamercolor*{palette sidebar secondary}{fg=UNL@Cream}
+% \setbeamercolor*{palette sidebar tertiary}{fg=red}
+% \setbeamercolor*{palette sidebar quaternary}{fg=red,bg=white}
+
+\setbeamercolor{titlelike}{fg=UNL@Scarlet}%fg=UNL@Cream,bg=UNL@Scarlet} %
+
+\setbeamercolor{sidebar}{fg=UNL@Cream}              %
+           %
+\setbeamercolor{title in sidebar}{fg=UNL@Cream}      %
+\setbeamercolor{author in sidebar}{fg=UNL@Cream}    %
+
+% \setbeamercolor{section in sidebar shaded}{fg=UNL@Cream}
+% \setbeamercolor{subsection in sidebar shaded}{fg=UNL@Cream}
+%\usecolortheme{sidebartab} cut-pasted-n-hacked:
+\setbeamercolor*{section in sidebar shaded}{parent=palette sidebar secondary}
+\setbeamercolor*{section in sidebar}
+  {parent=section in sidebar shaded,use={sidebar,section in sidebar shaded},%
+   fg=UNL@Scarlet,bg=UNL@Cream}
+
+\setbeamercolor*{subsection in sidebar shaded}{parent=palette sidebar primary}
+\setbeamercolor*{subsection in sidebar}
+  {parent=subsection in sidebar shaded,use=section in sidebar,%
+   bg=section in sidebar.bg, % We simply inherit the section properties
+   fg=section in sidebar.fg}
+\usecolortheme[RGB={140,17,17}]{structure}
+
