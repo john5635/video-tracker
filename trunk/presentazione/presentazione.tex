@@ -165,10 +165,34 @@ z_k=Hx_k+v_k
 \end{figure}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{ConDensation}
+\begin{itemize}
+ \item Algoritmo probabilistico (aka \textit{Particle Filter})
+\item Robusto su rumore e cambiamenti di stato non lineari
+\item Campionamento su $N$ samples, applicato alla teoria probabilistica
+\end{itemize}
+\begin{block}
 
+
+\begin{itemize}
+\item $H_{t}$: samples all'istante $t$.
+ \{$\overrightarrow{s_1}(t),\overrightarrow{s_1}(t),...,\overrightarrow{s_N}(t)$\}
+\item Samples: $\overrightarrow{s_i}(t)= \{\overrightarrow{x_i}(t),p(x_i(t))$\}
+\end{itemize}
+ 
+\end{block}
+%\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.3]{../relazione/figure/samplesProb.png}
+%\caption{\textit{Samples e relative probabilità}}
+%\end{figure}
+
+\begin{block}{}
+Predizione: $\overrightarrow{s_i}(t)$ con probabilità maggiore
+\end{block}
 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \frame{\frametitle{Implementazione del modello}
 
 
