@@ -125,6 +125,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Obiettivi}
 \frame{\frametitle{Obiettivi dell'elaborato}
+\begin{itemize}
+\item Video-tracking: localizzazione oggetti in movimento su stream video
+\begin{itemize}
+\item Utilizzato approccio di tracking basato su modelli\end{itemize}
+\item Approfondimento dei due metodi più importanti
+\begin{itemize}
+\item Filtro di Kalman (Anni '50)
+\item ConDensation (Anni '90)\end{itemize}
+\item Realizzazione software C++ (OpenCV based) per il confronto\end{itemize}
+\begin{block}{}
+ Confronto tracking basato su Kalman con tracking basato su ConDensation
+\end{block}
+
 
 
 }
@@ -132,8 +145,24 @@
 \section{Tracking}
 \frame{\frametitle{Kalman Filter}
 
+Obiettivo: stimare lo stato $x \in \Re^n$ di un processo a tempo discreto governato dalla seguente equazione alle differenze
+\begin{equation*}
+ x_k=Ax_{k-1}+Bu_{k-1}+w_{k-1}
+\end{equation*}  
 
-}
+
+ L'osservazione (al tempo $k$) dello stato reale $x_k$ è effettuata tramite il vettore della misura $z \in \Re^m$ 
+
+
+\begin{equation*}
+z_k=Hx_k+v_k
+\end{equation*}
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.25]{../relazione/figure/PredCorr.jpg}
+\caption{\textit{Il ciclio di calcolo del filtro di Kalman.}}
+\end{figure}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{ConDensation}
 
