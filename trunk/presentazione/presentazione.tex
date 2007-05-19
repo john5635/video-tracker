@@ -4,7 +4,6 @@
   \usetheme[height=40pt]{ScarletHannover} %UNL-Sbaush, MyHannover, BlueHannover, ScarletHannover, Lart
   \useinnertheme[shadow=true]{rounded}
   %\useoutertheme{shadow}  
-  
    \usefonttheme{professionalfonts}
   %\usefonttheme{structureitalicserif,structuresmallcapsserif,professionalfonts,serif,structurebold,}
    
@@ -23,6 +22,7 @@
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{listings}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{epsfig}
@@ -194,6 +194,14 @@ Predizione: $\overrightarrow{s_i}(t)$ con probabilità maggiore
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frame{\frametitle{Implementazione del modello}
+\begin{itemize}
+\item Modellare il moto di un oggetto su un piano cartesiano
+\item Si tiene conto della posizion e della velocità
+\end{itemize}
+$
+ \overrightarrow{x}=\begin{bmatrix} x \\ y \\ v_x \\ v_y \end{bmatrix}
+$
+
 
 
 }
@@ -201,13 +209,78 @@ Predizione: $\overrightarrow{s_i}(t)$ con probabilità maggiore
 \section{Software}
 \frame{\frametitle{Librerie e background subtraction}
 
+\begin{itemize}
+\item OpenCV, librerie per \textit{computer vision} di Intel sotto licenza open source.
+\item Sotware crossplatform scritto in C++
+\end{itemize}
+
+\begin{block}{Background subtraction MoG}
+Mixture of Gaussian
+\begin{itemize}
+\item efficiente anche su video complessi
+\item \textit{tuning} dei parametri come:
+\begin{itemize}
+ \item Soglia di classificazione
+\item Numero di Gaussiane per pixel
+\end{itemize}
+
+
+\end{itemize}
+\end{block}
+
 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Control-flow}
+\begin{frame}[fragile]
+\frametitle{Control-flow}
+
+\textit{Steps} effettuati durante l'esecuzione:
+
+\begin{itemize}
+\item Apertura del video da filesystem e ottenimento delle informazioni
+\item Ciclo su tutti frame del video:
+	\begin{enumerate}
+	\item Background Subtraction
+	\item Aggiornamento di Kalman e Condensation
+	\item Rappresentazione dei risultati 
+	\end{enumerate}
+\end{itemize}
+
+\begin{figure}[hb]
+\centering
+	\includegraphics[scale=0.2]{../relazione/figure/doppiascelta.jpg}
+\caption[Esempio di scelta tra due blob]{\textit{Detecting di più blob durante tracking multiplo.}\label{fig:scelta2blob}}
+\end{figure}
+
+%\lstset{language=c++}
+%\lstset{commentstyle=\emph}
+%\begin{lstlisting}[frame=tr,breaklines=true,basicstyle=\tiny]
+%	video = captureFromAvi( file )
+%	initBackgroundSubtraction( video )
+
+%	for( int fr = 1; frame = captureNextFrame( video ), fr++ ){
+%	
+%                updateBackgroundSubtraction( frame )
+%		
+%                if ( frame == FIRST_FRAME){
+%			
+%                        blob = getBlobSelectedFromUser( frame )
+%	
+%                        initKalman( blob );
+%			
+ %                       initCondensation( blob );
+  %              }
+   %             else{
+    %            blob= getBlob(Frame);
+     %           updateKalman(blob);
+      %          updateCondensation(blob);
+       %         }
+       % }
+%\end{lstlisting}
 
 
-}
+
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Esperimenti}
 \frame{\frametitle{Primo video}
