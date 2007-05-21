@@ -133,9 +133,9 @@
 \begin{itemize}
 \item Filtro di Kalman (Anni '50)
 \item ConDensation (Anni '90)\end{itemize}
-\item Realizzazione software C++ (OpenCV based) per il confronto\end{itemize}
+\item Realizzazione del software per il confronto\end{itemize}
 \begin{block}{}
- Confronto tracking basato su Kalman con tracking basato su ConDensation
+ Confronto tracking basato su Kalman con quello basato su ConDensation
 \end{block}
 
 
@@ -178,7 +178,7 @@ z_k=Hx_k+v_k
  \{$\overrightarrow{s_1}(t),\overrightarrow{s_1}(t),...,\overrightarrow{s_N}(t)$\}
 \item Samples: $\overrightarrow{s_i}(t)= \{\overrightarrow{x_i}(t),p(x_i(t))$\}
 \end{itemize}
- 
+% Qui si parla delle funzioni di ogni matrice...
 \end{block}
 %\begin{figure}[hb]
 \centering
@@ -195,12 +195,26 @@ Predizione: $\overrightarrow{s_i}(t)$ con probabilità maggiore
 
 \frame{\frametitle{Implementazione del modello}
 \begin{itemize}
-\item Modellare il moto di un oggetto su un piano cartesiano
-\item Si tiene conto della posizion e della velocità
+\item Studio del modello di caduta di un grave
+\item Estensione e progettazione del modello per il moto generico di un oggetto su un piano cartesiano
+\begin{itemize}
+\item $ \Rightarrow$ Scrittura delle matrici del sistema dinamico da usare come input nell'applicativo.
 \end{itemize}
-$
- \overrightarrow{x}=\begin{bmatrix} x \\ y \\ v_x \\ v_y \end{bmatrix}
-$
+
+\end{itemize}
+
+\begin{block}{Matrici d'interesse del sistema dinamico}
+$\overrightarrow{x}=\begin{bmatrix} x \\ y \\ v_x \\ v_y \end{bmatrix}$
+$ A = 
+\begin{bmatrix}
+ 1 & 0 & \Delta t & 0 \\
+ 0 & 1 & 0 & \Delta t \\
+ 0 & 0 & 1 & 0 \\
+ 0 & 0 & 0 & 1
+\end{bmatrix}$
+$Q = 0.01 \cdot Id $
+\end{block}
+
 
 
 
