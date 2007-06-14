@@ -1,0 +1,116 @@
+\documentclass{beamer}
+\mode<presentation>
+{
+  \usetheme[height=40pt]{ScarletHannover} %UNL-Sbaush, MyHannover, BlueHannover, ScarletHannover, Lart
+  \useinnertheme[shadow=true]{rounded}
+  %\useoutertheme{shadow}  
+   \usefonttheme{professionalfonts}
+  %\usefonttheme{structureitalicserif,structuresmallcapsserif,professionalfonts,serif,structurebold,}
+   
+   %\usecolortheme{sbaushOUTER} % ---> OUTER
+   %\usecolortheme{sbaushINNER} % ---> INNER
+   %\usecolortheme{fly}    % ---> COMPLETE
+ 
+%\usecolortheme{default,structure,sidebartab,albatross,dove,fly,seagull,crane,beetle}
+
+%\INNER --> usecolortheme{lily,orchid,rose,}
+%\OUTER --> usecolortheme{whale,seahorse,dolphin,}
+
+\setbeamertemplate{navigation symbols}{}
+  \setbeamercovered{transparent}
+}
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{beamerouterthemeleo}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%%%%%%%%%%%%%%%
+% Definitions %
+%%%%%%%%%%%%%%%
+
+
+
+%\newcommand{\g}[1]{\alert{#1}}
+
+\institute[Università degli studi di Firenze, Facoltà di Ingegneria] % (optional, but mostly needed)
+{
+\begin{minipage}[t]{0.4\textwidth}
+ \textbf{Docente:} \\ \professor \\
+\textbf{Assistenti:} \\ \firstassistant \\  \secondassistant
+\end{minipage} 
+\hfill
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushright}
+\textbf{Autori:} \\ \firstauthor \\ \secondauthor \\ \thirdauthor
+\end{flushright}
+\end{minipage}
+}
+
+
+%\title[Mesh-AP NMS]{Mesh-AP Network Management System}
+
+\title[Analisi Immagini e Video] {Kalman e ConDensation in \textit{video-tracking}}
+
+\subtitle{Sviluppo e comparazione dei due algoritmi per il tracciamento di oggetti su video}
+
+\author[N. Martorana\\I. Masi\\M. Meoni\\ \hrulefill]{Presentazione Elaborato\\ \textsc{ Analisi Immagini e Video}}
+
+
+\date[Presentazione elaborato] % (optional, should be abbreviation of conference name)
+{
+   18 Maggio 2007
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\def\firstauthor{Nicola Martorana}
+\def\secondauthor{Iacopo Masi}
+\def\thirdauthor{Marco Meoni}
+\def\coursenumber{ARC}
+\def\class{Relazione di Analisi Immagini e Video}
+\def\title{Comparazione di Kalman e ConDensation in video-tracking}
+\def\semester{2006/2007}
+\def\instructor{P. Crescenzi}
+\def\date{Maggio 2007}
+\def\professor{Prof. Pietro Pala}
+\def\firstassistant{Ing. Walter Nunziati}
+\def\secondassistant{Ing. Andrew D. Bagdanov}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\setbeamercolor{titlelike}{bg=UNL@Scarlet,fg=UNL@Cream}
+\vspace{-10pt}
+\begin{center}
+\begin{scriptsize}
+	\textsc{Università degli studi di Firenze}
+\end{scriptsize}\\ 
+\begin{tiny}
+	Facoltà di Ingegneria - Corso di laurea specialistica in \textsc{Ingegneria Informatica}
+\vspace{-20pt}
+\end{tiny}
+\end{center}
+
+\titlepage
+ }
+
+
+%%%PARTE DI IAC %%%
+\include{slides-iac}
+
+%%%PARTE DI MARTO %%%
+\include{slides-marto}
+
+%%%PARTE DI MEO %%%
+\include{slides-meo}
+
+
+
+
+\end{document}
+
+
