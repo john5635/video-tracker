@@ -1,26 +1,63 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Outline}
+\section{Introduzione}
 
 \frame{\frametitle{Outline}
-\begin{itemize}
-\item Obiettivi dell'elaborato
-\item Metodi di tracking basati su modelli
-\begin{itemize}
- \item Kalman Filter
-\item ConDensation Filter
-\end{itemize}
-\item Implementazione dei modelli
-\item Sviluppo del Software
-\begin{itemize}
- \item Librerie utilizzate
-\item Control-flow del programma
-\end{itemize}
-\item Risultati
-\begin{itemize}
- \item Primo video: movies12.mjpeg
-\item Secondo video: tappetonozoom.avi
-\item Terzo video: singlecar.avi
-\end{itemize}
-\end{itemize}
+\tableofcontents
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% MOSTRARE VIDEO AL PROF
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Introduzione}
+
+
+
+\begin{block}{Obiettivi del Tracking Video - Idea di Base}
+\begin{itemize}
+ \item Seguire oggetti (blob) che si muovono per un periodo di tempo (potenzialmente lungo)
+ \item \'E possibile sapere dove un oggetto è stato, è e anche \textbf{prevedere}  dove sarà
+\end{itemize}
+\end{block}
+
+\begin{block}{Ambiti di Utilizzo}
+\begin{itemize}
+\item Industria di localizzazione dispositivi come Radar
+\item Riprese di sicurezza per elaborazione di video
+\end{itemize}
+\end{block}
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Nostro Caso}
+
+
+
+\begin{block}{Condizioni Ottimali di Lavoro}
+\begin{itemize}
+ \item La misura dei blob è ottenibile frame per frame
+\end{itemize}
+\end{block}
+
+\begin{block}{Tipo di Video}
+\begin{itemize}
+\item Video nel formato avi, mjpeg con compressione xvid.
+\item Requisiti:
+\begin{enumerate}
+	\item Numero determinato di frame con il background iniziale fisso
+	\item Telecamera di ripresa ferma (Non introduce moto relativo)
+\end{enumerate}
+\end{itemize}
+\end{block}
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
