@@ -15,17 +15,26 @@
 
 
 
-\begin{block}{Obiettivi del Tracking Video - Idea di Base}
+\begin{block}{Idea di base del tracking video}
 \begin{itemize}
- \item Seguire oggetti (blob) che si muovono per un periodo di tempo (potenzialmente lungo)
- \item \'E possibile sapere dove un oggetto è stato, è e anche \textbf{prevedere}  dove sarà
+ \item Seguire oggetti- \textit{blob} -  che si muovono per un periodo di tempo, potenzialmente anche lungo.
+ \item \'E possibile conoscere:
+			\begin{enumerate}
+			\item dove un oggetto è stato
+			\item è attualmente
+			\item anche \textbf{prevedere}  dove sarà
+			\end{enumerate}
+
+
 \end{itemize}
 \end{block}
 
+
+
 \begin{block}{Ambiti di Utilizzo}
 \begin{itemize}
-\item Industria di localizzazione dispositivi come Radar
-\item Riprese di sicurezza per elaborazione di video
+\item Industria per la localizzazione di oggetti in movimento (es. Radar )
+\item Sistemi di video sorveglianza intelligente.
 \end{itemize}
 \end{block}
 
@@ -36,28 +45,166 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\frame{\frametitle{Nostro Caso}
+\frame{\frametitle{Obiettivi}
+
+
+
+
+\begin{enumerate}
+\item Eseguire Tracking basato su modelli tramite:
+\begin{itemize}
+ \item Kalman Filter
+\item ConDensation
+\end{itemize}
+
+ \item  Scelta del blob da tracciare in caso di \textbf{tracking multipo}.
+ \item  Tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti.;
+% \item  Visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
+ \item Fornire un output dei risulati al fine di ottenere una \textbf{rappresentazione grafica} dell'accuratezza dei due metodi.
+ \item Progettare e realizzare l'applicazione in maniera tale che possa essere compilata ed eseguite su \textbf{piattaforme diverse (Win32, Linux)}.
+\end{enumerate}
+
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Ambiente di lavoro}
 
 
 
 \begin{block}{Condizioni Ottimali di Lavoro}
 \begin{itemize}
- \item La misura dei blob è ottenibile frame per frame
+ \item La misura del centroide blob è ottenibile frame per frame ...
+ \item ...cosa che non accade nei sistemi non ideali \begin{small}(per simulare cià si è utilizzato il parametro \textbf{MOD})                                                                                                                    \end{small} %fare esempio Tracciamento punto con Kalmans
 \end{itemize}
 \end{block}
 
-\begin{block}{Tipo di Video}
-\begin{itemize}
-\item Video nel formato avi, mjpeg con compressione xvid.
-\item Requisiti:
+\begin{center}
+ \begin{Large}Video \end{Large}
+\end{center}
+\begin{center}
+% use packages: array
+\begin{tabular}{|l|l|l|l|} \hline
+ & Movie12 & TappetoNoMod & SingleCar \\  \hline
+Formato & mjpeg/xvid & avi/xvid & avi/xvid \\ \hline
+fps & 25 & 10 & 30 \\ \hline
+Durata & 50.4 s & 60 s & 33 s \\ \hline
+\end{tabular}
+\end{center}
+%\begin{block}{Requisiti}
+\begin{center}
+ \begin{large}Requisiti dei Video \end{large}
+\end{center}
+
 \begin{enumerate}
 	\item Numero determinato di frame con il background iniziale fisso
-	\item Telecamera di ripresa ferma (Non introduce moto relativo)
+	%\item Lo sfondo non vari drasticamente nella ripresa 
+	\item Telecamera di ripresa fissa
 \end{enumerate}
-\end{itemize}
-\end{block}
+%\end{block}
+
+
+
+%\begin{description}
+% \item[Object Tracking da camera fissa] \'E il nostro caso in cui si fa \textit{car tracking} da telecamera fissa
+% \item[Object Tracking  da camera che zooma e ruota] \'E il caso del \textit{football player tracking}.
+% \item[Active Tracking] \'E il caso del \textit{active face tracking}.
+% \end{description}
 
 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Ground Truth}
+
+
+%#  Ground Truth
+\begin{block}{Blob Detection}
+\begin{enumerate}
+\item Segmentazione del background tramite Background Subtraction di tipo MoG
+\item Maschera binaria foreground/background
+\item I blobs sono identificati e filtrati sulla base della loro Area e Vicinanza. %inserire i valori giusti -approfondire
+\item Il blob selezionato viene scelto sulla base della distanza euclidea calcolata dal click dell'utente.
+\end{enumerate}
+ 
+\end{block}
+
+   % * Ottenimento della misura/Segmentazione fg-bg
+   %* Individuazione Blob di interesse (classificando la dimensione, distanza, confronto tra frames)
+   % * In sintesti si parla di misura del moto e campionamento dei valori di esso
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Model-based Tracking}
+
+
+Uso dei due metodi più importanti:
+\begin{itemize}
+\item Filtro di Kalman (Anni '50)
+\item ConDensation (Anni '90)
+\end{itemize}
+
+
+    %*   Dati Campionati
+    %* Introduzione agli algoritmi di predizione fatti basati su modelli
+    %* Cenni alle altre tipologie
+    %* Come si predice il moto sulla base dei valori campionati
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Background Subtraction}
+
+
+\begin{block}{Background subtraction MoG}
+\underline{Mixture of Gaussian}
+\begin{itemize}
+\item efficiente anche su video complessi
+\item \textit{tuning} dei parametri come:
+\begin{itemize}
+ \item Soglia di classificazione
+\item Numero di Gaussiane per pixel
+\end{itemize}
+
+
+
+\end{itemize}
+\end{block}
+
+
+          %*   MoG (Mixture of Gaussian)
+          %* Cenno agli altri tipi di segmentazione background
+
+\begin{block}{Altre tipologie}
+\begin{itemize}
+ \item Distribuzione Unimodale
+ \item Tecniche Non Parametriche
+ \item Approccio basato su regioni o frame
+\end{itemize}
+
+\end{block}
+
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
