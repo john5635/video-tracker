@@ -120,7 +120,7 @@ L'applicazione deve poter:
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+\subsection{Ground Truth}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -171,7 +171,7 @@ La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} c
 \item Tipologia statistica e \textit{online}.
 \item Modella le informazioni di ogni pixel come processo di funzioni gaussiane
 %\item Efficiente anche su video complessi
-\item Permette il \textit{Tuning} dei parametri come:
+\item \textit{Tuning} dei parametri come:
 \begin{itemize}
  \item Soglia di classificazione
  \item Numero di Gaussiane per pixel
@@ -205,11 +205,14 @@ La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} c
 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\subsection{Introduzione agli algoritmi}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \frame{\frametitle{Model-based Tracking}
+
+La misura è ottenuta come dato campionato sul centroide del blob:
+
 
 
 Uso dei due metodi più importanti:
