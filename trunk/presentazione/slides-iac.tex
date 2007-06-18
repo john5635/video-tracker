@@ -15,14 +15,14 @@
 
 
 
-\begin{block}{Idea di base del tracking video}
+\begin{block}{Idea di base}
 \begin{itemize}
- \item Seguire oggetti- \textit{blob} -  che si muovono per un periodo di tempo, potenzialmente anche lungo.
- \item \'E possibile conoscere:
+ \item Seguire oggetti  \begin{small} \textit{blob}  \end{small}  che si muovono per un periodo di tempo, potenzialmente anche lungo dato un flusso video.
+ \item \'E possibile conoscere informazioni su:
 			\begin{enumerate}
-			\item dove un oggetto è stato
-			\item è attualmente
-			\item anche \textbf{prevedere}  dove sarà
+			\item posizione passata
+			\item stato attuale
+			\item anche \textbf{prevedere} lo stato futuro
 			\end{enumerate}
 
 
@@ -35,6 +35,7 @@
 \begin{itemize}
 \item Industria per la localizzazione di oggetti in movimento (es. Radar )
 \item Sistemi di video sorveglianza intelligente.
+\item Sistemi software per editing dei video
 \end{itemize}
 \end{block}
 
@@ -49,7 +50,7 @@
 
 
 
-
+L'applicazione deve poter:
 \begin{enumerate}
 \item Eseguire Tracking basato su modelli tramite:
 \begin{itemize}
@@ -57,10 +58,10 @@
 \item ConDensation
 \end{itemize}
 
- \item  Scelta del blob da tracciare in caso di \textbf{tracking multipo}.
- \item  Tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti.;
+ \item  Possibilità di scelta del blob da tracciare in caso di \textbf{tracking multiplo}.
+ \item  Tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti.
 % \item  Visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
- \item Fornire un output dei risulati al fine di ottenere una \textbf{rappresentazione grafica} dell'accuratezza dei due metodi.
+ \item Fornire un output dei risultati al fine di ottenere una \textbf{rappresentazione grafica} dell'accuratezza dei due metodi.
  \item Progettare e realizzare l'applicazione in maniera tale che possa essere compilata ed eseguite su \textbf{piattaforme diverse (Win32, Linux)}.
 \end{enumerate}
 
@@ -76,9 +77,9 @@
 
 
 
-\begin{block}{Condizioni Ottimali di Lavoro}
+\begin{block}{Condizioni Ottimali}
 \begin{itemize}
- \item La misura del centroide blob è ottenibile frame per frame ...
+ \item La misura del centroide del blob è ottenibile frame per frame ...
  \item ...cosa che non accade nei sistemi non ideali \begin{small}(per simulare cià si è utilizzato il parametro \textbf{MOD})                                                                                                                    \end{small} %fare esempio Tracciamento punto con Kalmans
 \end{itemize}
 \end{block}
@@ -89,10 +90,10 @@
 \begin{center}
 % use packages: array
 \begin{tabular}{|l|l|l|l|} \hline
- & Movie12 & TappetoNoMod & SingleCar \\  \hline
-Formato & mjpeg/xvid & avi/xvid & avi/xvid \\ \hline
-fps & 25 & 10 & 30 \\ \hline
-Durata & 50.4 s & 60 s & 33 s \\ \hline
+ & \texttt{Movie12} & \texttt{TappetoNoMod} & \texttt{SingleCar} \\  \hline
+\texttt{Formato} & mjpeg/xvid & avi/xvid & avi/xvid \\ \hline
+\texttt{fps} & 25 & 10 & 30 \\ \hline
+\texttt{Durata} & 50.4 s & 60 s & 33 s \\ \hline
 \end{tabular}
 \end{center}
 %\begin{block}{Requisiti}
@@ -126,14 +127,26 @@ Durata & 50.4 s & 60 s & 33 s \\ \hline
 
 \frame{\frametitle{Ground Truth}
 
-
+La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} che permette:
 %#  Ground Truth
+\begin{block}{Segmentazione Background}
+\begin{enumerate}
+\item Segmentazione del video tramite\textit{ Background Subtraction} di tipo MoG
+\item Maschera binaria \textit{foreground/background}
+\end{enumerate}
+\end{block}
+
+
 \begin{block}{Blob Detection}
 \begin{enumerate}
-\item Segmentazione del background tramite Background Subtraction di tipo MoG
-\item Maschera binaria foreground/background
-\item I blobs sono identificati e filtrati sulla base della loro Area e Vicinanza. %inserire i valori giusti -approfondire
-\item Il blob selezionato viene scelto sulla base della distanza euclidea calcolata dal click dell'utente.
+\item I blobs sono identificati e filtrati sulla base di: %\texttt{CBlobResult getBlobs(IplImage* , IplImage* )}: %inserire i valori giusti -approfondire
+\begin{itemize}
+ \item la selezione avviene senza nessuna maschera
+ \item Con una soglia di 10
+ \item si filtrano i blob con area più piccola di 40 pixels
+\end{itemize}
+
+\item Si sceglie il blob a distanza euclidea minima tra tutte le distanza calcolate dal punto del click utente al centroide di ogni blob.
 \end{enumerate}
  
 \end{block}
@@ -146,6 +159,52 @@ Durata & 50.4 s & 60 s & 33 s \\ \hline
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Background Subtraction}
+
+
+\begin{block}{Mixture of Gaussian}
+\begin{itemize}
+\item Tipologia statistica e \textit{online}.
+\item Modella le informazioni di ogni pixel come processo di funzioni gaussiane
+%\item Efficiente anche su video complessi
+\item Permette il \textit{Tuning} dei parametri come:
+\begin{itemize}
+ \item Soglia di classificazione
+ \item Numero di Gaussiane per pixel
+\end{itemize}
+
+%Il modello MoG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo sulla base dell'intensità del valore di grigio di ogni pixel.
+%Si eliman la gaussiana che ha minor peso e si aggiunge una nuova gaussiana con media uguale al valoredi quel pixel e varianza molto grande. Si aggiornano tutte le gaussiane e si normalizza...L’algoritmo di detection proposto è un algoritmo statistico, infatti, per la classificazione del pixel si considera la sua storia recente, rappresentata mediante un set di gaussiane: Mixture of Gaussians (MOG).
+%La classificazione dei pixel viene effettuata stabilendo il matching di ogni pixel con le gaussiane ad esso associate: se non esiste matching il pixel viene classificato come foreground, se, invece, esiste matching, il peso della gaussiana corrispondente viene confrontato con un valore di soglia, se esso è minore di tale soglia il pixel viene ancora classificato come foreground, se è maggiore, viene considerato background.
+%In particolare un pixel sarà classificato come un pixel di foreground se la distribuzione a lui associata ha peso sufficientemente basso e varianza alta, viceversa verrà classificato come background pixel.
+%\item [Tecniche Non Parametriche] Si stima la funziona di densità di probabilità per ogni pixel preso dai tanti campioni, usando una tecnica di stima sulla densità di probabilità.
+%\item [Approccio basato su regioni o frame] \'E una tecnica basata su pixel, che assume che le serie di temi dell'osservazione è indipendente per ogni pixel. L'approccio ad alto livello è eseguito segmentando un'immagine in una regione o ridefinendo un sottolivello di classificazione ottenuto su ogni pixel.
+
+
+\end{itemize}
+\end{block}
+
+
+          %*   MoG (Mixture of Gaussian)
+          %* Cenno agli altri tipi di segmentazione background
+
+\begin{block}{Altre tipologie}
+\begin{itemize}
+ \item Distribuzione Unimodale
+ \item Tecniche Non Parametriche
+ \item Approccio basato su regioni o frame
+\end{itemize}
+
+\end{block}
+
+
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -170,41 +229,4 @@ Uso dei due metodi più importanti:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\frame{\frametitle{Background Subtraction}
-
-
-\begin{block}{Background subtraction MoG}
-\underline{Mixture of Gaussian}
-\begin{itemize}
-\item efficiente anche su video complessi
-\item \textit{tuning} dei parametri come:
-\begin{itemize}
- \item Soglia di classificazione
-\item Numero di Gaussiane per pixel
-\end{itemize}
-
-
-
-\end{itemize}
-\end{block}
-
-
-          %*   MoG (Mixture of Gaussian)
-          %* Cenno agli altri tipi di segmentazione background
-
-\begin{block}{Altre tipologie}
-\begin{itemize}
- \item Distribuzione Unimodale
- \item Tecniche Non Parametriche
- \item Approccio basato su regioni o frame
-\end{itemize}
-
-\end{block}
-
-
-
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
