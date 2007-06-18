@@ -7,18 +7,35 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Parametri}
-
+\frame{\frametitle{Parametri e output}
+\begin{small}\alert{\textbf{Esperimenti}}: variazione di tre parametri nei tre video selezionati \end{small}
+\begin{footnotesize}\begin{description}
+\item [Intervallo Frames] Numero di frames tra due applicazioni consecutive del Tracking
+\item [Q - Area Kalman] Autovalori di Q, risulta l'area di confidenza del filtro di Kalman
+\item [Samples ConDensation] Numero di samples sui quali si basa l'esecuzione del ConDensation
+ \end{description}\end{footnotesize}\pause
+\begin{block}{}
+\begin{footnotesize}Il software produce sei files di output:\end{footnotesize}
+\begin{scriptsize}\begin{description}
+\item [\textit{coordinateReali.txt}] Coordinate reali dell'oggetto da tracciare
+\item [\textit{coordinateKalman.txt}] Coordinate previste da Kalman
+\item [\textit{coordinateCondensation.txt}] Coordinate previste dal ConDensation
+\item [\textit{distanzaKalman.txt}] \alert{$\delta_k$} Distanza tra le coordinate reali e la previsione di Kalman
+\item [\textit{distanzaCondensation.txt}]\alert{$\delta_c$} Distanza tra coord reali e previsione ConDensation
+\item [\textit{Risultati.txt~~~~~~~~~~~}]  distanza media, $\overline{\delta}_k, \overline{\delta}_c$, varianza media ConDensation ($\overline{\sigma}_x, \overline{\sigma}_y$).
+ \end{description}\end{scriptsize}
+\end{block}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{GNUPlot - plot.png}
+\includegraphics[scale=0.45]{../esperimenti/movie12/mod_3-Q_1000-S_1000/plot.png}
 
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{GNUPlot - distances.png}
-
+\includegraphics[scale=0.45]{../esperimenti/movie12/mod_3-Q_1000-S_1000/plot-distances.png}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -207,7 +224,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Risultati}
 \frame{\frametitle{Esperimento 1}
-Puppa
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
