@@ -31,13 +31,13 @@
 
 
 
-\begin{block}{Ambiti di Utilizzo}
+L' ambito di utilizzo è da collocarsi in settori come:
 \begin{itemize}
 \item Industria per la localizzazione di oggetti in movimento (es. Radar )
 \item Sistemi di video sorveglianza intelligente.
 \item Sistemi software per editing dei video
 \end{itemize}
-\end{block}
+
 
 
 }
@@ -77,10 +77,10 @@ L'applicazione deve poter:
 
 
 
-\begin{block}{Condizioni Ottimali}
+\begin{block}{Condizione Ottimale}
 \begin{itemize}
- \item La misura del centroide del blob è ottenibile frame per frame ...
- \item ...cosa che non accade nei sistemi non ideali \begin{small}(per simulare cià si è utilizzato il parametro \textbf{MOD})                                                                                                                    \end{small} %fare esempio Tracciamento punto con Kalmans
+ \item La misura del centroide del blob è ottenibile frame per frame.
+ \item In un sistema non ideale questa condizione ottimale non è mai verificata.
 \end{itemize}
 \end{block}
 
@@ -125,24 +125,127 @@ L'applicazione deve poter:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame{\frametitle{Background Subtraction}
+
+L'idea di base è conoscere il modello del background, segmentando ogni frame del video in una maschera foreground e background.\\
+Altra tecnica simile è il \textit{Motion Segmentation}.
+
+
+
+%Il modello MoG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo sulla base dell'intensità del valore di grigio di ogni pixel.
+%Si eliman la gaussiana che ha minor peso e si aggiunge una nuova gaussiana con media uguale al valoredi quel pixel e varianza molto grande. Si aggiornano tutte le gaussiane e si normalizza...L’algoritmo di detection proposto è un algoritmo statistico, infatti, per la classificazione del pixel si considera la sua storia recente, rappresentata mediante un set di gaussiane: Mixture of Gaussians (MOG).
+%La classificazione dei pixel viene effettuata stabilendo il matching di ogni pixel con le gaussiane ad esso associate: se non esiste matching il pixel viene classificato come foreground, se, invece, esiste matching, il peso della gaussiana corrispondente viene confrontato con un valore di soglia, se esso è minore di tale soglia il pixel viene ancora classificato come foreground, se è maggiore, viene considerato background.
+%In particolare un pixel sarà classificato come un pixel di foreground se la distribuzione a lui associata ha peso sufficientemente basso e varianza alta, viceversa verrà classificato come background pixel.
+%\item [Tecniche Non Parametriche] Si stima la funziona di densità di probabilità per ogni pixel preso dai tanti campioni, usando una tecnica di stima sulla densità di probabilità.
+%\item [Approccio basato su regioni o frame] \'E una tecnica basata su pixel, che assume che le serie di temi dell'osservazione è indipendente per ogni pixel. L'approccio ad alto livello è eseguito segmentando un'immagine in una regione o ridefinendo un sottolivello di classificazione ottenuto su ogni pixel.
+
+
+
+
+          %*   MoG (Mixture of Gaussian)
+          %* Cenno agli altri tipi di segmentazione background
+
+\begin{block}{Tipologie}
+\begin{itemize}
+ \item \underline{Mixture of Gaussian }
+ \item Distribuzione Unimodale
+ \item Tecniche Non Parametriche
+ \item Approccio basato su regioni o frame
+\end{itemize}
+
+\end{block}
+Possibili problematiche sono:
+\begin{itemize}
+ \item Presenza di illuminazione che genera ombre
+ \item Oggetti in movimento che si inseriscono nella scena
+ \item Oggetti rilevati come Foreground che fermano il loro moto.
+\end{itemize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\frametitle{Mixture of Gaussian (1)}
+
+
+\begin{itemize}
+\item Di tipo statistico e \textit{online}
+\item Modella le informazioni di ogni pixel come processo di funzioni gaussiane
+%\item Efficiente anche su video complessi
+\item Permette il \textit{tuning} dei parametri come:
+	\begin{itemize}
+	\item Soglia di classificazione
+	\item Numero di Gaussiane per pixel
+	\end{itemize}
+
+\end{itemize}
+
+\alert{Algoritmo:}
+
+1) Ogni pixel $x_t$ è rappresentato da un processo di K Gaussiane nella forma $P(\mu_k,\sigma_k,\omega_k)$:
+
+\begin{equation}
+ x_t = \sum_{j=1}^k \alert{\omega}_{i,t} \cdot \frac{1}{\sqrt{2\pi \cdot \alert{\sigma}^2_{j,t}}} \cdot e^{-\frac{(x_t - \alert{\mu}_{j,t})^2}{2\alert{\sigma}_{j,t}^2}}
+\end{equation}
+
+
+
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\frametitle{Mixture of Gaussian (2)}
+
+\alert{Online learning}
+
+2) Il processo è valutato sull'intensità dei valori di grigio dei pixel con:
+
+\begin{equation}
+|x_t - \mu_{j,t}| > 2.5 \cdot \sigma_{j,t}~~~~~ per ~j=1..k
+\end{equation}
+e i pesi $\omega_j$ vengono riaggiornati.
+
+\alert{Rilevamento del foreground}
+
+3) Si ordinano le k distribuzioni partendo da quelle con maggior peso e minor varianza (bg) fino a quelle con minor pes e maggior varianza (fg). Il parametro risulta: $r_{j,t} = \frac{\omega_{j,t}}{\delta_{j,t}}$
+
+4) Le prime B distribuzioni ottenute dalla seguente formula sono associate al bg viceversa le altre:
+
+
+\begin{equation}
+B = argmin_b{\sum_{j=0}^{b-1} r_j,t > T}
+\end{equation}
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \frame{\frametitle{Ground Truth}
 
 La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} che permette:
 %#  Ground Truth
 \begin{block}{Segmentazione Background}
 \begin{enumerate}
-\item Segmentazione del video tramite\textit{ Background Subtraction} di tipo MoG
-\item Maschera binaria \textit{foreground/background}
+\item Effettuare una segmentazione del video tramite\textit{ Background Subtraction} di tipo MoG
+\item Da cui si ottiene una maschera binaria \textit{foreground/background}
 \end{enumerate}
 \end{block}
 
 
 \begin{block}{Blob Detection}
 \begin{enumerate}
-\item I blobs sono identificati e filtrati sulla base di: %\texttt{CBlobResult getBlobs(IplImage* , IplImage* )}: %inserire i valori giusti -approfondire
+\item I blobs sono identificati attraverso il seguente metodo: %\texttt{CBlobResult getBlobs(IplImage* , IplImage* )}: %inserire i valori giusti -approfondire
 \begin{itemize}
- \item la selezione avviene senza nessuna maschera
- \item Con una soglia di 10
+ \item la selezione avviene senza applicare maschere
+ \item con una soglia di differenza fg/bg di 10
  \item si filtrano i blob con area più piccola di 40 pixels
 \end{itemize}
 
@@ -160,66 +263,37 @@ La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\frame{\frametitle{Background Subtraction}
-
-
-\begin{block}{Mixture of Gaussian}
-\begin{itemize}
-\item Tipologia statistica e \textit{online}.
-\item Modella le informazioni di ogni pixel come processo di funzioni gaussiane
-%\item Efficiente anche su video complessi
-\item \textit{Tuning} dei parametri come:
-\begin{itemize}
- \item Soglia di classificazione
- \item Numero di Gaussiane per pixel
-\end{itemize}
-
-%Il modello MoG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo sulla base dell'intensità del valore di grigio di ogni pixel.
-%Si eliman la gaussiana che ha minor peso e si aggiunge una nuova gaussiana con media uguale al valoredi quel pixel e varianza molto grande. Si aggiornano tutte le gaussiane e si normalizza...L’algoritmo di detection proposto è un algoritmo statistico, infatti, per la classificazione del pixel si considera la sua storia recente, rappresentata mediante un set di gaussiane: Mixture of Gaussians (MOG).
-%La classificazione dei pixel viene effettuata stabilendo il matching di ogni pixel con le gaussiane ad esso associate: se non esiste matching il pixel viene classificato come foreground, se, invece, esiste matching, il peso della gaussiana corrispondente viene confrontato con un valore di soglia, se esso è minore di tale soglia il pixel viene ancora classificato come foreground, se è maggiore, viene considerato background.
-%In particolare un pixel sarà classificato come un pixel di foreground se la distribuzione a lui associata ha peso sufficientemente basso e varianza alta, viceversa verrà classificato come background pixel.
-%\item [Tecniche Non Parametriche] Si stima la funziona di densità di probabilità per ogni pixel preso dai tanti campioni, usando una tecnica di stima sulla densità di probabilità.
-%\item [Approccio basato su regioni o frame] \'E una tecnica basata su pixel, che assume che le serie di temi dell'osservazione è indipendente per ogni pixel. L'approccio ad alto livello è eseguito segmentando un'immagine in una regione o ridefinendo un sottolivello di classificazione ottenuto su ogni pixel.
-
-
-\end{itemize}
-\end{block}
-
-
-          %*   MoG (Mixture of Gaussian)
-          %* Cenno agli altri tipi di segmentazione background
-
-\begin{block}{Altre tipologie}
-\begin{itemize}
- \item Distribuzione Unimodale
- \item Tecniche Non Parametriche
- \item Approccio basato su regioni o frame
-\end{itemize}
-
-\end{block}
-
-
-
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Introduzione agli algoritmi}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \frame{\frametitle{Model-based Tracking}
 
-La misura è ottenuta come dato campionato sul centroide del blob:
+La misura, ottenuta come dato campionato, rappresenta il centroide del blob nella forma:
+\begin{equation}
+\hat{x} = [x_c , y_c]
+\end{equation}
+%in maniera congrua con il vettore di stato del sistema.
 
 
+Una volta campionato l'oggetto di interesse, le osservazioni sono inserite come input ad un algoritmo, che può essere:
+\begin{enumerate}
+\item Filtro di Kalman
+			\begin{itemize}
+                        \item Anni '50
+			\item 	Per moti lineari e semplici
+			\item oggetti puntiformi
+                        \end{itemize}
 
-Uso dei due metodi più importanti:
-\begin{itemize}
-\item Filtro di Kalman (Anni '50)
-\item ConDensation (Anni '90)
-\end{itemize}
+\item ConDensation 
+			\begin{itemize}
+                        \item Anni '90
+			\item Per moti non lineari
+			\item Oggetti dalla forma complessa
+                        \end{itemize}
+\end{enumerate}
+
+\begin{small}In caso di tracking multiplo in contemporanea è necessario un meccanismo di associazione dati tra blob.\end{small}
 
 
     %*   Dati Campionati
