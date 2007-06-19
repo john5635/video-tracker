@@ -8,10 +8,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Parametri degli esperimenti}
-\begin{small}\alert{\textbf{Esperimenti}}: variazione di tre parametri nei tre video selezionati \end{small}
+\begin{block}{}\begin{small}\alert{\textbf{Esperimenti}}: variazione di tre parametri nei tre video selezionati \end{small}\end{block}
+\pause
 \begin{footnotesize}\begin{description}
-\item [\textbf{Intervallo Frames}] Frames tra due applicazioni consecutive del Tracking\\Distanziare nel tempo due applicazioni successive di \alert{Tracking} consente di peggiorare il lavoro del filtro di Kalman
-\item [\textbf{Q - Area Kalman}] Autovalori della matrice del rumore sul processo (Q)\\Ririsulta l'area di confidenza del filtro di \alert{Kalman}, ovvero l'area nella quale deve risiedere il blob al frame precedente per poter continuare ad essere tracciato all'esecuzione successiva.
+\item [\textbf{Intervallo Frames}] Frames tra due applicazioni consecutive del Tracking\\Distanziare nel tempo due applicazioni successive di \alert{Tracking} consente di peggiorare il lavoro del filtro di Kalman\pause
+\item [\textbf{Q - Area Kalman}] Autovalori della matrice del rumore sul processo (Q)\\Ririsulta l'area di confidenza del filtro di \alert{Kalman}, ovvero l'area nella quale deve risiedere il blob al frame precedente per poter continuare ad essere tracciato all'esecuzione successiva.\pause
 \item [\textbf{Samples ConDensation}] Numero dei samples ad ogni esecuzione\\ \`E il numero totale di samples che utilizza il \alert{ConDensation} per effettuare i calcoli statistici ad ogni esecuzione del Tracking
  \end{description}\end{footnotesize}
 
@@ -19,7 +20,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Output \& Scripting}
 \begin{block}{}
-\begin{footnotesize}Il software produce sei files di output:\end{footnotesize}
+\begin{small}Il software produce sei files di output:\end{small}
 \begin{scriptsize}\begin{description}
 \item [\textit{coordinateReali.txt}] Coordinate reali dell'oggetto da tracciare
 \item [\textit{coordinateKalman.txt}] Coordinate previste da Kalman
@@ -29,6 +30,7 @@
 \item [\textit{Risultati.txt~~~~~~~~~~~}]  distanza media, $\overline{\delta}_k, \overline{\delta}_c$, varianza media ConDensation ($\overline{\sigma}_x, \overline{\sigma}_y$).
  \end{description}\end{scriptsize}
 \end{block}
+\pause
 \begin{small}I files ottenuti vengono processati da due \alert{script bash}\end{small}
 \begin{scriptsize}\begin{description}
 \item [\textbf{gplot.sh}] Invoca degli script \alert{GNUPlot} che restituiscono dei grafici relativi ai risultati ottenuti, consentendo una valutazione immediata dell'esperimento effettuato.
