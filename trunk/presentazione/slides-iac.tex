@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduzione}
 
-\frame{\frametitle{Outline}
-\tableofcontents
-}
+%\frame{\frametitle{Outline}
+%\tableofcontents
+%}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% MOSTRARE VIDEO AL PROF
@@ -15,10 +15,10 @@
 
 
 
-\begin{block}{Idea di base}
+\begin{block}{Definizione}
 \begin{itemize}
- \item Seguire oggetti  \begin{small} \textit{blob}  \end{small}  che si muovono per un periodo di tempo, potenzialmente anche lungo dato un flusso video.
- \item \'E possibile conoscere informazioni su:
+ \item Tracking video è quel processo che, dato un flusso video, localizza e segue uno o più oggetti che si muovono nella scena.
+ \item \'E quindi possibile ricavare informazioni su:
 			\begin{enumerate}
 			\item posizione passata
 			\item stato attuale
@@ -33,8 +33,8 @@
 
 L' ambito di utilizzo è da collocarsi in settori come:
 \begin{itemize}
-\item Industria per la localizzazione di oggetti in movimento (es. Radar )
-\item Sistemi di video sorveglianza intelligente.
+\item Industria per la localizzazione di oggetti in movimento \begin{footnotesize}(es. Radar )                                                                          \end{footnotesize}
+\item Sistemi di video sorveglianza intelligente
 \item Sistemi software per editing dei video
 \end{itemize}
 
@@ -59,10 +59,10 @@ L'applicazione deve poter:
 \end{itemize}
 
  \item  Possibilità di scelta del blob da tracciare in caso di \textbf{tracking multiplo}.
- \item  Tracciare a video l'andamento dei due algoritmi, evidenziandoli con colori differenti.
+ \item  Tracciare a video l'andamento dei due algoritmi.
 % \item  Visualizzare un' ellissi per ogni algoritmo che indichi la varianza del vettore di stato per quel tipo di tracking.
  \item Fornire un output dei risultati al fine di ottenere una \textbf{rappresentazione grafica} dell'accuratezza dei due metodi.
- \item Progettare e realizzare l'applicazione in maniera tale che possa essere compilata ed eseguite su \textbf{piattaforme diverse (Win32, Linux)}.
+ \item Progettare e realizzare l'applicazione in maniera tale che possa essere compilata ed eseguita su \textbf{piattaforme diverse (Win32, Linux)}.
 \end{enumerate}
 
 
@@ -79,32 +79,33 @@ L'applicazione deve poter:
 
 \begin{block}{Condizione Ottimale}
 \begin{itemize}
- \item La misura del centroide del blob è ottenibile frame per frame.
- \item In un sistema non ideale questa condizione ottimale non è mai verificata.
+ \item La misura del centro del blob è ottenibile per ogni frame del video.
+ \item Nella realtà questa condizione non è detto che sia verificata.
 \end{itemize}
 \end{block}
 
-\begin{center}
- \begin{Large}Video \end{Large}
-\end{center}
-\begin{center}
+%\begin{center}
+% \begin{Large}Video \end{Large}
+%\end{center}
+%\begin{center}
 % use packages: array
-\begin{tabular}{|l|l|l|l|} \hline
- & \texttt{Movie12} & \texttt{TappetoNoMod} & \texttt{SingleCar} \\  \hline
-\texttt{Formato} & mjpeg/xvid & avi/xvid & avi/xvid \\ \hline
-\texttt{fps} & 25 & 10 & 30 \\ \hline
-\texttt{Durata} & 50.4 s & 60 s & 33 s \\ \hline
-\end{tabular}
-\end{center}
+%\begin{tabular}{|l|l|l|l|} \hline
+% & \texttt{Movie12} & \texttt{TappetoNoMod} & \texttt{SingleCar} \\  \hline
+%\texttt{Formato} & mjpeg/xvid & avi/xvid & avi/xvid \\ \hline
+%\texttt{fps} & 25 & 10 & 30 \\ \hline
+%\texttt{Durata} & 50.4 s & 60 s & 33 s \\ \hline
+%\end{tabular}
+%\end{center}
 %\begin{block}{Requisiti}
-\begin{center}
- \begin{large}Requisiti dei Video \end{large}
-\end{center}
+
+\begin{large}Requisiti dei Video:\end{large}
+
 
 \begin{enumerate}
-	\item Numero determinato di frame con il background iniziale fisso
-	%\item Lo sfondo non vari drasticamente nella ripresa 
 	\item Telecamera di ripresa fissa
+	\item Deve possedere un numero determinato di frames iniziali con esclusivamente il background della scena
+	%\item Lo sfondo non vari drasticamente nella ripresa 
+	
 \end{enumerate}
 %\end{block}
 
@@ -130,10 +131,8 @@ L'applicazione deve poter:
 
 \frame{\frametitle{Background Subtraction}
 
-L'idea di base è conoscere il modello del background, segmentando ogni frame del video in una maschera foreground e background.\\
-Altra tecnica simile è il \textit{Motion Segmentation}.
-
-
+L'idea di base è conoscere il modello dello sfondo, segmentando ogni frame del video in una maschera di foreground e background.\\
+\begin{footnotesize}Una tecnica alternativa ma simile è il \textit{Motion Segmentation}.\end{footnotesize}
 
 %Il modello MoG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo sulla base dell'intensità del valore di grigio di ogni pixel.
 %Si eliman la gaussiana che ha minor peso e si aggiunge una nuova gaussiana con media uguale al valoredi quel pixel e varianza molto grande. Si aggiornano tutte le gaussiane e si normalizza...L’algoritmo di detection proposto è un algoritmo statistico, infatti, per la classificazione del pixel si considera la sua storia recente, rappresentata mediante un set di gaussiane: Mixture of Gaussians (MOG).
@@ -150,10 +149,10 @@ Altra tecnica simile è il \textit{Motion Segmentation}.
 
 \begin{block}{Tipologie}
 \begin{itemize}
- \item \underline{Mixture of Gaussian }
- \item Distribuzione Unimodale
+ \item Mixture of Gaussian
+\begin{footnotesize} \item Distribuzione Unimodale
  \item Tecniche Non Parametriche
- \item Approccio basato su regioni o frame
+ \item Approccio basato su regioni o frame\end{footnotesize}
 \end{itemize}
 
 \end{block}
@@ -161,7 +160,7 @@ Possibili problematiche sono:
 \begin{itemize}
  \item Presenza di illuminazione che genera ombre
  \item Oggetti in movimento che si inseriscono nella scena
- \item Oggetti rilevati come Foreground che fermano il loro moto.
+ \item Oggetti rilevati come foreground che fermano il loro moto
 \end{itemize}
 
 }
@@ -187,9 +186,9 @@ Possibili problematiche sono:
 
 1) Ogni pixel $x_t$ è rappresentato da un processo di K Gaussiane nella forma $P(\mu_k,\sigma_k,\omega_k)$:
 
-\begin{equation}
+\begin{equation*}
  x_t = \sum_{j=1}^k \alert{\omega}_{i,t} \cdot \frac{1}{\sqrt{2\pi \cdot \alert{\sigma}^2_{j,t}}} \cdot e^{-\frac{(x_t - \alert{\mu}_{j,t})^2}{2\alert{\sigma}_{j,t}^2}}
-\end{equation}
+\end{equation*}
 
 
 
@@ -207,21 +206,21 @@ Possibili problematiche sono:
 
 2) Il processo è valutato sull'intensità dei valori di grigio dei pixel con:
 
-\begin{equation}
+\begin{equation*}
 |x_t - \mu_{j,t}| > 2.5 \cdot \sigma_{j,t}~~~~~ per ~j=1..k
-\end{equation}
+\end{equation*}
 e i pesi $\omega_j$ vengono riaggiornati.
 
 \alert{Rilevamento del foreground}
 
-3) Si ordinano le k distribuzioni partendo da quelle con maggior peso e minor varianza (bg) fino a quelle con minor pes e maggior varianza (fg). Il parametro risulta: $r_{j,t} = \frac{\omega_{j,t}}{\delta_{j,t}}$
+3) Si ordinano le k distribuzioni partendo da quelle con maggior peso e minor varianza (bg) fino a quelle con minor peso e maggior varianza (fg). Il parametro risulta: $r_{j,t} = \frac{\omega_{j,t}}{\delta_{j,t}}$
 
 4) Le prime B distribuzioni ottenute dalla seguente formula sono associate al bg viceversa le altre:
 
 
-\begin{equation}
+\begin{equation*}
 B = argmin_b{\sum_{j=0}^{b-1} r_j,t > T}
-\end{equation}
+\end{equation*}
 
 
 }
@@ -230,17 +229,17 @@ B = argmin_b{\sum_{j=0}^{b-1} r_j,t > T}
 
 \frame{\frametitle{Ground Truth}
 
-La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} che permette:
+La \alert{blob detection} è effettuata tramite la libreria OpenCV  \textit{libblob}.
 %#  Ground Truth
-\begin{block}{Segmentazione Background}
-\begin{enumerate}
-\item Effettuare una segmentazione del video tramite\textit{ Background Subtraction} di tipo MoG
-\item Da cui si ottiene una maschera binaria \textit{foreground/background}
-\end{enumerate}
-\end{block}
+%\begin{block}{Segmentazione Background}
+%\begin{enumerate}
+%item Effettuare una segmentazione del video tramite\textit{ Background Subtraction} di tipo MoG
+%\item Da cui si ottiene una maschera binaria \textit{foreground/background}
+%\end{enumerate}
+%\end{block}
 
 
-\begin{block}{Blob Detection}
+\begin{block}{Caratteristiche}
 \begin{enumerate}
 \item I blobs sono identificati attraverso il seguente metodo: %\texttt{CBlobResult getBlobs(IplImage* , IplImage* )}: %inserire i valori giusti -approfondire
 \begin{itemize}
@@ -263,7 +262,7 @@ La blob detection è effettuata attraverso la libreria OpenCV \textit{libblob} c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{Introduzione agli algoritmi}
+\subsection{Algoritmi}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
