@@ -3,8 +3,56 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Conclusione}
 
+\textcolor{UNL@Scarlet}{Filtro di Kalman}
+\begin{itemize}
+ \item Ottimo se eseguito ogni frame
+\item Perde l'oggetto se fuori dall'area di confidenza
+\item Impreciso su movimenti \textbf{non lineari}
+\item Tentativo di predizione dell'oggetto non tracciato in caso di \textbf{occlusione}
+
+
+\end{itemize}
+\pause
+\textcolor{UNL@Scarlet}{ConDensation}
+\begin{itemize}
+ \item Meno preciso di Kalman
+\item Non perde mai l'oggetto
+\item Efficiente su tracking \textbf{non lineare}
+\item Ottimo tracciamento in caso di \textbf{occlusione}
+\end{itemize}
+\pause
+\begin{block}{}
+Non è possibile elevare uno dei due approcci come \alert{migliore}.\\
+\alert{Tuning} dei parametri porta a conclusioni particolari.
+\end{block}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Conclusione}
+
+Materiale: software, risultati, relazione, presentazione
+\begin{itemize}
+ \item Rilasciato con licenza GPL
+\item Disponibile su spazio SVN Google Code
+	\\ \begin{tiny}svn checkout http://video-tracker.googlecode.com/svn/trunk/ video-tracker\end{tiny}
+\item Sviluppato e testato sui sistemi operativi:
+\begin{itemize}
+\item []\includegraphics[width=13pt]{img/UbuntuLogo.jpg}~Ubuntu/Kubuntu  6.10/7.04 
+\item []\includegraphics[width=13pt]{img/Windows.jpg}~Microsoft Windows XP
+\end{itemize}
+
+\item Video utilizzati:
+\begin{itemize}
+ \item Centro d'eccellenza \textbf{MICC} (Università di Firenze)
+\item Produzione autonoma 
+\end{itemize}
+
+\end{itemize}
+\pause
+\begin{block}{}
+\begin{center}
+\textcolor{UNL@Scarlet}{http://code.google.com/p/video-tracker/}\end{center}\end{block}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frame{\setbeamercolor{titlelike}{bg=UNL@Scarlet,fg=UNL@Cream}

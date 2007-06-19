@@ -11,7 +11,7 @@
 \begin{block}{}\begin{small}\alert{\textbf{Esperimenti}}: variazione di tre parametri nei tre video selezionati \end{small}\end{block}
 \pause
 \begin{footnotesize}\begin{description}
-\item [\textbf{Intervallo Frames}] Frames tra due applicazioni consecutive del Tracking\\Distanziare nel tempo due applicazioni successive di \alert{Tracking} consente di peggiorare il lavoro del filtro di Kalman\pause
+\item [\textbf{Intervallo Frames}] Frames tra due applicazioni consecutive del Tracking\\Allontanamento dalle condizioni ottimali di lavoro, simulazione del comportamento dei tracker reali. \pause
 \item [\textbf{Q - Area Kalman}] Autovalori della matrice del rumore sul processo (Q)\\Ririsulta l'area di confidenza del filtro di \alert{Kalman}, ovvero l'area nella quale deve risiedere il blob al frame precedente per poter continuare ad essere tracciato all'esecuzione successiva.\pause
 \item [\textbf{Samples ConDensation}] Numero dei samples ad ogni esecuzione\\ \`E il numero totale di samples che utilizza il \alert{ConDensation} per effettuare i calcoli statistici ad ogni esecuzione del Tracking
  \end{description}\end{footnotesize}
@@ -50,8 +50,8 @@
 \begin{footnotesize}\begin{enumerate}
 \item [1] \textbf{movie12.mjpeg} (mjpeg/xvid)
 	\begin{itemize}
-	\item occlusione, moto circolare e costante
-	\item 640x480, 25$fps$, 50.4$s$\end{itemize}
+	\item[-] occlusione, moto circolare e costante
+	\item[-] 640x480, 25$fps$, 50.4$s$\end{itemize}
 \end{enumerate}\end{footnotesize}
 \end{columns}
 
@@ -62,8 +62,8 @@
 \begin{footnotesize}\begin{enumerate}
 \item[2] \textbf{tappeto\_nozoom.avi} (avi/xvid)
 	\begin{itemize}
-	\item moto vario, repentine accelerazioni, oggetto entra ed esce dalla scena
-	\item 320x240, 10$fps$, 59$s$\end{itemize}
+	\item[-] moto vario, repentine accelerazioni, oggetto entra ed esce dalla scena
+	\item[-] 320x240, 10$fps$, 59$s$\end{itemize}
 \end{enumerate}\end{footnotesize}
 \column{.30\textwidth}\centering
 \includegraphics[scale=0.21]{img/tappetonozoom.png}
@@ -78,8 +78,8 @@
 \begin{footnotesize}\begin{enumerate}
 \item[3] \textbf{singlecar.avi} (avi/xvid)
 	\begin{itemize}
-	\item moto costante, oggetto entra ed esce dalla scena
-	\item 648x484, 30$fps$, 33$s$\end{itemize}
+	\item[-] moto costante, oggetto entra ed esce dalla scena
+	\item[-] 648x484, 30$fps$, 33$s$\end{itemize}
 \end{enumerate}\end{footnotesize}
 \end{columns}
 \hrulefill
