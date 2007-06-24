@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Model Based Tracking}
 
-\frame{\frametitle{Tracking Model Based}
+\frame{\frametitle{Model-based Tracking}
 
 
 I due filtri possono tracciare oggetti di qualsiasi natur, ma necessitano di un modello che definisca il moto dell'oggetto studiato. \\
@@ -40,24 +40,37 @@ E' lo strumento più utilizzato nei problemi di tracciamento, anche se dimostra 
 \frame{\frametitle{Le equazioni}
 
 \begin{block}{}
-\begin{center}
-\begin{cases}
-\hat x_t = A \hat x_{t-1} + B u_{t-1} + w_t\\
 
-z_t = H x_t + v_t\\
 
-\hat x_{t+1} = \hat x_t + K_t \, (z_t - H \hat x_t)
-\end{cases}
-\end{center}
+\begin{equation}
+ \hat{x_t} = A \cdot \hat x_{t-1} + B  \cdot u_{t-1} + w_t
+\end{equation}
+
+
+\begin{equation}
+z_t = H \cdot x_t + v_t
+\end{equation}
+
+
+\begin{equation}
+\hat{x_{t+1}} = \hat{x_t} + K_t  (z_t - H \cdot \hat{x_t})
+\end{equation}
+
+
+
+
+
+
+
 \end{block}
 
 \begin{footnotesize}
 \begin{itemize}
-\item $\hat x_t$ è lo stato dell'oggetto al tempo t secondo il modello da noi definito
+\item $\hat{x_t}$ è lo stato dell'oggetto al tempo t secondo il modello da noi definito
 \item $x_t$ è lo stato reale direttamente misurato dell'oggetto
 \item $z_t$ è la scelta dei parametri misurati che riteniamo utile a descrivere il moto tenuto conto anche un certo errore sulla misura
 \item $w_t$ e $v_t$ sono due processi gaussiani con media zero e covariaza rispettivamente Q e R
-\item $\hat x_{t+1}$ è la posizione predetta dell'oggetto
+\item $\hat{x_{t+1}}$ è la posizione predetta dell'oggetto
 \end{itemize}
 \end{footnotesize}
 
