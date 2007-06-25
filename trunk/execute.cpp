@@ -42,9 +42,8 @@ void execute(int argc, char** argv ){
 		MOD = atoi(argv[2]);
 		//printf("mod = %d\n",mod);
 		samples = atoi(argv[3]);
-		printf("enable = %c", argv[4]);
-		if (strncmp( argv[4], "true" ,strlen("true")) ) ENABLE = false;
-		else ENABLE = true;
+		if (strncmp( argv[4], "true" ,strlen("true")) ) ENABLE = true;
+		else ENABLE = false;
 
 	}
 	else{
