@@ -33,7 +33,7 @@ void execute(char * aviName,int id ){
 	int MOD;
 	bool ENABLE;
 
-	ENABLE=true;
+	ENABLE = true;
 	MOD = 1;
 	 
 	//Declare the variable of Kalman
