@@ -42,14 +42,22 @@ void execute(int argc, char** argv ){
 		MOD = atoi(argv[2]);
 		//printf("mod = %d\n",mod);
 		samples = atoi(argv[3]);
-		if (atoi(argv[4]) == 1) ENABLE = false;
+		printf("enable = %c", argv[4]);
+		if (strncmp( argv[4], "true" ,strlen("true")) ) ENABLE = false;
 		else ENABLE = true;
 
 	}
 	else{
 
 		fprintf( stderr,
-	        "\nUsage: ./videotracker filename.avi MOD SAMPLEs ENABLE \n\n where:		- MOD is the integer that rapresent the module\n 		- SAMPLEs is the integer for the condensation \n		- ENABLE 1 Yes to the ellispe control \n		- ENABLE 0 No to the ellispe control \n\n" );
+	        "\nUsage: ./videotracker filename.avi <MOD> <SAMPLEs> <ENABLE> \n\n where:		- <MOD> is the integer that rapresent the module\n 		- <SAMPLEs> is the integer for the condensation \n		- <ENABLE>  true -  Yes to the ellispe control \n		- <ENABLE>  false - No to the ellispe control \n\n" );
+  exit(-1);
+	}
+
+ if (MOD == 0 or samples == 0 ){
+
+		fprintf( stderr,
+	        "\nUsage: ./videotracker filename.avi <MOD> <SAMPLEs> <ENABLE> \n\n where:		- <MOD> is the integer that rapresent the module\n 		- <SAMPLEs> is the integer for the condensation \n		- <ENABLE>  true -  Yes to the ellispe control \n		- <ENABLE>  false - No to the ellispe control \n\n" );
 	        exit(-1);
 
 	}
