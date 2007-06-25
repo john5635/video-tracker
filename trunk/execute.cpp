@@ -28,14 +28,34 @@
 int CLICK[2];
 
 
-void execute(char * aviName,int id ){
-
+void execute(int argc, char** argv ){
 	int MOD;
+	int samples;
+	char * aviName;
 	bool ENABLE;
 
-	ENABLE = true;
-	MOD = 1;
-	 
+
+	if (argc == 5){
+
+
+
+		MOD = atoi(argv[2]);
+		//printf("mod = %d\n",mod);
+		samples = atoi(argv[3]);
+		if (atoi(argv[4]) == 1) ENABLE = false;
+		else ENABLE = true;
+
+	}
+	else{
+
+		fprintf( stderr,
+	        "\nUsage: ./videotracker filename.avi MOD SAMPLEs ENABLE \n\n where:		- MOD is the integer that rapresent the module\n 		- SAMPLEs is the integer for the condensation \n		- ENABLE 1 Yes to the ellispe control \n		- ENABLE 0 No to the ellispe control \n\n" );
+	        exit(-1);
+
+	}
+
+
+
 	//Declare the variable of Kalman
 	coord coordReal;
 	coord candidateCoordReal;
@@ -96,7 +116,7 @@ void execute(char * aviName,int id ){
 
 	theta=0;
 	
-	CvCapture* capture = cvCaptureFromAVI(aviName);
+	CvCapture* capture = cvCaptureFromAVI(argv[1]);
  
 	if( !capture ) {
 		fprintf( stderr, "ERROR: capture is NULL \n" );
@@ -141,7 +161,7 @@ void execute(char * aviName,int id ){
 				//Init Kalman
 				kalman = initKalman(indexMat, selectedCoord);
 				//Init Condensation
-				ConDens = initCondensation (indexMat, 1000, frameW, frameH);
+				ConDens = initCondensation (indexMat, samples, frameW, frameH);
 				
 				state=cvCreateMat(kalman->DP,1,CV_32FC1);
 				measurement = cvCreateMat( kalman->MP, 1, CV_32FC1 );

@@ -8,10 +8,10 @@
  *   		 		and Nicola Martorana <martorana.nicola@gmail.com>
  *				and Marco Meoni <meonimarco@gmail.com>
  * 				This  code is distributed under the terms of <b>GNU GPL v2</b>
- * 
+ *
  *  \version $Revision: 0.1 $
- *  \date 2006/10/27 
- * 
+ *  \date 2006/10/27
+ *
  *
  *
  */
@@ -29,7 +29,7 @@
 ///Functions Declaration
 void on_mouse( int event, int x, int y, int flags, void* param );
 
-void execute(char * ,int );
+void execute(int argc, char** argv );
 
 void drawBlob (IplImage *, coord , int, int , int );
 

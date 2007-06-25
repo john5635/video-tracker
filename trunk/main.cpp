@@ -7,7 +7,7 @@
  *  \author Copyright (C) 2005-2006 by Iacopo Masi <iacopo.masi@gmail.com>
  *   		 	and Nicola Martorana <martorana.nicola@gmail.com>
  *			and Marco Meoni <meonimarco@gmail.com>
- * 	
+ *
  * This  code is distributed under the terms of <b>GNU GPL v2</b>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,8 +25,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  * \version $Revision: 0.1 $
- * \date 2006/10/27 
- * 
+ * \date 2006/10/27
+ *
  *
  *
  */
@@ -35,9 +35,9 @@
 
 int main (int argc, char ** argv){
 
-	
-	execute(argv[1],0);
-	
+
+	execute(argc,argv);
+
 
 
 	return 0;
