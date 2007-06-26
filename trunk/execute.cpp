@@ -53,7 +53,7 @@ void execute(int argc, char** argv ){
   exit(-1);
 	}
 
- if (MOD == 0 or samples == 0 ){
+ if (MOD == 0 || samples == 0 ){
 
 		fprintf( stderr,
 	        "\nUsage: ./videotracker filename.avi <MOD> <SAMPLEs> <ENABLE> \n\n where:		- <MOD> is the integer that rapresent the module\n 		- <SAMPLEs> is the integer for the condensation \n		- <ENABLE>  true -  Yes to the ellispe control \n		- <ENABLE>  false - No to the ellispe control \n\n" );
