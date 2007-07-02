@@ -18,7 +18,7 @@
 \begin{block}{Definizione}
 \begin{itemize}
  \item Tracking video è quel processo che, dato un flusso video, localizza e segue uno o più oggetti che si muovono nella scena.
- \item \'E quindi possibile ricavare informazioni su:
+ \item \`E quindi possibile ricavare informazioni su:
 			\begin{enumerate}
 			\item posizione passata
 			\item stato attuale
@@ -247,9 +247,9 @@ La \alert{blob detection} è effettuata tramite la libreria OpenCV  \textit{libb
 \begin{enumerate}
 \item I blobs sono identificati attraverso il seguente metodo: %\texttt{CBlobResult getBlobs(IplImage* , IplImage* )}: %inserire i valori giusti -approfondire
 \begin{itemize}
- \item la selezione avviene senza applicare maschere
- \item con una soglia di differenza fg/bg di 10
- \item si filtrano i blob con area più piccola di 40 pixels
+ \item sul foreground non viene applicata nessuna maschera per correggerlo
+ \item con una soglia di differenza fg/bg di 10 sui valori di grigio
+ %\item si filtrano i blob con area più piccola di 40 pixels
 \end{itemize}
 
 \item Si sceglie il blob a distanza euclidea minima tra tutte le distanza calcolate dal punto del click utente al centroide di ogni blob.
