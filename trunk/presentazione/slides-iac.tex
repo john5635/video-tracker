@@ -33,7 +33,8 @@
 
 L' ambito di utilizzo è da collocarsi in settori come:
 \begin{itemize}
-\item Industria per la localizzazione di oggetti in movimento \begin{footnotesize}(es. Radar )                                                                          \end{footnotesize}
+\item Industria per la localizzazione di oggetti in movimento
+% \begin{footnotesize}(es. Radar )                                                                          \end{footnotesize}
 \item Sistemi di video sorveglianza intelligente
 \item Sistemi software per editing dei video
 \end{itemize}
@@ -132,7 +133,7 @@ L'applicazione deve poter:
 \frame{\frametitle{Background Subtraction}
 
 L'idea di base è conoscere il modello dello sfondo, segmentando ogni frame del video in una maschera di foreground e background.\\
-\begin{footnotesize}Una tecnica alternativa ma simile è il \textit{Motion Segmentation}.\end{footnotesize}
+%\begin{footnotesize}Una tecnica alternativa ma simile è il \textit{Motion Segmentation}.\end{footnotesize}
 
 %Il modello MoG generalizzato viene di solito usato per modelli abbastanza complessi, non statici con molteplici background. Questo tipo di modellazione è di tipo statistico e online. L'idea è quella di modellare ogni pixel in un processo di funzioni gaussiane, successivamente eseguire l'apprendimento online e rilevare il foreground passo passo sulla base dell'intensità del valore di grigio di ogni pixel.
 %Si eliman la gaussiana che ha minor peso e si aggiunge una nuova gaussiana con media uguale al valoredi quel pixel e varianza molto grande. Si aggiornano tutte le gaussiane e si normalizza...L’algoritmo di detection proposto è un algoritmo statistico, infatti, per la classificazione del pixel si considera la sua storia recente, rappresentata mediante un set di gaussiane: Mixture of Gaussians (MOG).
@@ -149,10 +150,13 @@ L'idea di base è conoscere il modello dello sfondo, segmentando ogni frame del 
 
 \begin{block}{Tipologie}
 \begin{itemize}
+
+\begin{footnotesize}
+ \item Metodi di base
+ \item Running average
+ \item Distribuzione Unimodale - Running gaussian average
+\end{footnotesize}
  \item Mixture of Gaussian
-\begin{footnotesize} \item Distribuzione Unimodale
- \item Tecniche Non Parametriche
- \item Approccio basato su regioni o frame\end{footnotesize}
 \end{itemize}
 
 \end{block}
@@ -219,7 +223,7 @@ e i pesi $\omega_j$ vengono riaggiornati.
 
 
 \begin{equation*}
-B = argmin_b{\sum_{j=0}^{b-1} r_j,t > T}
+B = argmin_b{   \left(  \sum_{j=0}^{b-1} r_{j,t} > T \right)  }
 \end{equation*}
 
 
