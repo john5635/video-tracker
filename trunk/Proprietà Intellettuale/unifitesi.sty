@@ -1,0 +1,190 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Pacchetto di Layout unifitesi.sty
+% Fornisce una impaginazione per tesi universitarie
+% Autori: Iacopo Masi e Marco Meoni
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{unifitesi}[2004/11/10  Redefines maketitle for University of Florence Thesis, and sets a binding offset of 1cm; written by Gianluca Gorni and adapter for Florence University by Iacopo Masi & Marco Meoni]
+\RequirePackage{ifthen}
+\RequirePackage{graphicx}
+\RequirePackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Per allontanare la parte stampata %
+% dal margine della rilegatura:     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[bindingoffset=0cm]{geometry}
+
+
+\hypersetup{pdfpagelayout=SinglePage,
+pdfpagemode=UseOutlines,
+bookmarksopen,
+bookmarksopenlevel=2,
+pdftitle=Tesina di Gestone
+della conoscenza e della proprietà intellettuale,
+pdfauthor=Marco Meoni e Iacopo Masi,
+pdfsubject=Tesina per sostenere l'esame di Gestone
+della conoscenza e della proprietà intellettuale,
+pdfkeywords=tesi LaTeX}
+
+\renewcommand{\tableofcontents}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\contentsname
+        \@mkboth{\contentsname}{\contentsname}}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+    }
+
+\newcommand{\@facolta}{Ingegneria}
+\newcommand{\@corsodilaurea}{?}
+\newcommand{\@corsodilaureatriennale}{?}
+\newcommand{\@corsodilaureaspecialistica}{?}
+\newcommand{\@triennaleOspecialistica}{?}
+\newcommand{\@titolo}{Senza Titolo}
+\newcommand{\@annoaccademico}{?}
+\newcommand{\@relatore}{?}
+\newcommand{\@correlatore}{?}
+\newcommand{\@correlatoredue}{?}
+\newcommand{\@laureando}{?}
+\newcommand{\@laureanda}{?}
+\newcommand{\@autore}{}
+\newcommand{\@laureandoOlaureanda}{?}
+\newcommand{\@dedica}{?}
+
+\newcommand{\facolta}[1]{%
+  \renewcommand{\@facolta}{#1}}
+\newcommand{\corsodilaurea}[1]{%
+  \renewcommand{\@corsodilaurea}{#1}%
+  \renewcommand{\@triennaleOspecialistica}{\ignorespaces}}
+\newcommand{\corsodilaureatriennale}[1]{%
+  \renewcommand{\@corsodilaurea}{#1}%
+  \renewcommand{\@triennaleOspecialistica}{Triennale }}
+\newcommand{\corsodilaureaspecialistica}[1]{%
+  \renewcommand{\@corsodilaurea}{#1}%
+  \renewcommand{\@triennaleOspecialistica}{Specialistica }}
+\newcommand{\titolo}[1]{%
+  \renewcommand{\@titolo}{\textbf{#1}}}
+\newcommand{\annoaccademico}[1]{%
+  \renewcommand{\@annoaccademico}{#1}}
+\newcommand{\relatore}[2][Prof.]{%
+  \renewcommand{\@relatore}{#1 \textsc{#2}}}
+\newcommand{\correlatore}[2][Prof.]{%
+  \renewcommand{\@correlatore}{#1 \textsc{#2}}}
+\newcommand{\correlatoredue}[2][Prof.]{%
+  \renewcommand{\@correlatoredue}{#1 \uppercase{#2}}}
+\newcommand{\laureando}[1]{%
+  \renewcommand{\@laureando}{\textsc{#1}}%
+  \renewcommand{\@autore}{\textsc{#1}}%
+  \renewcommand{\@laureandoOlaureanda}{Autori}}
+\newcommand{\laureanda}[1]{%
+  \renewcommand{\@laureanda}{\uppercase{#1}}%
+  \renewcommand{\@autore}{\uppercase{#1}}%
+  \renewcommand{\@laureandoOlaureanda}{Laureanda}}
+\newcommand{\dedica}[1]{%
+  \renewcommand{\@dedica}{#1}}
+\newcommand{\data}[1]{\date{#1}}
+
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}%
+  \cleardoublepage}}
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                                   %
+    %  Formattazione dell'intestazione  %
+    %  della tesi                       %
+    %                                   %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\maketitle}
+{\begin{titlepage}
+  %\begin{center}
+    %\vbox to0pt{%
+    %\vbox to\textheight{\vfil
+   % \includegraphics[width=\textwidth]{firenze_tras}%
+  %  \vfil}\vss}
+ % \end{center}
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  %\BeginSingle
+  \vspace*{-30mm}
+  \centerline{\includegraphics[height=25mm]{firenze}}
+  
+
+  \begin{center}
+  \textsc{\Large Universit\`a degli Studi di Firenze} \smallskip \\
+    {\Large Facolt\`a di Ingegneria}\medskip\\
+    \rule{50mm}{0.01mm}\medskip\\
+    {\small Corso di Laurea Specialistica in}\\%\smallskip\\
+    \textsc{\@corsodilaurea}\smallskip\\
+    \vfill
+  \bigskip
+  \bigskip
+  \bigskip
+  \bigskip \bigskip
+  \bigskip
+  \bigskip \bigskip
+  \bigskip
+  \bigskip
+  \begin{Large}Tesina di Gestone
+della conoscenza e della proprietà intellettuale\end{Large}\\Settembre 2007
+  \bigskip
+  
+  {\Large \@titolo \par}%{\huge \bf \@titolo \par}
+  \bigskip\bigskip\bigskip \bigskip
+  \bigskip
+  \bigskip\vfill
+\begin{normalsize}
+  \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}l@{}}
+    Docente:&\@laureandoOlaureanda:\\
+     \vtop{\halign{\strut\hfil##\hfil\cr
+       \@relatore\cr}}&%
+     \vtop{\halign{\strut\hfil##\hfil\cr
+       \@autore\cr}}%
+  \end{tabular*}\end{normalsize}\end{center}
+% \begin{normalsize}
+%   \ifthenelse{\equal{\@correlatore}{?}}{}%
+%     {\noindent Tutore:\newline
+%       \vtop{\halign{\strut\hfil##\hfil\cr
+%        \@correlatore\cr}}} \newline \newline
+%   \ifthenelse{\equal{\@correlatoredue}{?}}{}%
+%     {\noindent Correlatore:\newline
+%       \vtop{\halign{\strut\hfil##\hfil\cr
+%        \@correlatoredue\cr}}}
+% \end{normalsize}
+  \begin{center}
+  \bigskip
+  \bigskip
+  \bigskip
+  \bigskip
+
+
+  \rule{40mm}{0.01mm}\\%\rule{9cm}{.4pt}\\
+  \medskip
+  \textsc{Anno Accademico \@annoaccademico}\\
+  \end{center}
+  
+%\end{sffamily}
+\clearemptydoublepage
+\ifthenelse{\equal{\@dedica}{?}}{}{%
+\pagestyle{empty}
+  \null\vfil
+  \begin{flushright}
+\begin{footnotesize}
+    \@dedica
+\end{footnotesize}
+  \end{flushright}
+ % \vfil\vfil\clearemptydoublepage
+}
+\end{titlepage}}
+
+\renewcommand{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{empty}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+
+\endinput
