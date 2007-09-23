@@ -3,7 +3,7 @@
 Appurate le definizioni di forma di tutela della Proprietà Intellettuale come copyright, brevetto e marchio nel capitolo 1 e la storia dei brevetti applicati software nei mercati più sviluppati come USA e UE nel capitolo 2, si sfrutta i seguenti due capitolo dell'elaborato per approfondire il dibattito sulla tutela del software che oscilla tra copyrigt e brevetti.
 
 In particolare nel capitlo 3 si approfondirà come il movimento opensource stia cercando di difendersi dalla brevettazione del software attraverso la licenza madre copyleft \textit{par excellence}: la GPL, modificata di recente per questo motivo approdando alla terza versione.
-In questo trattato non si approfondiranno nè i concetti di opensource o free software nè il concetto di copyleft, che invece possono essere conosciuti rispettivamente attraverso la lettura di \cite[Compendio di libertà informatica e cultura open]{Aliprandi-compendio} e \cite[Copyleft e Opencontent]{Aliprandi-copyleft}
+In questo trattato non si approfondiranno nè i concetti di opensource o free software nè il concetto di copyleft, che invece possono essere conosciuti rispettivamente attraverso la lettura di \cite[Compendio di libertà informatica e cultura open]{Aliprandi-compendio} e \cite[Copyleft e Opencontent]{Aliprandi-copyleft}.
 
 Il capitolo 4 invece sarà più pratico: si metteranno in luce delle conseguenze che la brevettazione software apporta sia nel software libero che in quello proprietario e commerciale; quindi si farà un esempio di brevetto, verrà spiegato e si vedrà le conseguenze portati in USA e in UE.
 
@@ -11,11 +11,45 @@ Adesso si va ad approfondire alla luce di quanto visto fino ad ora, come si tute
 
 
 \section{Le licenze libere}
-Breve introduzione
-	\subsection{La licenza GPL}
-	breve
+
+Nella sezione \ref{sec:sistema-licenze} si è affrontato la gestione delle licenze nel sistema giuridico informatico e si è sottolineato la natura di contratto ad adesione per le licenze copyleft o libere.
+
+In generale una licenza software si dice libera quando è rilasciata attraverso la gestione dei diritti tipica del copyleft: il software è quasi sempre rilasciato gratuitamente e l'utente che accetta la licenza possiede non soo il diritto di uso, ma anche quello di modifica e copia. L'unico dovere dell'utente risulta quello di distribuzione del software dopo eventuali modifiche sotto la stessa identica licenza a cui era sottoposto il programma originale. Questo aspetto delle licenze copyeft è detto viralità delle licenze nel continuare a propagarsi sul software free sviluppato, tutelandone quindi la sua natura \textit{free}.
+
+\`E bene ricordare che il concetto di copyleft non si attaglia solo al prodotto di software ma può essere applicato a molti prodotti come musica, blog informativi, enciclopedia, libri o ebook: le licenze libere non necessariamente devono essere solo per programmi per elaboratore. Se si pensa  all' esempio di Wikipedia, l'enciclopedia libera,  esistono licenze libere per la documentazione come la GNU FDL; oppure se si pensa alla pubblicazione di libri e materiale informativo esistono le cosìdette licenze opencontet come quelle pubblicate dal gruppo Creative Commons.
+Fondamentalmente la causa scatenante di questa gestione alternativa del diritto d'autore, ma che si basa sul copyright, ha preso campo con l'avvento di Internet e la condivisione di migliaia di documenti online, provando una vera rivoluzione per quanto riguarda la tematica del diritto informatico.
+
+
+\subsection{La licenza GPL}
+
+Dopo aver accenato alle licenze libere in generale e visto che tale gestione non si attaglia solo al software, si prende in analisi la madre di tutte le licenze di tipo copyleft, cioè la GNU General Public License.
+
+La GNU General Public License è una licenza per software libero. Anzi è possibile dire che vi è software libero quando questo è rilasciato sotto licenza GPL.
+
+La GNU GPL è stata scritta da Richard Stallman e Eben Moglen nel 1989 (versione 1.0), rivista nel 1991 (versione 2.0) e il 29 Giugno del 2007 è uscita l'aspettata versione 3.0. Si approfondirà il dibattituo sulla versione 3 nelle sezioni successive, adesso ci si soffermerà sulla trattazione in generale della licenza fino alla versione 2, attualmete la più utilizzata del mercato del free software.
+
+Contrapponendosi alle licenze per software proprietario, la GNU GPL permette all'utente libertà di utilizzo, copia, modifica e distribuzione; a partire dalla sua creazione è diventata una delle licenze per software libero più usate. Il testo della GNU GPL è disponibile per chiunque riceva una copia di un software coperto da questa licenza. I licenziatari/utenti che accettano le sue condizioni hanno la possibilità di modificare il software, di copiarlo e ridistribuirlo con o senza modifiche, sia gratuitamente sia a pagamento. Quest'ultimo punto distingue la GNU GPL dalle licenze che proibiscono la ridistribuzione commerciale.\footnote{come quella utilizzata per questo'opera}.
+
+Se l'utente distribuisce copie del software, deve rendere disponibile il codice sorgente a ogni acquirente, incluse tutte le modifiche eventualmente effettuate; nella pratica, i programmi sotto GNU GPL vengono spesso distribuiti allegando il loro codice sorgente, anche se la licenza non lo richiede. Ci sono casi in cui viene distribuito solo il codice sorgente e in quel caso è l'utente che ha il compito di compilarlo, ricavando il formato eseguibile per l'uso.
+L'utente ha il dovere di rendere disponibile il codice sorgente solo alle persone che hanno ricevuto da lui il formato eseguibile. Questo significa, ad esempio, che è possibile creare versioni private di un software sotto GNU GPL, a patto che tale versione non venga distribuita a qualcun altro. Questo accade quando l'utente crea delle modifiche private al software, ma non lo distribuisce: in questo caso non è tenuto a rendere pubbliche le modifiche.
+
+Da sottolineare nella licenza anche la clausola di non garanzia, reperibile all'art.11. Dato che il software è protetto da copyright, l'utente non ha altro diritto di modifica o ridistribuzione al di fuori dalle condizioni di copyleft. In ogni caso, l'utente deve accettare i termini della GNU GPL se desidera esercitare diritti normalmente non contemplati dalla legge sul copyright, come la ridistribuzione. Se qualcuno distribuisce un software (in particolare, versioni modificate) senza rendere disponibile il codice sorgente o violando in altro modo la licenza, può essere denunciato dall'autore originale secondo le stesse leggi sul copyright.
+
+In questo senso la GPL risulta un intelligente cavillo legale e per questo è stata descritta come un \textit{``copyright hack''}, che riesce a mantenere le famose quattro libertà rivendicate dal suo creatore R.~Stallman quali:
+\begin{itemize}
+\item la libertà di usare a propria discrezione (libertà 0)
+\item la libertà di copiare e condividere con altri (libertà 1)
+\item la libertà di modificare, studiare ed elaborare (libertà 2)
+\item la libertà di ridistribuire i cambiamenti e i lavori derivati a patto di mantenre la solita licenza (libertà 3)
+\end{itemize}
+
+
 \section{L'approccio ai brevetti della nuova licenza GPLv3}
+
+
 va letta la GPL3 e spulciata per quanto riguarda i brevetti riportando magari qualche tratto saliente.
+
+
 \section{Un esempio di brevetto vincolato dalla GPLv3}
 idem
 
