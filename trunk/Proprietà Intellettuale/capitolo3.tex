@@ -46,7 +46,7 @@ In questo senso la GPL risulta un intelligente cavillo legale e per questo è st
 \end{itemize}
 
 
-\section{L'approccio ai brevetti della nuova licenza GPLv3}
+\section{La licenza GPLv3 e il rapporto con i  brevetti software}
 Il 29 Giugno 2007 è stata rilasciata a Boston (Massachusetts) la terza versione della GPL, creata dalla  Free Software Foundation (FSF).
 Per introdurre la licenza si riporta uno spezzone del discorso del creatore R.~Stallman:
 
@@ -58,16 +58,16 @@ Da quanto afferma Stallman si intravedono subito le nuove tematiche relative al 
 
 \begin{figure}[b]
 	\begin{center}
-		\includegraphics[scale=0.5]{figure/gplv3.png}
+		\includegraphics[scale=0.3]{figure/gplv3.png}
 	\end{center}
 	\caption{\textit{Il logo della GPLv3}}
 \end{figure}
 
 Questo in sintesi è l'\textit{humus}, cioè la terra fertile, che su cui sono nate le nuove forme di difesa di R.~Stallman, brillantemente messe in ratica dai legai della Free Software Fondation. La GPLv3 è stata proposta nell'ottica di vedere come si pone il mondo del software libero e opensource nei confroni dei software patents, ricollegandosi ai capitoli precedenti.
 
-Si affronterano ora gli articoli di maggiorni rilievo della licenza nella sezione \ref{sec:caratteristiche}.
+Si affronterano ora gli articoli di maggiorni rilievo della licenza nella sezione \ref{sec:analisi-gpl3}.
 
-\subsection{Caratteristiche} \label{sec:caratteristiche}
+\subsection{Analisi delle novità} \label{sec:analisi-gpl3}
 Prima di tutto è bene citare dove poter reprire il testo della licenza sotto vari formati liberi come HTML, PDF, TXT. Esso infatti può essere reperito tramite web nel sito della GNU all'indirizzo \textit{http://www.gnu.org/licenses/gpl-3.0.html}. La traduzione italiana non ufficiale, ma comunque attendibile invece si può trovare all'indirizzo \textit{http://katolaz.homeunix.net/gplv3/}.
 
 Si va quindi ad osservare la caratteristiche saliente che la diversificano dalla versione 2 e che trattano l'argomento dei brevetti vincolati al software, ricordando che risulta una licenza che cerca di vietare i privilegi ottentui tramite i brevetti software.
@@ -78,17 +78,71 @@ Analizzando nel dettaglio la prima parte della licenza, si nota come il preambol
 Più sostanziali, invece, le modifiche successive: l'art. 0, intitolato “Definizioni”, sul quale poggia l’intero impianto della licenza. Vale la pena di osservare che è vincolata alla GPLv3 qualsiasi forma di circolazione del software (riassunta nella licenza con il termine propagate), mentre la versione precedente si occupava solo di “copia” e “ridistribuzione”. Come in molti casi questa è una modifica puramente formale che serve a ridurre le ambiguità del testo piuttosco che ad aggiungere qualcosa di nuova.
 
 Spostandosi invece su temi più caldi si evidenziano elementi di novità invece, dall’art. 2 (Basic permission) e dall’art. 3 (Digital Restrictions Management) della licenza.
+Il primo introduce prime limitazioni al diritto di uso del software da parte dell’utente finale in rapporto al rischio di provocare cause per violazione di brevetto. Gli articoli che riprendono tale argomento sono anche l'art. 10 e 11.
+Il secondo vieta la distribuzione di software che violano la privacy degli utenti e limitano, in qualsiasi modo, l’esercizio dei diritti attribuiti con la GPL. Proprio come avvenuto per quanto riguarda la questione TiVo.
+Riportiamo qui a seguito l'articolo 3:\\
 
 
-%Un'altro aspetto nuova ma già citato è la cosidetta Tivoizzazione: apparecchi che contegono gpled software, che però in pratica non danno la possibilità di ottenere dei benefici nella modifica del free software, in quanto l'apparecchio viene automaticamente spento via hardware una volta riconosciuto il software modificato. La ragione di questo procedimento è di sfruttare la libertà e la gratuiticità del free software senza dare indietro però i benefici di tale libertà all'utente finale.
+\begin{scriptsize}
+
+\textbf{Art. 3 - Protezione dei diritti legali degli utenti dalle leggi anti-elusione.}
+
+Nessun programma protetto da questa Licenza può essere considerato parte di una misura tecnologica di restrizione che sottosta ad alcuna delle leggi che soddisfano l'articolo 11 del "WIPO copyright treaty" adottato il 20 Dicembre 1996, o a simili leggi che proibiscono o limitano l'elusione di tali misure tecnologiche di restrizione.
+Quando distribuisci un programma coperto da questa Licenza, rifiuti tutti i poteri legali atti a proibire l'elusione di misure tecnologiche di restrizione ammesso che tale elusione sia effettuata nell'esercizio dei diritti garantiti da questa Licenza riguardo al programma coperto da questa Licenza, e rinunci all'intenzione di limitare l'operatività o la modifica del programma per far valere, contro i diritti degli utenti del programma, diritti legali tuoi o di terze parti che impediscano l'elusione di misure tecnologiche di restrizione.\\
+\end{scriptsize}
 
 
+Questo articolo ha una importanza centrale perchè si riflette non solo sulla progettazione di un software, ma anche sul modello di business che dovrebbe sostenere la commercializzazione dei servizi a esso collegati. L'articolo riguarda molto di più l'uso della licenza da parte del distributore del programma, piuttosto che colui che la sottoscrive cioè l'utente. Infatti il distributore usando questa licenza rifiuta tutti i diritti derivati dal tratto WIPO sulla possiblità di proibire l'elusione a misure di restrizione di acesso sul software di tipo DRM nella veste coniata dalla FSF di Digital Restrictions Management. Comunque l'articolo risulta abbastanza generico non specificando la forma benigna o maligna di queste tecnologie, a volte incluse per togliere libertà all'utente a volta atte ad aggiornare in maniera remota il software. \`E evidente che non sempre si potrà rispettarne il dettato: è vietata qualsiasi invasione della privacy e quindi alcuni modelli di business, anche se gestiti in buona fede, saranno comunque in violazione di licenza.
+
+Questo aspetto quindi tocca il nuovo ma già citato argomento della cosidetta Tivoizzazione: apparecchi che contegono gpled software, che però in pratica non danno la possibilità di ottenere dei benefici nella modifica del free software, in quanto l'apparecchio viene automaticamente spento via hardware una volta riconosciuto il software non originale. La ragione di questo procedimento è di sfruttare la libertà e la gratuiticità del free software senza dare indietro però i benefici di tale libertà all'utente finale. L'articolo 3 della GPLv3 tenta di arginare questi tipi di comportamenti.
+
+L'articolo 9 invece recita nel senguente modo ed ha una valenza legale molto pesante soprattutto perchè può essere differentemente interpretato a seconda dei paesi in cui la licenza viene usata.\\
 
 
+\begin{scriptsize}\textbf{Art. 9 - L'ottenimento di copie non richiede l'accettazione della Licenza}
+Non sei obbligato ad accettare i termini di questa Licenza al solo fine di ottenere o eseguire una copia del Programma. Similmente, propagazioni collaterali di un Programma coperto da questa Licenza che occorrono come semplice conseguenza dell'utilizzo di trasmissioni peer-to-peer per la ricezione di una copia non richiedono l'accettazione della Licenza. In ogni caso, solo e soltanto questa Licenza ti garantiscono il permesso di propagare e modificare qualunque programma coperto da questa Licenza. Queste azioni violano le leggi sul copyright nel caso in cui tu non accetti questa Licenza. Pertanto, modificando o propagando un programma coperto da questa Licenza, indichi implicitamente la tua accettazione della Licenza.\\
 
-%CONTINUARE IL DISCORSO DA http://www.gnu.org/licenses/rms-why-gplv3.html inseriendo spezzone di licenza da http://katolaz.homeunix.net/gplv3/
+\end{scriptsize}
+
+Per quanto riguarda l'Italia, sembra di poter concludere che, dal punto di vista del diritto italiano, la GPL3 sia a tutti gli effetti un contratto per adesione (tipo quelli di banche e assicurazioni) come riportato nella precedente sezione di Licenze Libere.
+
+I brevetti software vengono spesso citati nella licenza soprattutto quando si parla di rilasciare del software che viene coperto da essi, ma a differenza della GPLv2, adesso vi è un articolo esclusivamente dedicato, il numre 11 che commenteremo in seguito. Riportiamo dei passi salienti presi da vari articoli che trattano la distribuzione di codice sotto brevetto; in particolare ci si riferisce all'art. 8, 10 e 12 :\\ \newpage
 
 
+\begin{scriptsize}
+\textbf{Art. 8 - Cessazione di Licenza}
+
+Non puoi propagare o modificare un programma coperto da questa Licenza in maniera diversa da quanto espressamente consentito da questa Licenza. Qualunque tentativo di propagare o modificare altrimenti il Programma è nullo, e provoca l'immediata cessazione dei diritti garantiti da questa Licenza (compresi tutte le eventuali licenze di brevetto garantite ai sensi del terzo paragrafo della sezione 11).
+[...]\\
+
+\textbf{Art. 10 - Licenza Automatica per i successivi destinatari}
+
+[...]
+Non puoi imporre nessuna ulteriore restrizione sull'esercizio dei diritti garantiti o affermati da questa Licenza. Per esempio, non puoi imporre un prezzo di licenza, una royalty, o altri costi per l'esercizio dei diritti garantiti da questa Licenza, e non puoi dar corso ad una controversia (ivi incluse le controversie incrociate o la difesa in cause legali) affermando che siano stati violati dei brevetti a causa della produzione, dell'uso, della vendita, della messa in vendita o dell'importazione del Programma o di sue parti.\\
+
+\textbf{Art. 12 - Nessuna resa di libertà altrui}
+
+
+Se ti vengono imposte delle condizioni (da un ordine giudiziario, da un accordo o da qualunque altra eventualità) che contraddicono le condizioni di questa Licenza, non sei in nessun modo esonerato dal rispetto delle condizioni di questa Licenza. Se non puoi distribuire un Programma coperto da questa Licenza per sottostare simultaneamente agli obblighi derivanti da questa Licenza e ad altri obblighi pertinenti, allora non puoi distribuire il Programma per nessun motivo. Per esempio, se accetti delle condizioni che ti obbligano a richiedere il pagamento di una royalty per le distribuzioni successivamente effettuate da coloro ai quali hai distribuito il Programma, l'unico modo per soddisfare sia queste condizioni che questa Licenza è evitare del tutto la distribuzione del Programma.\\
+
+
+\end{scriptsize}
+
+
+Come si nota dall'articolo 8 sulla cessazione della licenza in questa versione si prevede non solo la cessazione dei classici diritti d'autore ma anche le eventuali licenze di brevetto che la GPLv2 non ratificava. E ancora l'articolo 10 ribadisce che non si possono applicare royalty al software suddetto nè tanto meno non è permesso dar luogo a processi o cause per la violazione dei brevetti a riguardo del software sotto licenza. Si ribadisce concludendo nell'articolo 12 che l'unico modo per sottoscrivere la licenza e comunque autorizzazre il pagamento di royalty corrisponde chiaramente alla non distribuzione del programma. Anche in questo caso non si vieta in toto le royalty, ma indirettamente se ne vieta l'uso.\\
+
+La parte di negazione dei brevetti si ratifica con l'art.11 che afferma invece:\\
+
+\begin{scriptsize}
+
+\textbf{Art. 11 -  Brevetti}
+[...]
+Se distribuisci un programma coperto da questa Licenza, confidando consapevolmente su una licenza di brevetto, e il Sorgente Corrispondente per il programma non è reso disponibile per la copia, senza alcun onere aggiuntivo e comunque nel rispetto delle condizioni di questa Licenza, attraverso un server di rete pubblicamente accessibile o tramite altri mezzi facilmente accessibili, allora devi (1) fare in modo che il Sorgente Corrispondente sia reso disponibile come sopra, oppure (2) fare in modo di rinunciare ai benefici della licenza di brevetto per quel particolare programma, oppure (3) adoperarti, in maniera consistente con le condizioni di questa Licenza, per estendere la licenza di brevetto a tutti i destinatari successivi. "Confidare consapevolmente" significa che tu sei attualmente cosciente che, eccettuata la licenza di brevetto, la distribuzione da parte tua di un programma protetto da questa Licenza in un paese, o l'utilizzo in un paese del programma coperto da questa Licenza da parte di un destinatario, può violare uno o più brevetti in quel paese che tu hai ragione di ritenere validi.\\
+
+\end{scriptsize}
+
+
+\`E infatti con questo nuovo art. 11 (Licenza sui brevetti) ch si impone al titolare di un brevetto che lo utilizza in un software regolato dalla GPL3, di concedere agli utenti licenza gratuita e non esclusiva sul brevetto in questione. La scelta risulta piuttosto drastica e tagliente: basta pensare al programmatore che fosse titolare di un brevetto e che potrebbe trovarsi nella condizione di non scegliere la GPL3 perchè questo priverebbe di valore economico la sua creazione. Anche se questo risulta proprio il risultato che questa licenza vuole raggiungere contro i software patents.
 
 
 
