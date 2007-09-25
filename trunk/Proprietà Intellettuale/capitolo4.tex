@@ -1,16 +1,44 @@
 \chapter{Un esempio concreto: il caso MP3}
+Per rendere chiara e comprensibile la trattazione sarà portata come esemplificativa uno delle questioni più famose e rilevanti nella storia della brevettazione software, sia per l'importanza dell'invenzione sotto brevetto, sia per la rilevanza economica che ha avuto la causa giudiziaria di violazione di brevetto che ha colpito una delle più importanti aziende informatiche: Microsoft Corporation.
+
+Rilevante sarà anche l'analisi del comportamento che deve essere tenuto nelle varie regioni mondiali in virtù della valenza o meno del suddetto brevetto: per chiarire questa problematica sarà portato come esemplare il comportamento della distribuzione GNU/Linux più diffusa al momento, Ubuntu Linux\cite{ubuntu}.
 
 \section{Cos'è l'algoritmo di compressione MP3}
+La discussione di questo capitolo verte su uno degli algoritmi più importanti della storia informatica degli ultimi tempi: l'algoritmo di compressione audio \textit{MPEG-1/2 Audio Layer 3}, comunemente noto come MP3. Questo algoritmo di compressione è diventato noto per la sua capacità di ridurre drasticamente la quantità di dati richiesti per la riproduzione di un suono, mantenendo comunque una riproduzione fedele del suono originario. Nei moderni codificatori MP3 gli algoritmi più efficaci fanno di tutto per assicurare che i suoni rimossi siano quelli che non possono essere rilevati dall'orecchio umano. Questo risultato è stato ottenuto anche grazie alla scienza della psicoacustica.
 
-\section{Il brevetto sull'MP3}
-
-\subsection{Ricerca del brevetto}magari si inserisce la procedura per ricercare il brevetto nei motori di ricerca come fa lui
-così ci si riaggancia alla pare di programma centrale. 
+Nonostante ne siano stati riconosciuti molti difetti, diversi dei quali superati anche da algoritmi successivi ed alternativi (si pensi all'algoritmo \textit{AAC MPEG-4} oppure all'\textit{Ogg Vorbis}) il formato .mp3 (classico dei files compressi con tale algoritmo) risulta ancora il più diffuso in campo musicale, e ciò spiega la portata economica che può comportare l'eventuale copertura brevettuale sull'invenzione.
+\section{Il brevetto sull'MP3}\label{mp3-patent}
+La Thomson Consumer Electronics è la proprietaria principale del brevetto di MPEG-1/2 Layer 3 in U.S.A. e Giappone, e ha raccolto in un apposito sito (\textit{http://www.mp3licensing.com/}) tutte i brevetti relativi all'MP3 che detiene (svariati validi anche in UE), e una riepilogativa tabella delle royalties che le aziende devono pagare per utilizzare codificatori e decodificatori di MP3.
+\begin{figure}[b]
+	\begin{center}
+		\includegraphics[scale=0.75]{figure/mp3.jpg}
+	\end{center}
+	\caption{\textit{Il logo del sito Thomson sui brevetti MP3}}
+\end{figure}
+\subsection{Ricerca del brevetto}
 
 \subsection{Termini del brevetto}
 
 \subsection{Aree di valenza e royalties}
 
+\section{Il delicato rapporto tra Microsoft ed il formato MP3}
+Scendendo nelle notizie di attualità è comune trovare, in campo tecnico/ingegneristico, notizie di violazioni di brevetto, di violazione di proprietà intellettuali e simili. Un po' meno raro è trovare eventi che vedano implicati i brevetti software, specialmente in Europa, dove, come abbiamo visto, sono quasi impossibili da ottenere. 
+
+\`E normale quindi che faccia scalpore quando un tribunale emette una sentenza di violazione di brevetto informatico contro una azienda; è ancora più normale che l'interesse salga a livelli inauditi se l'azienda coinvolta è la più fiorente in campo informatico, e viene condannata ad una pena pecuniaria pari al fatturato di una decina di anni di una azienda normale. Stiamo parlando della Microsoft, e della \textit{querelle} giudiziaria che l'ha vista protagonista con Alcatel-Lucent.
+
+La questione è spinosa in quanto non vede solo motivazioni giuridiche tra i proprietari originari del brevetto ed il presunto violatore, ma vede di fronte al presunto violatore delle enormi aziende che hanno inglobato in percentuali diverse le originali proprietarie del brevetto, lasciando innescare quindi procedure economico/giudiziarie dalla portata enorme.
+
+Nel caso di MP3, come è stato detto nella sezione \ref{mp3-patent}, il principale detentore della proprietà brevettuale è Thomson Consumer Electronics, ma non è affatto ne' l'unica ne' l'originaria proprietaria. Gli algoritmi di base di MP3 sono stati sviluppati originariamente in collaborazione tra il Fraunhofer Institute e gli ex-Bell Laboratories. Il primo gruppo a rilasciare un encoder fu il Fraunhofer Institute nel 1994, e Microsoft ha sempre sostenuto di aver ottenuto in licenza la tecnologia proprio da quest'ultimo, pagandola ben 16 milioni di dollari ed integrandola nei sistemi operativi Windows attraverso i codec e il lettore software Windows Media Player.
+
+Thomson è di fatto la società che al momento controlla il Fraunhofer Institute, mentre Alcatel-Lucent al momento detiene la proprietà dei Bell Laboratories.
+
+Proprio Alcatel-Lucent nel 2003 ha trascinato in tribunale i produttori di PC Dell e Gateway per l'utilizzo illegittimo dei suoi brevetti. Microsoft, in accordo con i patti di indennizzo stretti con le due società, ha offerto loro protezione legale ed ha ottenuto come contropartita la denuncia di Alcatel per la violazione degli accordi di sfruttamento dei brevetti sulla console Xbox 360. Le due aziende avevano stretto un'intesa sulla prima Xbox ma Alcatel-Lucent ha sostenuto davanti al giudice - e ha infine ottenuto una sentenza a proprio favore - che l'accordo non comprendeva la nuova versione; in tutto la disputa riguardava ben quindici violazioni di brevetto, e dopo il rigetto delle prime due accuse, nel Febbraio del 2007 è arrivata la notizia di una sconfitta giuridica per la Microsoft, per la violazione appunto del brevetto riguardante MP3. La sanzione prevedeva una multa per più di un miliardo e mezzo di dollari, valutati i benefici sfruttati abusivamente da Microsoft nel proprio sistema, valutata la diffusione del formato MP3 e la diffusione del sistema Microsoft stesso.
+
+Il motivo principale della diatriba è strettamente legato alle royalties\footnote{Con il termine royalty si indica il pagamento di un compenso al titolare di un brevetto o una proprietà intellettuale, con lo scopo di poter sfruttare quel bene per fini commerciali.} che le aziende devono pagare per poter utilizzare il formato MP3. Come si può vedere nell'elenco pubblico disponibile nel sito Thomson già citato in precedenza, Microsoft risulta considerata tra le aziende autorizzate all'utilizzo della tecnologia; Alcatel, cercando di sfruttare altri processi già aperti contro la casa di Redmond ha tentato di avvalersi del presunto diritto di riscuotere ulteriori royalties sul formato, in virtù dell'acquisizione dei Bell Laboratories.
+
+La questione, ancora non definitivamente sciolta in quanto è ancora possibile un ulteriore grado di giudizio, ha visto la sentenza in appello ribaltare, e di fatto annullare, la sentenza contro Microsoft, riconoscendo sufficiente il pagamento del brevetto presso uno dei proprietari legittimi.
+
+ 
 \section{Il caso Ubuntu: come utilizzare gli MP3 senza violare il brevetto}
 
 % \section{Cosa si può fare/non fare in USA in questa circostanza}
