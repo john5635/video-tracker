@@ -9,7 +9,7 @@ La discussione di questo capitolo verte su uno degli algoritmi più importanti d
 Nonostante ne siano stati riconosciuti molti difetti, diversi dei quali superati anche da algoritmi successivi ed alternativi (si pensi all'algoritmo \textit{AAC MPEG-4} oppure all'\textit{Ogg Vorbis}) il formato .mp3 (classico dei files compressi con tale algoritmo) risulta ancora il più diffuso in campo musicale, e ciò spiega la portata economica che può comportare l'eventuale copertura brevettuale sull'invenzione.
 \section{Il brevetto sull'MP3}\label{mp3-patent}
 La Thomson Consumer Electronics è la proprietaria principale del brevetto di MPEG-1/2 Layer 3 in U.S.A. e Giappone, e ha raccolto in un apposito sito (\textit{http://www.mp3licensing.com/}) tutte i brevetti relativi all'MP3 che detiene (svariati validi anche in UE), e una riepilogativa tabella delle royalties che le aziende devono pagare per utilizzare codificatori e decodificatori di MP3.
-\begin{figure}[b]
+\begin{figure}[hb]
 	\begin{center}
 		\includegraphics[scale=0.75]{figure/mp3.jpg}
 	\end{center}
@@ -38,8 +38,43 @@ Il motivo principale della diatriba è strettamente legato alle royalties\footno
 
 La questione, ancora non definitivamente sciolta in quanto è ancora possibile un ulteriore grado di giudizio, ha visto la sentenza in appello ribaltare, e di fatto annullare, la sentenza contro Microsoft, riconoscendo sufficiente il pagamento del brevetto presso uno dei proprietari legittimi.
 
- 
-\section{Il caso Ubuntu: come utilizzare gli MP3 senza violare il brevetto}
+Non ha comunque avuto vita facile la casa di Redmond verso questo formato di compressione audio. Mentre negli Stati Uniti, dove vige il brevetto, ha dovuto sostenere questo lungo processo (non ancora terminato), risulta interessante vedere anche il trattamento che le è stato riservato nell'Unione Europea, dove i brevetti principali dell'MP3 non sono validi.
 
+La Microsoft, dovendo produrre un sistema operativo con bacino d'utenza mondiale, ha inizialmente provato a ``boicottare'' questo formato, cercando di far abituare i suoi utenti al suo formato proprietario (.wma) senza fornire il proprio sistema operativo del supporto per MP3. Questo la lasciava libera negli Stati Uniti dove il brevetto l'avrebbe obbligata al pagamento delle royalties, ma l'ha messa in cattiva luce verso l'antirtrust europeo. 
+
+Il formato .wma a differenza dell'MP3 (che è a specifiche aperte), è a specifiche chiuse e quindi impone all'utente l'utilizzo del software pensato e realizzato dalla stessa Microsoft; d'altro canto la possibilità di essere il produttore del sistema operativo distribuito per più del 90\% sul pianeta aveva indotto la Microsoft a pensare di poter innestare il boicottaggio tramite la procedura di ``abitudine'' degli utenti. 
+
+Sotto la presidenza di Mario Monti, l'antitrust europeo ha comminato alla Microsoft una multa per abuso di posizione dominante con il massimo della sanzione, il 10\% del fatturato. Microsoft è stata costretta ad abilitare l'installazione su Windows di lettori audio diversi dal nativo Windows Media Player, venduto insieme al sistema operativo ad inizialmente l'unico player disponibile sulla piattaforma (e come detto senza il supporto a MP3). Questi software invece dispongono della possibilità di ascoltare l'mp3 e altri formati diversi dal ``.wma'': alla fine, lo stesso software "Windows Media Player" è stato modificato per la lettura di molti codec e la loro masterizzazione, fra i quali c'è l'mp3.
+
+La diatriba tra Microsoft ed il formato MP3 sembra adesso sistemata, in modo positivo per l'azienda negli Stati Uniti ed in modo negativo nell'Unione Europea; la Microsoft resta comunque una delle principali sostenitrici della brevettazione software, intesa come baluardo difensivo del software proprietario e come difesa estrema contro l'avanzata del software libero ed open source. 
+
+Questa presa di posizione sembra quasi confermare la tesi espressa recentemente\footnote{Dal blog personale  http://www.markshuttleworth.com/archives/118} da Mark Shuttleworth, fondatore di Ubuntu, che sostiene quanto non sia la Microsoft stessa la più grossa nemica dello sviluppo open source, ma piuttosto lo sia la possibilità di poter brevettare software in alcuni paesi, che mette moltissime aziende e laboratori di piccole o medie dimensioni in virtù di chiedere royalties pesantissime agli sviluppatori; Microsoft al pari di molte altre aziende e società open source che producono tecnologia (ed anche di più, considerata la distribuzione di Windows), spende cifre sempre più salate per difendersi dalle cause legali relative ai brevetti e per il pagamento delle royalties: questo ha la possibilità di interferire con i piani di sviluppo e rilascio del software, danneggiandola economicamente e portandola con tutta probabilità alla difesa della non brevettabilità del software nel mondo.
+
+Lo stesso Shuttleworth traccia con la propria distribuzione Linux la strada per poter ``convivere'' pacificamente con MP3, senza di fatto pagare royalties o piegarsi a logiche di brevetto.
+\section{Il caso Ubuntu: come utilizzare gli MP3 senza violare il brevetto}
+Ubuntu è una distribuzione GNU/Linux nata nel 2004 e basata su Debian, che si concentra sulla facilità di installazione e d'uso e sul rilascio regolare (semestrale) delle nuove versioni. 
+
+Finanziata dalla società Canonical Ltd (registrata nell'Isola di Man), rimane comunque in tutto e per tutto un software libero. L'ideatore dell'iniziativa e titolare di Canonical è Mark Shuttleworth, un giovane imprenditore sudafricano diventato fiero sostenitore dell'open source, al cui servizio ha posto le sue risorse.
+
+\`E interessante vedere l'approccio di questa distribuzione sempre nel caso MP3 per due motivazioni distinte: prima di tutto per capire come si sono comportati nei confronti del brevetto vigente ed in seconda battuta per capire come possa il mondo open source sfruttare la loro riuscita nei vari rapporti con software brevettato.
+
+Ubuntu è al momento la principale distribuzione Linux e per questo motivo deve tutelarsi dalla violazione di brevetto, in quanto il suo utilizzo non è vincolato ad una sola zona del mondo ma a tutti i continenti.
+
+In tutte le distribuzioni Linux di \textit{default} è impossibile eseguire un file .mp3; i produttori così si tutelano da eventuali cause contro i detentori del brevetto. Il problema riguarda paesi europei, come l'Italia stessa, dove non c'è vincolo di brevetto per la riproduzione del formato ma ci troviamo comunque di fronte ad un sistema operativo che non lo può riprodurre, vincolato da brevetti stranieri. 
+
+La soluzione pensata da Ubuntu è tanto semplice quanto efficace, e le ha consentito di accaparrarsi solo per questa ragione una discreta fetta di utenza; questa soluzione si basa di fatto sulla responsabilizzazione dell'utenza, e non stravolge di fatto il procedimento da fare nel caso di altre distribuzioni, però lo automatizza.
+
+La prima fase è quella di responsabilizzazione dell'utente; citando direttamente da fonte ufficiale questo è quanto viene comunicato all'utente intenzionato a riprodurre un MP3:``Lo sforzo di Ubuntu nell'includere solo software completamente libero, implica l'esclusione di alcuni formati multimediali proprietari dalla sua installazione. Questa pagina indica i metodi per abilitare il supporto per i formati proprietari più comuni come MP3, WMV e molti altri. Informativa legale: le leggi sui brevetti e sul copyright operano in maniera diversa da paese a paese. Consultare un parere legale se non si è sicuri delle leggi vigenti in materia nel proprio paese.''
+
+A questo punto appare un dialog, simile a quello in figura \ref{dialog}, che richiede all'utente l'abilitaizone alla riproduzione del formato MP3. Se l'utente è in un paese come Stati Uniti o Giappone è esclusivamente colpa dell'utente se il brevetto viene infranto, in quanto prima dell'abilitazione è stato correttamente avvisato dei rischi e delle leggi vigenti.
+
+\begin{figure}[htb]
+	\begin{center}
+		\includegraphics[scale=0.75]{figure/ubuntu_mp3.png}\label{dialog}
+	\end{center}
+	\caption{\textit{Il primo ``dialog'' per l'installazione del supporto MP3}}
+\end{figure}
+
+Questa soluzione, che a livello pratico non richiede particolari competenze informatiche come la capacità di installare il codec MP3 personalmente nel sistema, ha consentito ad Ubuntu di ottenere moltissimi utenti (soprattutto in Europa e negli stati ``liberi'') che non hanno sentito opprimente la copertura brevettuale di altri paesi arrivare fino al proprio.
 % \section{Cosa si può fare/non fare in USA in questa circostanza}
 % \section{Cosa si può fare/non fare in UE in questa circostanza}
